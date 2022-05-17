@@ -13,7 +13,7 @@ jobs:
       - name: send_dispatch
         uses: peter-evans/repository-dispatch@v2
         with:
-          token: ${{secrets.PAT_TOKEN}}
-          repository: is-tech-y24/Do-Svyazi
+          token: ${{ secrets.PAT_TOKEN }}
+          repository: is-tech-y24-1/Do-Svyazi
           event-type: update-submodule
           client-payload: '{"submodule_name" : "Do-Svyazi.User"}'
