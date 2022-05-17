@@ -1,0 +1,20 @@
+name: Trigger-submodule-update
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs: 
+  trigger-submodule-update:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: send_dispatch
+        run: |
+          curl \
+            -X POST -u "${{secrets.PAT_USERNAME}}:${{secrets.PAT_TOKEN}}" \
+            -H "Accept: application/vnd.github.everest-preview+json" \
+            -H "Content-Type: application/json" \
+            https://api.github.com/repos/is-tech-y24/Do-Svyazi/dispatches \
+            --data '{"event_type": "push" }'
