@@ -11,7 +11,6 @@ public class UsersAndUsersAndChatDbContext : DbContext, IUsersAndChatDbContext
     public UsersAndUsersAndChatDbContext(DbContextOptions<UsersAndUsersAndChatDbContext> options)
         : base(options)
     {
-        Database.EnsureDeleted();
         Database.EnsureCreated();
     }
 
