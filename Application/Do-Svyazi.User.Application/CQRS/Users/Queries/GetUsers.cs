@@ -26,9 +26,6 @@ public static class GetUsers
 
         public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
         {
-            // await _context.Users.AddAsync(new MessengerUser { Id = Guid.NewGuid(), Name = "aboba", NickName = "aboba", Description = "ya aboba" }, cancellationToken);
-            // await _context.SaveChangesAsync(cancellationToken);
-
             var result = await _context
                 .Users
                 .ProjectTo<MessengerUserDto>(_mapper.ConfigurationProvider)

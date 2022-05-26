@@ -6,15 +6,15 @@ namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
 
 public static class AddUser
 {
-    public record Command(string Name, string NickName, string Description) : IRequest;
+    public record Command(string Name, string NickName, string Description) : IRequest<Guid>;
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, Guid>
     {
         private readonly IUsersAndChatDbContext _context;
 
         public Handler(IUsersAndChatDbContext context) => _context = context;
 
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
         {
             var user = new MessengerUser
             {
@@ -26,7 +26,7 @@ public static class AddUser
             await _context.Users.AddAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            return user.Id;
         }
     }
 }
