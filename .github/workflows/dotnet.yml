@@ -1,6 +1,10 @@
 name: .NET
 
 on:
+  pull_request:
+     branches: [ master, dev ]
+     types: [opened, synchronize, reopened]
+
   push:
     branches: [ master, dev ]
 
