@@ -16,7 +16,7 @@ public class ChatController : ControllerBase
 
     [HttpGet("GetAll")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<MessengerChatDto>>> GetChats()
+    public async Task<ActionResult<IReadOnlyCollection<MessengerChatDto>>> GetChats()
     {
         var response = await _mediator.Send(new GetChats.Query());
         return Ok(response.Chats);

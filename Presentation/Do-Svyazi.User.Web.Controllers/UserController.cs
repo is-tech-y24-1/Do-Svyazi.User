@@ -17,7 +17,7 @@ public class UserController : ControllerBase
 
     [HttpGet("GetAll")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<MessengerUserDto>>> GetUsers()
+    public async Task<ActionResult<IReadOnlyCollection<MessengerUserDto>>> GetUsers()
     {
         var response = await _mediator.Send(new GetUsers.Query());
         return Ok(response.Users);

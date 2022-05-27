@@ -1,7 +1,6 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Do_Svyazi.User.Application.Abstractions.DbContexts;
-using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,7 @@ namespace Do_Svyazi.User.Application.CQRS.Users.Queries;
 public static class GetUsers
 {
     public record Query : IRequest<Response>;
-    public record Response(List<MessengerUserDto> Users);
+    public record Response(IReadOnlyCollection<MessengerUserDto> Users);
 
     public class Handler : IRequestHandler<Query, Response>
     {

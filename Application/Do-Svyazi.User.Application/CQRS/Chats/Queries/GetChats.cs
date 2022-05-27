@@ -10,7 +10,7 @@ namespace Do_Svyazi.User.Application.CQRS.Chats.Queries;
 public static class GetChats
 {
     public record Query : IRequest<Response>;
-    public record Response(List<MessengerChatDto> Chats);
+    public record Response(IReadOnlyCollection<MessengerChatDto> Chats);
 
     public class Handler : IRequestHandler<Query, Response>
     {
