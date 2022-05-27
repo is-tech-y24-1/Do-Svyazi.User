@@ -18,7 +18,7 @@ public class Startup
 {
     public Startup(IConfiguration configuration) => Configuration = configuration;
 
-    public IConfiguration Configuration { get; }
+    public IConfiguration Configuration { get; init; }
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -30,7 +30,7 @@ public class Startup
         services.AddDbContext<IUsersAndChatDbContext, UsersAndUsersAndChatDbContext>(optionsBuilder =>
         {
             optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.UseSqlite("Data Source=aboba.db;Cache=Shared;");
+            optionsBuilder.UseSqlite(Configuration.GetConnectionString("Database"));
         });
 
         services.AddEndpointsApiExplorer();
