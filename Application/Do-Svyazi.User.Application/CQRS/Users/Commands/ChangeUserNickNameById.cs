@@ -1,6 +1,5 @@
 using Do_Svyazi.User.Application.Abstractions.DbContexts;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
 
@@ -16,9 +15,7 @@ public static class SetUserNickNameById
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            var messengerUser = await _context.Users
-                .SingleOrDefaultAsync(
-                    user => user.Id == request.UserId, cancellationToken);
+            var messengerUser = await _context.Users.FindAsync(request.UserId);
 
             if (messengerUser == null) return Unit.Value;
 
