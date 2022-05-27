@@ -6,7 +6,7 @@ namespace Do_Svyazi.User.Application.Abstractions.DbContexts;
 
 public interface IUsersAndChatDbContext
 {
-    public DbSet<Chat> Chats { get; set; }
-    public DbSet<MessengerUser> Users { get; set; }
+    public DbSet<Chat> Chats { get; init; }
+    public DbSet<MessengerUser> Users { get; init; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

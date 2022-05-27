@@ -14,14 +14,14 @@ public class UsersAndUsersAndChatDbContext : DbContext, IUsersAndChatDbContext
         Database.EnsureCreated();
     }
 
-    public DbSet<Chat> Chats { get; set; }
-    public DbSet<MessengerUser> Users { get; set; }
+    public DbSet<Chat> Chats { get; init; }
+    public DbSet<MessengerUser> Users { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
 
-        modelBuilder.Entity<Role>().HasKey(role => new {role.ChatId, role.UserId});
+        modelBuilder.Entity<Role>().HasKey(role => new { role.ChatId, role.UserId });
         modelBuilder.Entity<ChatUser>().HasKey(user => user.UserId);
 
         modelBuilder.Entity<Channel>();
