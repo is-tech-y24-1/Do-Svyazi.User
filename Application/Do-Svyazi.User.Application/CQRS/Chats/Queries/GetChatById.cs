@@ -24,11 +24,10 @@ public static class GetChatById
 
         public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
         {
-            var result = await _mapper
-                .ProjectTo<MessengerChatDto>(_context.Chats)
+            var result = await _context.Chats
                 .FirstOrDefaultAsync(chat => chat.Id == request.ChatId, cancellationToken);
 
-            return new Response(result);
+            return new Response(_mapper.Map<MessengerChatDto>(result));
         }
     }
 }
