@@ -34,28 +34,30 @@ public class Startup
         });
 
         services.AddEndpointsApiExplorer();
-
-        services.AddSwaggerGen(opt =>
+        services.AddSwaggerDocument(settings =>
         {
-            opt.UseInlineDefinitionsForEnums();
-            opt.SwaggerDoc("v1", new OpenApiInfo
+            settings.Title = "Do-Svyazi.User";
+            settings.PostProcess = document =>
             {
-                Title = "Do-Svyazi.User",
-                Version = "v1",
-            });
+                document.Info.Version = "v1";
+                document.Info.Title = "Do-Svyazi.User";
+                document.Info.Description = "Do-Svyazi.User module";
+            };
         });
 
-        services.AddMediatR(typeof(GetUsers).Assembly, typeof(AddUser).Assembly);
+        services.AddMediatR(typeof(GetUsers).Assembly);
         services.AddAutoMapper(typeof(MappingProfile).Assembly);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         app.UseDeveloperExceptionPage();
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
+
+        app.UseOpenApi();
+        app.UseSwaggerUi3(c =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Do-Svyazi.User");
+            c.DocumentTitle = "Do-Svyazi.User";
+            c.DocumentPath = "/swagger/v1/swagger.json";
         });
 
         app.UseHttpsRedirection();
