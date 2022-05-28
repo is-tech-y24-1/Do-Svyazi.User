@@ -5,6 +5,7 @@
         <RootNamespace>Do_Svyazi.User.Web.Controllers</RootNamespace>
         <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
         <ImplicitUsings>enable</ImplicitUsings>
+        <WarningsAsErrors>true</WarningsAsErrors>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 

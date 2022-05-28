@@ -4,6 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>Do_Svyazi.User.Web.Api</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
+        <WarningsAsErrors>true</WarningsAsErrors>
         <Nullable>enable</Nullable>
         <OutputType>Exe</OutputType>
     </PropertyGroup>
