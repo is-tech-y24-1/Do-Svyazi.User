@@ -15,7 +15,6 @@ public class UsersAndUsersAndChatDbContext : DbContext, IUsersAndChatDbContext
     }
 
     public DbSet<Chat> Chats { get; init; }
-
     public DbSet<MessengerUser> Users { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
