@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Application\Do-Svyazi.User.Application.Abstractions\Do-Svyazi.User.Application.Abstractions.csproj" />
+      <ProjectReference Include="..\..\Application\Do-Svyazi.User.Application\Do-Svyazi.User.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>

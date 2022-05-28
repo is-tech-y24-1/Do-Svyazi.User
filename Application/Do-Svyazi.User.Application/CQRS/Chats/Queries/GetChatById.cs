@@ -1,5 +1,5 @@
 using AutoMapper;
-using Do_Svyazi.User.Application.Abstractions.DbContexts;
+using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Dtos.Chats;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
