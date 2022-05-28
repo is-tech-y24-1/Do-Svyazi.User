@@ -8,8 +8,8 @@ namespace Do_Svyazi.User.Application.CQRS.Chats.Queries;
 
 public static class GetChatById
 {
-    public record Query(Guid ChatId) : IRequest<Response>;
-    public record Response(MessengerChatDto Chat);
+    public record Query(Guid chatId) : IRequest<Response>;
+    public record Response(MessengerChatDto chat);
 
     public class Handler : IRequestHandler<Query, Response>
     {
@@ -25,7 +25,7 @@ public static class GetChatById
         public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
         {
             var result = await _context.Chats
-                .FirstOrDefaultAsync(chat => chat.Id == request.ChatId, cancellationToken);
+                .FirstOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken);
 
             return new Response(_mapper.Map<MessengerChatDto>(result));
         }

@@ -20,7 +20,7 @@ public class UserController : ControllerBase
     public async Task<ActionResult<IReadOnlyCollection<MessengerUserDto>>> GetUsers()
     {
         var response = await _mediator.Send(new GetUsers.Query());
-        return Ok(response.Users);
+        return Ok(response.users);
     }
 
     [HttpPost("ChangeNickName")]

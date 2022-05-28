@@ -5,22 +5,31 @@
         <RootNamespace>Do_Svyazi.User.Web.Controllers</RootNamespace>
         <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
         <ImplicitUsings>enable</ImplicitUsings>
-        <WarningsAsErrors>true</WarningsAsErrors>
+        <WarningLevel>4</WarningLevel>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MediatR" Version="10.0.1" />
-      <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.8" />
-      <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
+        <EditorConfigFiles Remove="..\..\.editorconfig"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Application\Do-Svyazi.User.Application\Do-Svyazi.User.Application.csproj" />
-      <ProjectReference Include="..\..\Application\Do-Svyazi.User.Dtos\Do-Svyazi.User.Dtos.csproj" />
+        <None Include="..\..\.editorconfig"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MediatR" Version="10.0.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.8"/>
+        <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Application\Do-Svyazi.User.Application\Do-Svyazi.User.Application.csproj"/>
+        <ProjectReference Include="..\..\Application\Do-Svyazi.User.Dtos\Do-Svyazi.User.Dtos.csproj"/>
     </ItemGroup>
 
 </Project>
