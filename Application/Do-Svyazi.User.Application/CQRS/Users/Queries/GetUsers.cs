@@ -10,7 +10,7 @@ namespace Do_Svyazi.User.Application.CQRS.Users.Queries;
 public static class GetUsers
 {
     public record Query : IRequest<Response>;
-    public record Response(IReadOnlyCollection<MessengerUserDto> Users);
+    public record Response(IReadOnlyCollection<MessengerUserDto> users);
 
     public class Handler : IRequestHandler<Query, Response>
     {

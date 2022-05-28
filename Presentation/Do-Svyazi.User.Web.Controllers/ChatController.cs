@@ -19,7 +19,7 @@ public class ChatController : ControllerBase
     public async Task<ActionResult<IReadOnlyCollection<MessengerChatDto>>> GetChats()
     {
         var response = await _mediator.Send(new GetChats.Query());
-        return Ok(response.Chats);
+        return Ok(response.chats);
     }
 
     [HttpGet("GetById")]
@@ -27,6 +27,6 @@ public class ChatController : ControllerBase
     public async Task<ActionResult<MessengerChatDto>> GetChatById(Guid chatId)
     {
         var response = await _mediator.Send(new GetChatById.Query(chatId));
-        return Ok(response.Chat);
+        return Ok(response.chat);
     }
 }

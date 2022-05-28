@@ -6,7 +6,7 @@ namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
 
 public static class AddUser
 {
-    public record Command(string Name, string NickName, string Description) : IRequest<Guid>;
+    public record Command(string name, string nickName, string description) : IRequest<Guid>;
 
     public class Handler : IRequestHandler<Command, Guid>
     {
@@ -18,9 +18,9 @@ public static class AddUser
         {
             var user = new MessengerUser
             {
-                Name = request.Name,
-                NickName = request.NickName,
-                Description = request.Description,
+                Name = request.name,
+                NickName = request.nickName,
+                Description = request.description,
             };
 
             await _context.Users.AddAsync(user, cancellationToken);
