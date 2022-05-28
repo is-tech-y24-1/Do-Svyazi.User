@@ -474,7 +474,7 @@ function createInstance<T>(data: any, mappings: any, type: any): T | null {
   return result;
 }
 
-export class ApiException extends Error {
+export class Do_Svyazi_User_ApiClient_Exception extends Error {
     override message: string;
     status: number;
     response: string;
@@ -491,10 +491,10 @@ export class ApiException extends Error {
         this.result = result;
     }
 
-    protected isApiException = true;
+    protected isDo_Svyazi_User_ApiClient_Exception = true;
 
-    static isApiException(obj: any): obj is ApiException {
-        return obj.isApiException === true;
+    static isDo_Svyazi_User_ApiClient_Exception(obj: any): obj is Do_Svyazi_User_ApiClient_Exception {
+        return obj.isDo_Svyazi_User_ApiClient_Exception === true;
     }
 }
 
@@ -502,7 +502,7 @@ function throwException(message: string, status: number, response: string, heade
     if (result !== null && result !== undefined)
         throw result;
     else
-        throw new ApiException(message, status, response, headers, null);
+        throw new Do_Svyazi_User_ApiClient_Exception(message, status, response, headers, null);
 }
 
 function isAxiosError(obj: any | undefined): obj is AxiosError {

@@ -54,14 +54,14 @@ namespace Do_Svyazi.User.Web.ApiClient
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>> GetChatsAsync()
         {
             return GetChatsAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>> GetChatsAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
@@ -102,14 +102,14 @@ namespace Do_Svyazi.User.Web.ApiClient
                             var objectResponse_ = await ReadObjectResponseAsync<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -126,14 +126,14 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<MessengerChatDto> GetChatByIdAsync(System.Guid chatId)
         {
             return GetChatByIdAsync(chatId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<MessengerChatDto> GetChatByIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken)
         {
             if (chatId == null)
@@ -179,14 +179,14 @@ namespace Do_Svyazi.User.Web.ApiClient
                             var objectResponse_ = await ReadObjectResponseAsync<MessengerChatDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -236,7 +236,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                 catch (Newtonsoft.Json.JsonException exception)
                 {
                     var message = "Could not deserialize the response body string as " + typeof(T).FullName + ".";
-                    throw new SwaggerException(message, (int)response.StatusCode, responseText, headers, exception);
+                    throw new Do_Svyazi_User_ApiClient_Exception(message, (int)response.StatusCode, responseText, headers, exception);
                 }
             }
             else
@@ -255,7 +255,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                 catch (Newtonsoft.Json.JsonException exception)
                 {
                     var message = "Could not deserialize the response body stream as " + typeof(T).FullName + ".";
-                    throw new SwaggerException(message, (int)response.StatusCode, string.Empty, headers, exception);
+                    throw new Do_Svyazi_User_ApiClient_Exception(message, (int)response.StatusCode, string.Empty, headers, exception);
                 }
             }
         }
@@ -341,14 +341,14 @@ namespace Do_Svyazi.User.Web.ApiClient
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerUserDto>> GetUsersAsync()
         {
             return GetUsersAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerUserDto>> GetUsersAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
@@ -389,14 +389,14 @@ namespace Do_Svyazi.User.Web.ApiClient
                             var objectResponse_ = await ReadObjectResponseAsync<System.Collections.ObjectModel.ObservableCollection<MessengerUserDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -413,14 +413,14 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task SetNickNameByIdAsync(System.Guid userId, string nickName)
         {
             return SetNickNameByIdAsync(userId, nickName, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task SetNickNameByIdAsync(System.Guid userId, string nickName, System.Threading.CancellationToken cancellationToken)
         {
             if (userId == null)
@@ -469,7 +469,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -486,14 +486,14 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task AddUserAsync(string name, string nickName, string description)
         {
             return AddUserAsync(name, nickName, description, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task AddUserAsync(string name, string nickName, string description, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
@@ -540,7 +540,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -590,7 +590,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                 catch (Newtonsoft.Json.JsonException exception)
                 {
                     var message = "Could not deserialize the response body string as " + typeof(T).FullName + ".";
-                    throw new SwaggerException(message, (int)response.StatusCode, responseText, headers, exception);
+                    throw new Do_Svyazi_User_ApiClient_Exception(message, (int)response.StatusCode, responseText, headers, exception);
                 }
             }
             else
@@ -609,7 +609,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                 catch (Newtonsoft.Json.JsonException exception)
                 {
                     var message = "Could not deserialize the response body stream as " + typeof(T).FullName + ".";
-                    throw new SwaggerException(message, (int)response.StatusCode, string.Empty, headers, exception);
+                    throw new Do_Svyazi_User_ApiClient_Exception(message, (int)response.StatusCode, string.Empty, headers, exception);
                 }
             }
         }

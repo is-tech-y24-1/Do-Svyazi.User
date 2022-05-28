@@ -20,18 +20,18 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IChatClient
     {
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>> GetChatsAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>> GetChatsAsync(System.Threading.CancellationToken cancellationToken);
 
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task<MessengerChatDto> GetChatByIdAsync(System.Guid chatId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task<MessengerChatDto> GetChatByIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken);
 
     }
@@ -39,25 +39,25 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IUserClient
     {
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerUserDto>> GetUsersAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerUserDto>> GetUsersAsync(System.Threading.CancellationToken cancellationToken);
 
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task SetNickNameByIdAsync(System.Guid userId, string nickName);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task SetNickNameByIdAsync(System.Guid userId, string nickName, System.Threading.CancellationToken cancellationToken);
 
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task AddUserAsync(string name, string nickName, string description);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task AddUserAsync(string name, string nickName, string description, System.Threading.CancellationToken cancellationToken);
 
     }
@@ -122,7 +122,7 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
 
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class SwaggerException : System.Exception
+    public partial class Do_Svyazi_User_ApiClient_Exception : System.Exception
     {
         public int StatusCode { get; private set; }
 
@@ -130,7 +130,7 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
 
         public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
 
-        public SwaggerException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception innerException)
+        public Do_Svyazi_User_ApiClient_Exception(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception innerException)
             : base(message + "\n\nStatus: " + statusCode + "\nResponse: \n" + ((response == null) ? "(null)" : response.Substring(0, response.Length >= 512 ? 512 : response.Length)), innerException)
         {
             StatusCode = statusCode;
@@ -145,11 +145,11 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class SwaggerException<TResult> : SwaggerException
+    public partial class Do_Svyazi_User_ApiClient_Exception<TResult> : Do_Svyazi_User_ApiClient_Exception
     {
         public TResult Result { get; private set; }
 
-        public SwaggerException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException)
+        public Do_Svyazi_User_ApiClient_Exception(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException)
             : base(message, statusCode, response, headers, innerException)
         {
             Result = result;
