@@ -1,5 +1,4 @@
 using Do_Svyazi.User.Domain.Exceptions;
-using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Domain.Users;
 
