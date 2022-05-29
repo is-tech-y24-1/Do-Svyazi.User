@@ -1,4 +1,5 @@
 using Do_Svyazi.User.Domain.Exceptions;
+using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Domain.Users;
 
@@ -8,6 +9,8 @@ public abstract class Chat
 {
     private readonly List<ChatUser> _users = new ();
     private readonly List<Role> _roles = new ();
+
+    protected Chat() { }
 
     protected Chat(string name, string description)
     {
@@ -22,6 +25,9 @@ public abstract class Chat
     // public long Tag { get; init; } ??
     public IReadOnlyCollection<ChatUser> Users => _users.AsReadOnly();
     public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
+
+    protected Role BaseAdminRole { get; init; }
+    protected Role BaseUserRole { get; init; }
 
     public virtual void ChangeNameChat(string name)
     {

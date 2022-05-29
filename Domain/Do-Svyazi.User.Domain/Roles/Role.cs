@@ -3,29 +3,26 @@ namespace Do_Svyazi.User.Domain.Roles;
 public class Role
 {
     public Guid ChatId { get; init; }
-    public Guid UserId { get; init; }
-
     public string Name { get; set; }
 
-    public ActionOption CanEdit { get; set; }
-    public ActionOption CanDelete { get; set; }
-    public ActionOption CanWrite { get; set; }
-    public ActionOption CanRead { get; set; }
+    public ActionOption CanEditMessages { get; set; }
+    public ActionOption CanDeleteMessages { get; set; }
+    public ActionOption CanWriteMessages { get; set; }
+    public ActionOption CanReadMessages { get; set; }
+    public ActionOption CanAddUsers { get; set; }
+    public ActionOption CanDeleteUsers { get; set; }
+    public ActionOption CanPinMessages { get; set; }
+    public ActionOption CanSeeChannelMembers { get; set; }
+    public ActionOption CanInviteOtherUsers { get; set; }
+    public ActionOption CanEditChannelDescription { get; set; }
+    public ActionOption CanDeleteChat { get; set; }
 
     public override bool Equals(object? obj) => Equals(obj as Role);
 
-    public override int GetHashCode() =>
-        HashCode.Combine(ChatId, UserId, Name, (int)CanEdit, (int)CanDelete, (int)CanWrite, (int)CanRead);
+    public override int GetHashCode() => HashCode.Combine(ChatId, Name);
 
-    public bool Equals(Role? role)
-    {
-        return role != null &&
-               ChatId.Equals(role.ChatId) &&
-               UserId.Equals(role.UserId) &&
-               Name == role.Name &&
-               CanEdit == role.CanEdit &&
-               CanDelete == role.CanDelete &&
-               CanWrite == role.CanWrite &&
-               CanRead == role.CanRead;
-    }
+    private bool Equals(Role? role) =>
+        role != null &&
+        ChatId.Equals(role.ChatId) &&
+        Name == role.Name;
 }
