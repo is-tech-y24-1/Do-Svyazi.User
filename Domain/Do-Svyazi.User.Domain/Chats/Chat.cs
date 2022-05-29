@@ -9,7 +9,11 @@ public abstract class Chat
     private readonly List<ChatUser> _users = new ();
     private readonly List<Role> _roles = new ();
 
-    protected Chat() { }
+    protected Chat(string name, string description)
+    {
+        Name = name;
+        Description = description;
+    }
 
     public Guid Id { get; protected init; } = Guid.NewGuid();
     public string Name { get; protected set; }
