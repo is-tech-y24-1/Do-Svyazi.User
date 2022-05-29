@@ -1,3 +1,4 @@
+using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Domain.Users;
 
@@ -5,6 +6,9 @@ namespace Do_Svyazi.User.Domain.Chats;
 
 public abstract class Chat
 {
+    private readonly List<ChatUser> _users = new ();
+    private readonly List<Role> _roles = new ();
+
     protected Chat() { }
 
     public Guid Id { get; protected init; } = Guid.NewGuid();
@@ -12,68 +16,73 @@ public abstract class Chat
     public string Description { get; protected set; }
 
     // public long Tag { get; init; } ??
-    public List<ChatUser> Users { get; init; } = new ();
-    public List<Role> Roles { get; init; } = new ();
+    public IReadOnlyCollection<ChatUser> Users => _users.AsReadOnly();
+    public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
 
     public virtual void ChangeNameChat(string name)
     {
-        Name = name ?? throw new NullReferenceException("Name chat is null");
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentNullException("Chat name to set is null");
+
+        Name = name;
     }
 
     public virtual void ChangeDescriptionChat(string description)
     {
-        Description = description ?? throw new NullReferenceException("Name chat is null");
+        if (string.IsNullOrWhiteSpace(description))
+            throw new ArgumentNullException("Chat name to set is null");
+
+        Description = description;
     }
 
     public List<ChatUser> GetChatUsersRole(Role role)
     {
-        return Users.Where(user => user.Role.Name == role.Name).ToList();
+        return Users.Where(user => user.Role.Equals(role)).ToList();
     }
 
     public ChatUser GetChatUser(string nickName)
     {
-        foreach (ChatUser user in Users.Where(user => user.NickName == nickName))
-        {
-            return user;
-        }
-
-        return new ChatUser();
-    }
-
-    public int GetChatUsersCount()
-    {
-        return Users.Count;
+        return Users.SingleOrDefault(user => user.NickName == nickName)
+               ?? throw new Do_Svyazi_User_NotFoundException("User is not found in chat");
     }
 
     public virtual void AddChatUser(ChatUser chatUser)
     {
         if (chatUser is null)
-            throw new NullReferenceException("ChatUser is null");
+            throw new ArgumentNullException("User to set is null");
 
-        Users.Add(chatUser);
+        if (Users.Contains(chatUser))
+            throw new Do_Svyazi_User_InnerLogicException("This user already exists");
+
+        _users.Add(chatUser);
     }
 
     public virtual void RemoveChatUser(ChatUser chatUser)
     {
         if (chatUser is null)
-            throw new NullReferenceException("ChatUser is null");
+            throw new ArgumentNullException("User to set is null");
 
-        Users.Remove(chatUser);
+        if (!_users.Remove(chatUser))
+            throw new Exception("This user doesn't exist in this chat");
     }
 
     public virtual void AddRole(Role role)
     {
         if (role is null)
-            throw new NullReferenceException("Role is null");
+            throw new ArgumentNullException("User to set is null");
 
-        Roles.Add(role);
+        if (Roles.Contains(role))
+            throw new Do_Svyazi_User_InnerLogicException("This role already exists");
+
+        _roles.Add(role);
     }
 
     public virtual void RemoveRole(Role role)
     {
         if (role is null)
-            throw new NullReferenceException("Role is null");
+            throw new ArgumentNullException("Role to set is null");
 
-        Roles.Remove(role);
+        if (!_roles.Remove(role))
+            throw new Exception("This role doesn't exist in this chat");
     }
 }
