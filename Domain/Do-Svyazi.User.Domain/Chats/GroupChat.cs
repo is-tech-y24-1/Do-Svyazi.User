@@ -7,10 +7,10 @@ public class GroupChat : Chat
 {
     private readonly Role _baseAdminRole = new Role
     {
-        CanEditMessage = ActionOption.Enabled,
-        CanDeleteMessage = ActionOption.Enabled,
-        CanWriteMessage = ActionOption.Enabled,
-        CanReadMessage = ActionOption.Enabled,
+        CanEditMessages = ActionOption.Enabled,
+        CanDeleteMessages = ActionOption.Enabled,
+        CanWriteMessages = ActionOption.Enabled,
+        CanReadMessages = ActionOption.Enabled,
         CanAddUsers = ActionOption.Enabled,
         CanDeleteUsers = ActionOption.Enabled,
         CanPinMessages = ActionOption.Enabled,
@@ -22,10 +22,10 @@ public class GroupChat : Chat
 
     private readonly Role _baseUserRole = new Role
     {
-        CanEditMessage = ActionOption.Disabled,
-        CanDeleteMessage = ActionOption.Enabled,
-        CanWriteMessage = ActionOption.Enabled,
-        CanReadMessage = ActionOption.Enabled,
+        CanEditMessages = ActionOption.Disabled,
+        CanDeleteMessages = ActionOption.Enabled,
+        CanWriteMessages = ActionOption.Enabled,
+        CanReadMessages = ActionOption.Enabled,
         CanAddUsers = ActionOption.Disabled,
         CanDeleteUsers = ActionOption.Disabled,
         CanPinMessages = ActionOption.Enabled,
@@ -36,6 +36,7 @@ public class GroupChat : Chat
     };
 
     protected GroupChat()
+        : base()
     {
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;

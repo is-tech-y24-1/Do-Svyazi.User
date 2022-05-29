@@ -5,10 +5,10 @@ public class Role
     public Guid ChatId { get; init; }
     public string Name { get; set; }
 
-    public ActionOption CanEditMessage { get; set; }
-    public ActionOption CanDeleteMessage { get; set; }
-    public ActionOption CanWriteMessage { get; set; }
-    public ActionOption CanReadMessage { get; set; }
+    public ActionOption CanEditMessages { get; set; }
+    public ActionOption CanDeleteMessages { get; set; }
+    public ActionOption CanWriteMessages { get; set; }
+    public ActionOption CanReadMessages { get; set; }
     public ActionOption CanAddUsers { get; set; }
     public ActionOption CanDeleteUsers { get; set; }
     public ActionOption CanPinMessages { get; set; }

@@ -6,10 +6,10 @@ public class SavedMessages : Chat
 {
     private readonly Role _baseAdminRole = new Role
     {
-        CanEditMessage = ActionOption.Enabled,
-        CanDeleteMessage = ActionOption.Enabled,
-        CanWriteMessage = ActionOption.Enabled,
-        CanReadMessage = ActionOption.Enabled,
+        CanEditMessages = ActionOption.Enabled,
+        CanDeleteMessages = ActionOption.Enabled,
+        CanWriteMessages = ActionOption.Enabled,
+        CanReadMessages = ActionOption.Enabled,
         CanAddUsers = ActionOption.Unavailable,
         CanDeleteUsers = ActionOption.Unavailable,
         CanPinMessages = ActionOption.Enabled,
@@ -21,10 +21,10 @@ public class SavedMessages : Chat
 
     private readonly Role _baseUserRole = new Role
     {
-        CanEditMessage = ActionOption.Enabled,
-        CanDeleteMessage = ActionOption.Enabled,
-        CanWriteMessage = ActionOption.Enabled,
-        CanReadMessage = ActionOption.Enabled,
+        CanEditMessages = ActionOption.Enabled,
+        CanDeleteMessages = ActionOption.Enabled,
+        CanWriteMessages = ActionOption.Enabled,
+        CanReadMessages = ActionOption.Enabled,
         CanAddUsers = ActionOption.Unavailable,
         CanDeleteUsers = ActionOption.Unavailable,
         CanPinMessages = ActionOption.Enabled,
@@ -35,6 +35,7 @@ public class SavedMessages : Chat
     };
 
     protected SavedMessages()
+        : base()
     {
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;

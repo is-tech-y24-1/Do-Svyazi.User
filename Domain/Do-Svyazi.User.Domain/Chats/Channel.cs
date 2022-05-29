@@ -6,10 +6,10 @@ public class Channel : Chat
 {
     private readonly Role _baseAdminRole = new Role
     {
-        CanEditMessage = ActionOption.Enabled,
-        CanDeleteMessage = ActionOption.Enabled,
-        CanWriteMessage = ActionOption.Enabled,
-        CanReadMessage = ActionOption.Enabled,
+        CanEditMessages = ActionOption.Enabled,
+        CanDeleteMessages = ActionOption.Enabled,
+        CanWriteMessages = ActionOption.Enabled,
+        CanReadMessages = ActionOption.Enabled,
         CanAddUsers = ActionOption.Enabled,
         CanDeleteUsers = ActionOption.Enabled,
         CanPinMessages = ActionOption.Enabled,
@@ -20,10 +20,10 @@ public class Channel : Chat
 
     private readonly Role _baseUserRole = new Role
     {
-        CanEditMessage = ActionOption.Disabled,
-        CanDeleteMessage = ActionOption.Disabled,
-        CanWriteMessage = ActionOption.Disabled,
-        CanReadMessage = ActionOption.Enabled,
+        CanEditMessages = ActionOption.Disabled,
+        CanDeleteMessages = ActionOption.Disabled,
+        CanWriteMessages = ActionOption.Disabled,
+        CanReadMessages = ActionOption.Enabled,
         CanAddUsers = ActionOption.Disabled,
         CanDeleteUsers = ActionOption.Disabled,
         CanPinMessages = ActionOption.Disabled,
@@ -32,6 +32,7 @@ public class Channel : Chat
         CanDeleteChat = ActionOption.Disabled,
     };
     protected Channel()
+        : base()
     {
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
