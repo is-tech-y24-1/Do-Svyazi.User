@@ -5,6 +5,22 @@ namespace Do_Svyazi.User.Domain.Chats;
 
 public abstract class Chat
 {
+    private readonly Role _baseAdminRole = new Role
+    {
+        CanEdit = ActionOption.Enabled,
+        CanDelete = ActionOption.Enabled,
+        CanWrite = ActionOption.Enabled,
+        CanRead = ActionOption.Enabled,
+    };
+
+    private readonly Role _baseUserRole = new Role
+    {
+        CanEdit = ActionOption.Disabled,
+        CanDelete = ActionOption.Enabled,
+        CanWrite = ActionOption.Enabled,
+        CanRead = ActionOption.Enabled,
+    };
+
     protected Chat() { }
 
     public Guid Id { get; protected init; } = Guid.NewGuid();
