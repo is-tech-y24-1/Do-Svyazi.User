@@ -7,18 +7,32 @@ public abstract class Chat
 {
     private readonly Role _baseAdminRole = new Role
     {
-        CanEdit = ActionOption.Enabled,
-        CanDelete = ActionOption.Enabled,
-        CanWrite = ActionOption.Enabled,
-        CanRead = ActionOption.Enabled,
+        CanEditMessage = ActionOption.Enabled,
+        CanDeleteMessage = ActionOption.Enabled,
+        CanWriteMessage = ActionOption.Enabled,
+        CanReadMessage = ActionOption.Enabled,
+        CanAddUsers = ActionOption.Enabled,
+        CanDeleteUsers = ActionOption.Enabled,
+        CanPinMessages = ActionOption.Enabled,
+        CanSeeChannelMembers = ActionOption.Enabled,
+        CanInviteOtherUsers = ActionOption.Enabled,
+        CanEditChannelDescription = ActionOption.Enabled,
+        CanDeleteChat = ActionOption.Enabled,
     };
 
     private readonly Role _baseUserRole = new Role
     {
-        CanEdit = ActionOption.Disabled,
-        CanDelete = ActionOption.Enabled,
-        CanWrite = ActionOption.Enabled,
-        CanRead = ActionOption.Enabled,
+        CanEditMessage = ActionOption.Disabled,
+        CanDeleteMessage = ActionOption.Enabled,
+        CanWriteMessage = ActionOption.Enabled,
+        CanReadMessage = ActionOption.Enabled,
+        CanAddUsers = ActionOption.Enabled,
+        CanDeleteUsers = ActionOption.Disabled,
+        CanPinMessages = ActionOption.Enabled,
+        CanSeeChannelMembers = ActionOption.Enabled,
+        CanInviteOtherUsers = ActionOption.Enabled,
+        CanEditChannelDescription = ActionOption.Disabled,
+        CanDeleteChat = ActionOption.Disabled,
     };
 
     protected Chat() { }

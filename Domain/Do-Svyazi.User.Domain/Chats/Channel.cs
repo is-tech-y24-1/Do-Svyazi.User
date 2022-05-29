@@ -6,17 +6,31 @@ public class Channel : Chat
 {
     private readonly Role _baseAdminRole = new Role
     {
-        CanEdit = ActionOption.Enabled,
-        CanDelete = ActionOption.Enabled,
-        CanWrite = ActionOption.Enabled,
-        CanRead = ActionOption.Enabled,
+        CanEditMessage = ActionOption.Enabled,
+        CanDeleteMessage = ActionOption.Enabled,
+        CanWriteMessage = ActionOption.Enabled,
+        CanReadMessage = ActionOption.Enabled,
+
+        // the Admin can add any people to his channel
+        CanAddUsers = ActionOption.Enabled,
+        CanDeleteUsers = ActionOption.Enabled,
+        CanPinMessages = ActionOption.Enabled,
+        CanInviteOtherUsers = ActionOption.Unavailable,
+        CanEditChannelDescription = ActionOption.Enabled,
+        CanDeleteChat = ActionOption.Enabled,
     };
 
     private readonly Role _baseUserRole = new Role
     {
-        CanEdit = ActionOption.Disabled,
-        CanDelete = ActionOption.Disabled,
-        CanWrite = ActionOption.Disabled,
-        CanRead = ActionOption.Enabled,
+        CanEditMessage = ActionOption.Disabled,
+        CanDeleteMessage = ActionOption.Disabled,
+        CanWriteMessage = ActionOption.Disabled,
+        CanReadMessage = ActionOption.Enabled,
+        CanAddUsers = ActionOption.Disabled,
+        CanDeleteUsers = ActionOption.Disabled,
+        CanPinMessages = ActionOption.Disabled,
+        CanInviteOtherUsers = ActionOption.Enabled,
+        CanEditChannelDescription = ActionOption.Disabled,
+        CanDeleteChat = ActionOption.Disabled,
     };
 }
