@@ -3,8 +3,6 @@ namespace Do_Svyazi.User.Domain.Roles;
 public class Role
 {
     public Guid ChatId { get; init; }
-    public Guid UserId { get; init; }
-
     public string Name { get; set; }
 
     public ActionOption CanEdit { get; set; }
