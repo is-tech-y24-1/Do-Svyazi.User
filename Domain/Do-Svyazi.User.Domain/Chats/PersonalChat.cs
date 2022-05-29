@@ -33,4 +33,10 @@ public class PersonalChat : Chat
         CanEditChannelDescription = ActionOption.Unavailable,
         CanDeleteChat = ActionOption.Enabled,
     };
+
+    protected PersonalChat()
+    {
+        BaseAdminRole = _baseAdminRole;
+        BaseUserRole = _baseUserRole;
+    }
 }

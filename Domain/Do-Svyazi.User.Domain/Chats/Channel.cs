@@ -10,8 +10,6 @@ public class Channel : Chat
         CanDeleteMessage = ActionOption.Enabled,
         CanWriteMessage = ActionOption.Enabled,
         CanReadMessage = ActionOption.Enabled,
-
-        // the Admin can add any people to his channel
         CanAddUsers = ActionOption.Enabled,
         CanDeleteUsers = ActionOption.Enabled,
         CanPinMessages = ActionOption.Enabled,
@@ -33,4 +31,9 @@ public class Channel : Chat
         CanEditChannelDescription = ActionOption.Disabled,
         CanDeleteChat = ActionOption.Disabled,
     };
+    protected Channel()
+    {
+        BaseAdminRole = _baseAdminRole;
+        BaseUserRole = _baseUserRole;
+    }
 }

@@ -35,10 +35,9 @@ public class GroupChat : Chat
         CanDeleteChat = ActionOption.Disabled,
     };
 
-    public new long Id { get; init; }
-    public new string Name { get; init; }
-    public new string Description { get; init; }
-
-    public new List<ChatUser> Users { get; init; }
-    public new List<Role> Roles { get; init; }
+    protected GroupChat()
+    {
+        BaseAdminRole = _baseAdminRole;
+        BaseUserRole = _baseUserRole;
+    }
 }

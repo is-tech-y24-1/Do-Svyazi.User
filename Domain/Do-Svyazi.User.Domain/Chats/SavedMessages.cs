@@ -33,4 +33,10 @@ public class SavedMessages : Chat
         CanEditChannelDescription = ActionOption.Unavailable,
         CanDeleteChat = ActionOption.Unavailable,
     };
+
+    protected SavedMessages()
+    {
+        BaseAdminRole = _baseAdminRole;
+        BaseUserRole = _baseUserRole;
+    }
 }
