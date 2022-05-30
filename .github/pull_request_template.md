@@ -1,7 +1,18 @@
-## Describe your changes
+## Вкратце опиши свои изменения
 
-## Issue ticket number and link
+1. Я сделал ..., ...
+2. Я добавил ..., ...
+3. Я отрефакторил ..., ...
 
-## Checklist before requesting a review
-- [ ] I have performed a self-review of my code
-- [ ] Will this be part of an api update? If yes, please write one phrase about this update.
+## Номер выполненной ишуи
+
+Closing issue #1
+
+## Чеклист перез запросом ревью :)
+
+- [ ] Весь функционал ишуи реализован
+
+## Вопросы
+
+1. Как правильнее раализвать ...
+2. Насколько правильно сделано ...
