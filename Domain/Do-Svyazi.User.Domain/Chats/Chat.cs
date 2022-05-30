@@ -58,24 +58,6 @@ public abstract class Chat
 
     public abstract void AddUser(ChatUser chatUser);
     public abstract void RemoveUser(ChatUser chatUser);
-
-    public void AddRole(Role role)
-    {
-        if (role is null)
-            throw new ArgumentNullException(nameof(role), "User to set is null");
-
-        if (Roles.Contains(role))
-            throw new Do_Svyazi_User_InnerLogicException($"Role {role.Name} already exists in chat {Name}");
-
-        _roles.Add(role);
-    }
-
-    public void RemoveRole(Role role)
-    {
-        if (role is null)
-            throw new ArgumentNullException(nameof(role), "Role to set is null");
-
-        if (!_roles.Remove(role))
-            throw new Exception($"Role {role.Name} doesn't exist in this chat {Name}");
-    }
+    public abstract void AddRole(Role role);
+    public abstract void RemoveRole(Role role);
 }

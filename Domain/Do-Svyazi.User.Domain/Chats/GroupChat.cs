@@ -52,4 +52,14 @@ public class GroupChat : Chat
     {
         throw new NotImplementedException();
     }
+
+    public override void AddRole(Role role)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void RemoveRole(Role role)
+    {
+        throw new NotImplementedException();
+    }
 }
