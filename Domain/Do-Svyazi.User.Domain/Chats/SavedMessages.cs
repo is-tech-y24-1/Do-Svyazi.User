@@ -36,26 +36,20 @@ public class SavedMessages : Chat
         CanDeleteChat = ActionOption.Unavailable,
     };
 
-    public SavedMessages(MessengerUser user, string name, string description)
+    public SavedMessages(MessengerUser messengerUser, string name, string description)
         : base(name, description)
     {
-        var admin = new ChatUser
-        {
-            Role = _baseAdminRole,
-            ChatId = Id,
-            User = user,
-        };
-
+        ChatUser admin = CreateUser(messengerUser, this, _baseAdminRole);
         Users.Add(admin);
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
     }
 
-    public override void AddUser(ChatUser chatUser) =>
-        throw new Do_Svyazi_User_BusinessLogicException($"User {chatUser.User.Name} can't added in chat {Name}");
+    public override void AddUser(MessengerUser messengerUser) =>
+        throw new Do_Svyazi_User_BusinessLogicException($"User {messengerUser.Name} can't added in chat {Name}");
 
-    public override void RemoveUser(ChatUser chatUser) =>
-        throw new Do_Svyazi_User_BusinessLogicException($"User {chatUser.User.Name} can't removed in chat {Name}");
+    public override void RemoveUser(MessengerUser messengerUser) =>
+        throw new Do_Svyazi_User_BusinessLogicException($"User {messengerUser.Name} can't removed in chat {Name}");
 
     public override void AddRole(Role role) =>
         throw new Do_Svyazi_User_BusinessLogicException($"Error added role in chat {Name}");

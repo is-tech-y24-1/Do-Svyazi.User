@@ -36,36 +36,34 @@ public class PersonalChat : Chat
         CanDeleteChat = ActionOption.Enabled,
     };
 
-    public PersonalChat(MessengerUser user, string name, string description)
+    public PersonalChat(MessengerUser messengerUser, string name, string description)
         : base(name, description)
     {
-        var admin = new ChatUser
-        {
-            Role = _baseAdminRole,
-            ChatId = Id,
-            User = user,
-        };
-
+        ChatUser admin = CreateUser(messengerUser, this, _baseAdminRole);
         Users.Add(admin);
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
     }
 
-    public override void AddUser(ChatUser chatUser)
+    public override void AddUser(MessengerUser messengerUser)
     {
         if (Users.Count != 1)
-            throw new Do_Svyazi_User_BusinessLogicException($"User {chatUser.User.Name} can't added in chat {Name}");
+            throw new Do_Svyazi_User_BusinessLogicException($"User {messengerUser.Name} can't added in chat {Name}");
 
-        Users.Add(chatUser);
+        ChatUser user = CreateUser(messengerUser, this, _baseAdminRole);
+
+        Users.Add(user);
     }
 
-    public override void RemoveUser(ChatUser chatUser)
+    public override void RemoveUser(MessengerUser messengerUser)
     {
         if (Users.Count != 2)
             throw new Do_Svyazi_User_BusinessLogicException($"Number users != 2 in chat {Name}");
 
-        if (!Users.Remove(chatUser))
-            throw new Do_Svyazi_User_InnerLogicException($"Error removed user {chatUser.User.Name} in chat {Name}");
+        var user = GetUser(messengerUser.NickName);
+
+        if (!Users.Remove(user))
+            throw new Do_Svyazi_User_InnerLogicException($"Error removed user {user.User.Name} in chat {Name}");
     }
 
     public override void AddRole(Role role) =>
