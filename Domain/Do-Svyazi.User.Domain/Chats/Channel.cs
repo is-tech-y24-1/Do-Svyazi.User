@@ -1,4 +1,5 @@
 using Do_Svyazi.User.Domain.Roles;
+using Do_Svyazi.User.Domain.Users;
 
 namespace Do_Svyazi.User.Domain.Chats;
 
@@ -37,5 +38,15 @@ public class Channel : Chat
     {
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
+    }
+
+    public override void AddUser(ChatUser chatUser)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void RemoveUser(ChatUser chatUser)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -8,11 +8,16 @@ public abstract class Chat
 {
     private readonly List<ChatUser> _users = new ();
     private readonly List<Role> _roles = new ();
-
     protected Chat() { }
 
     protected Chat(string name, string description)
     {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentNullException(nameof(name), "Chat name to set is null");
+
+        if (string.IsNullOrWhiteSpace(description))
+            throw new ArgumentNullException(nameof(description), "Chat description to set is null");
+
         Name = name;
         Description = description;
     }
@@ -22,76 +27,55 @@ public abstract class Chat
     public string Description { get; protected set; }
 
     // public long Tag { get; init; } ??
-    public IReadOnlyCollection<ChatUser> Users => _users.AsReadOnly();
-    public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
+    public IReadOnlyCollection<ChatUser> Users => _users;
+    public IReadOnlyCollection<Role> Roles => _roles;
 
     protected Role BaseAdminRole { get; init; }
     protected Role BaseUserRole { get; init; }
 
-    public virtual void ChangeNameChat(string name)
+    public virtual void ChangeName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException("Chat name to set is null");
+            throw new ArgumentNullException(nameof(name), "Chat name to set is null");
 
         Name = name;
     }
 
-    public virtual void ChangeDescriptionChat(string description)
+    public virtual void ChangeDescription(string description)
     {
         if (string.IsNullOrWhiteSpace(description))
-            throw new ArgumentNullException("Chat name to set is null");
+            throw new ArgumentNullException(nameof(description), "Chat description to set is null");
 
         Description = description;
     }
 
-    public List<ChatUser> GetChatUsersRole(Role role)
-    {
-        return Users.Where(user => user.Role.Equals(role)).ToList();
-    }
+    public IReadOnlyCollection<ChatUser> GetUsersRole(Role role) =>
+        Users.Where(user => user.Role.Equals(role)).ToList();
 
-    public ChatUser GetChatUser(string nickName)
-    {
-        return Users.SingleOrDefault(user => user.NickName == nickName)
-               ?? throw new Do_Svyazi_User_NotFoundException("User is not found in chat");
-    }
+    public ChatUser GetUser(string nickName) =>
+        Users.SingleOrDefault(user => user.NickName == nickName)
+        ?? throw new Do_Svyazi_User_NotFoundException($"User is not found in chat {Name}");
 
-    public virtual void AddChatUser(ChatUser chatUser)
-    {
-        if (chatUser is null)
-            throw new ArgumentNullException("User to set is null");
+    public abstract void AddUser(ChatUser chatUser);
+    public abstract void RemoveUser(ChatUser chatUser);
 
-        if (Users.Contains(chatUser))
-            throw new Do_Svyazi_User_InnerLogicException("This user already exists");
-
-        _users.Add(chatUser);
-    }
-
-    public virtual void RemoveChatUser(ChatUser chatUser)
-    {
-        if (chatUser is null)
-            throw new ArgumentNullException("User to set is null");
-
-        if (!_users.Remove(chatUser))
-            throw new Exception("This user doesn't exist in this chat");
-    }
-
-    public virtual void AddRole(Role role)
+    public void AddRole(Role role)
     {
         if (role is null)
-            throw new ArgumentNullException("User to set is null");
+            throw new ArgumentNullException(nameof(role), "User to set is null");
 
         if (Roles.Contains(role))
-            throw new Do_Svyazi_User_InnerLogicException("This role already exists");
+            throw new Do_Svyazi_User_InnerLogicException($"Role {role.Name} already exists in chat {Name}");
 
         _roles.Add(role);
     }
 
-    public virtual void RemoveRole(Role role)
+    public void RemoveRole(Role role)
     {
         if (role is null)
-            throw new ArgumentNullException("Role to set is null");
+            throw new ArgumentNullException(nameof(role), "Role to set is null");
 
         if (!_roles.Remove(role))
-            throw new Exception("This role doesn't exist in this chat");
+            throw new Exception($"Role {role.Name} doesn't exist in this chat {Name}");
     }
 }

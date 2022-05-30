@@ -22,7 +22,7 @@ public class Role
     public override int GetHashCode() => HashCode.Combine(ChatId, Name);
 
     private bool Equals(Role? role) =>
-        role != null &&
+        role is not null &&
         ChatId.Equals(role.ChatId) &&
         Name == role.Name;
 }
