@@ -22,7 +22,7 @@ public class UsersAndUsersAndChatDbContext : DbContext, IUsersAndChatDbContext
         ArgumentNullException.ThrowIfNull(modelBuilder);
 
         modelBuilder.Entity<Role>().HasKey(role => new { role.ChatId });
-        modelBuilder.Entity<ChatUser>().HasKey(user => user.UserId);
+        modelBuilder.Entity<ChatUser>().HasKey(user => user.User.Id);
 
         modelBuilder.Entity<Channel>();
         modelBuilder.Entity<GroupChat>();

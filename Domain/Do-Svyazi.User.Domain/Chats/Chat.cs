@@ -6,8 +6,6 @@ namespace Do_Svyazi.User.Domain.Chats;
 
 public abstract class Chat
 {
-    private readonly List<ChatUser> _users = new ();
-    private readonly List<Role> _roles = new ();
     protected Chat() { }
 
     protected Chat(string name, string description)
@@ -27,11 +25,13 @@ public abstract class Chat
     public string Description { get; protected set; }
 
     // public long Tag { get; init; } ??
-    public IReadOnlyCollection<ChatUser> Users => _users;
-    public IReadOnlyCollection<Role> Roles => _roles;
+    public IReadOnlyCollection<ChatUser> GetUsers => Users;
+    public IReadOnlyCollection<Role> GetRoles => Roles;
 
     protected Role BaseAdminRole { get; init; }
     protected Role BaseUserRole { get; init; }
+    protected List<ChatUser> Users { get; } = new ();
+    protected List<Role> Roles { get; } = new ();
 
     public virtual void ChangeName(string name)
     {
@@ -50,10 +50,10 @@ public abstract class Chat
     }
 
     public IReadOnlyCollection<ChatUser> GetUsersRole(Role role) =>
-        Users.Where(user => user.Role.Equals(role)).ToList();
+        GetUsers.Where(user => user.Role.Equals(role)).ToList();
 
     public ChatUser GetUser(string nickName) =>
-        Users.SingleOrDefault(user => user.NickName == nickName)
+        GetUsers.SingleOrDefault(user => user.User.NickName == nickName)
         ?? throw new Do_Svyazi_User_NotFoundException($"User is not found in chat {Name}");
 
     public abstract void AddUser(ChatUser chatUser);

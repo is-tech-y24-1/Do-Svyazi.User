@@ -10,4 +10,15 @@ public class MessengerUser
     public string Description { get; set; }
 
     public List<Chat> Chats { get; } = new ();
+
+    public override bool Equals(object? obj) => Equals(obj as MessengerUser);
+
+    public override int GetHashCode() => HashCode.Combine(Id, Name, NickName, Description);
+
+    private bool Equals(MessengerUser? messengerUser) =>
+        messengerUser is not null &&
+        Id.Equals(messengerUser.Id) &&
+        Name.Equals(messengerUser.Name) &&
+        NickName.Equals(messengerUser.NickName) &&
+        Description.Equals(messengerUser.Description);
 }
