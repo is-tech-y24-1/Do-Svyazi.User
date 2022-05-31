@@ -39,34 +39,34 @@ public class GroupChat : Chat
     public GroupChat(MessengerUser messengerUser, string name, string description)
         : base(name, description)
     {
-        ChatUser admin = CreateUser(messengerUser, this, _baseAdminRole);
+        ChatUser admin = CreateChatUser(messengerUser, this, _baseAdminRole);
         Users.Add(admin);
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
     }
 
-    public override void AddUser(MessengerUser messengerUser)
+    public override void AddUser(MessengerUser user)
     {
-        if (messengerUser is null)
-            throw new ArgumentNullException(nameof(messengerUser), "User to set is null");
+        if (user is null)
+            throw new ArgumentNullException(nameof(user), "User to set is null");
 
-        ChatUser user = CreateUser(messengerUser, this, _baseAdminRole);
+        ChatUser newUser = CreateChatUser(user, this, _baseAdminRole);
 
-        if (Users.Contains(user))
-            throw new Do_Svyazi_User_InnerLogicException($"User {user.User.Name} already exists in chat {Name}");
+        if (Users.Contains(newUser))
+            throw new Do_Svyazi_User_InnerLogicException($"User {newUser.User.Name} already exists in chat {Name}");
 
-        Users.Add(user);
+        Users.Add(newUser);
     }
 
-    public override void RemoveUser(MessengerUser messengerUser)
+    public override void RemoveUser(MessengerUser user)
     {
-        if (messengerUser is null)
-            throw new ArgumentNullException(nameof(messengerUser), "User to set is null");
+        if (user is null)
+            throw new ArgumentNullException(nameof(user), "User to set is null");
 
-        ChatUser user = GetUser(messengerUser.NickName);
+        ChatUser removeUser = GetUser(user.NickName);
 
-        if (!Users.Remove(user))
-            throw new Do_Svyazi_User_InnerLogicException($"User {user.User.Name} doesn't exist in this chat {Name}");
+        if (!Users.Remove(removeUser))
+            throw new Do_Svyazi_User_InnerLogicException($"User {removeUser.User.Name} doesn't exist in chat {Name}");
     }
 
     public override void AddRole(Role role)
@@ -86,6 +86,6 @@ public class GroupChat : Chat
             throw new ArgumentNullException(nameof(role), "Role to set is null");
 
         if (!Roles.Remove(role))
-            throw new Do_Svyazi_User_InnerLogicException($"Role {role.Name} doesn't exist in this chat {Name}");
+            throw new Do_Svyazi_User_InnerLogicException($"Role {role.Name} doesn't exist in chat {Name}");
     }
 }

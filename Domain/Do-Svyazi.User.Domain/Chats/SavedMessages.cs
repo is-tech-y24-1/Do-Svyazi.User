@@ -39,27 +39,27 @@ public class SavedMessages : Chat
     public SavedMessages(MessengerUser messengerUser, string name, string description)
         : base(name, description)
     {
-        ChatUser admin = CreateUser(messengerUser, this, _baseAdminRole);
+        ChatUser admin = CreateChatUser(messengerUser, this, _baseAdminRole);
         Users.Add(admin);
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
     }
 
-    public override void AddUser(MessengerUser messengerUser) =>
-        throw new Do_Svyazi_User_BusinessLogicException($"User {messengerUser.Name} can't added in chat {Name}");
+    public override void AddUser(MessengerUser user) =>
+        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support adding users");
 
-    public override void RemoveUser(MessengerUser messengerUser) =>
-        throw new Do_Svyazi_User_BusinessLogicException($"User {messengerUser.Name} can't removed in chat {Name}");
+    public override void RemoveUser(MessengerUser user) =>
+        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support removing users");
 
     public override void AddRole(Role role) =>
-        throw new Do_Svyazi_User_BusinessLogicException($"Error added role in chat {Name}");
+        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support adding roles");
 
     public override void RemoveRole(Role role) =>
-        throw new Do_Svyazi_User_BusinessLogicException($"Error deleted role in chat {Name}");
+        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support removing roles");
 
     public override void ChangeName(string name) =>
-        throw new Do_Svyazi_User_BusinessLogicException($"Error change name in chat {Name}");
+        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support rename name");
 
     public override void ChangeDescription(string description) =>
-        throw new Do_Svyazi_User_BusinessLogicException($"Error change description in chat {Name}");
+        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support rename description");
 }

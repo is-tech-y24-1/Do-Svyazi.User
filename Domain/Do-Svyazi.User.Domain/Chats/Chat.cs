@@ -28,6 +28,7 @@ public abstract class Chat
     public IReadOnlyCollection<ChatUser> GetUsers => Users;
     public IReadOnlyCollection<Role> GetRoles => Roles;
 
+    protected int MaxNumberUsers { get; init; }
     protected Role BaseAdminRole { get; init; }
     protected Role BaseUserRole { get; init; }
     protected List<ChatUser> Users { get; } = new ();
@@ -56,20 +57,20 @@ public abstract class Chat
         GetUsers.SingleOrDefault(user => user.User.NickName == nickName)
         ?? throw new Do_Svyazi_User_NotFoundException($"User is not found in chat {Name}");
 
-    public abstract void AddUser(MessengerUser messengerUser);
-    public abstract void RemoveUser(MessengerUser messengerUser);
+    public abstract void AddUser(MessengerUser user);
+    public abstract void RemoveUser(MessengerUser user);
     public abstract void AddRole(Role role);
     public abstract void RemoveRole(Role role);
 
-    protected ChatUser CreateUser(MessengerUser messengerUser, Chat chat, Role role)
+    protected ChatUser CreateChatUser(MessengerUser user, Chat chat, Role role)
     {
-        var user = new ChatUser
+        var newUser = new ChatUser
         {
             Role = role,
             Chat = chat,
-            User = messengerUser,
+            User = user,
         };
 
-        return user;
+        return newUser;
     }
 }
