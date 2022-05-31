@@ -9,5 +9,5 @@ public class MessengerUser
     public string NickName { get; set; }
     public string Description { get; set; }
 
-    public List<Chat> Chats { get; } = new ();
+    public List<Chat> Chats { get; set; } = new ();
 }

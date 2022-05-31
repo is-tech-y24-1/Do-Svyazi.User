@@ -5,28 +5,23 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
 
-public static class DeleteUser
+public static class GetUser
 {
-    public record Command(Guid userId) : IRequest;
+    public record Command(Guid userId) : IRequest<Guid>, IRequest<MessengerUser>;
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, MessengerUser>
     {
         private readonly IUsersAndChatDbContext _context;
 
         public Handler(IUsersAndChatDbContext context) => _context = context;
 
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<MessengerUser> Handle(Command request, CancellationToken cancellationToken)
         {
             MessengerUser? foundedUser = await _context.Users.FindAsync(request.userId);
             if (foundedUser is null)
-            {
                 throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId}");
-            }
 
-            _context.Users.Remove(foundedUser);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
+            return foundedUser;
         }
     }
 }
