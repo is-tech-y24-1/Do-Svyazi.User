@@ -19,7 +19,7 @@ public static class SetUserNickNameById
             var messengerUser = await _context.Users.FindAsync(request.userId) ??
                                 throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
 
-            messengerUser.NickName = request.nickName;
+            messengerUser.ChangeNickName(request.nickName);
             _context.Users.Update(messengerUser);
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -20,7 +20,7 @@ public static class ChangeUserNameById
             MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
                                           throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
 
-            messengerUser.Name = request.name;
+            messengerUser.ChangeName(request.name);
             _context.Users.Update(messengerUser);
             await _context.SaveChangesAsync(cancellationToken);
 
