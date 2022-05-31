@@ -49,7 +49,7 @@
     </ItemGroup>
 
     <Target Name="NSwag" BeforeTargets="AfterBuild" Condition="'$(TF_BUILD)'!='True'">
-        <Exec ConsoleToMSBuild="true" ContinueOnError="true" Command="$(NSwagExe_Net60) run nswag.json /variables:TypescriptOutputPath=..\..\Presentation\Do-Svyazi.User.Web.ApiClient\Front">
+        <Exec ConsoleToMSBuild="true" ContinueOnError="true" Command="$(NSwagExe_Net60) run nswag.json /variables:TypescriptOutputPath=..\..\Presentation\Do-Svyazi.User.Web.ApiClient.Frontend">
             <Output TaskParameter="ExitCode" PropertyName="NSwagExitCode"/>
             <Output TaskParameter="ConsoleOutput" PropertyName="NSwagOutput"/>
         </Exec>

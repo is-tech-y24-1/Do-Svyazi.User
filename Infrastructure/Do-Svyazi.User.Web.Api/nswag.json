@@ -1,6 +1,6 @@
 {
   "runtime": "Net60",
-  "defaultVariables": "CSharpOutputPath=..\\..\\Presentation\\Do-Svyazi.User.Web.ApiClient\\Back",
+  "defaultVariables": "CSharpOutputPath=..\\..\\Presentation\\Do-Svyazi.User.Web.ApiClient.Backend",
   "documentGenerator": {
     "aspNetCoreToOpenApi": {
       "project": "Do-Svyazi.User.Web.Api.csproj",
