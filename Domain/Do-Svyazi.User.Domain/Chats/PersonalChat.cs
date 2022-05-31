@@ -6,6 +6,8 @@ namespace Do_Svyazi.User.Domain.Chats;
 
 public class PersonalChat : Chat
 {
+    private readonly int _maxUsersAmount = 2;
+
     private readonly Role _baseAdminRole = new Role
     {
         CanEditMessages = ActionOption.Enabled,
@@ -36,36 +38,33 @@ public class PersonalChat : Chat
         CanDeleteChat = ActionOption.Enabled,
     };
 
-    public PersonalChat(MessengerUser messengerUser, string name, string description)
+    public PersonalChat(MessengerUser firstMessengerUser, MessengerUser secondMessengerUser, string name, string description)
         : base(name, description)
     {
-        ChatUser admin = CreateChatUser(messengerUser, this, _baseAdminRole);
-        Users.Add(admin);
+        MaxUsersAmount = _maxUsersAmount;
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
-        MaxNumberUsers = 2;
+
+        ChatUser firstUser = CreateChatUser(firstMessengerUser, _baseAdminRole);
+        ChatUser secondUser = CreateChatUser(secondMessengerUser, _baseAdminRole);
+
+        Users.AddRange(new[] { firstUser, secondUser });
     }
+
+    protected PersonalChat() { }
 
     public override void AddUser(MessengerUser user)
     {
-        if (Users.Count != MaxNumberUsers - 1)
-            throw new Do_Svyazi_User_BusinessLogicException($"User {user.Name} can't added in chat {Name}");
+        if (Users.Count >= MaxUsersAmount)
+            throw new Do_Svyazi_User_BusinessLogicException($"User {user.Name} can't be added in chat {Name}");
 
-        ChatUser newUser = CreateChatUser(user, this, _baseAdminRole);
+        ChatUser newUser = CreateChatUser(user, _baseAdminRole);
 
         Users.Add(newUser);
     }
 
-    public override void RemoveUser(MessengerUser user)
-    {
-        if (Users.Count != MaxNumberUsers)
-            throw new Do_Svyazi_User_BusinessLogicException($"Count users != {MaxNumberUsers} in chat {Name}");
-
-        ChatUser removeUser = GetUser(user.NickName);
-
-        if (!Users.Remove(removeUser))
-            throw new Do_Svyazi_User_InnerLogicException($"User {removeUser.User.Name} doesn't exist in chat {Name}");
-    }
+    public override void RemoveUser(MessengerUser user) =>
+        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support removing users");
 
     public override void AddRole(Role role) =>
         throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support adding roles");

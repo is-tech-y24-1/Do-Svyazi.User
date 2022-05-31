@@ -6,6 +6,8 @@ namespace Do_Svyazi.User.Domain.Chats;
 
 public class SavedMessages : Chat
 {
+    private readonly int _maxUsersAmount = 1;
+
     private readonly Role _baseAdminRole = new Role
     {
         CanEditMessages = ActionOption.Enabled,
@@ -39,11 +41,15 @@ public class SavedMessages : Chat
     public SavedMessages(MessengerUser messengerUser, string name, string description)
         : base(name, description)
     {
-        ChatUser admin = CreateChatUser(messengerUser, this, _baseAdminRole);
-        Users.Add(admin);
+        MaxUsersAmount = _maxUsersAmount;
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
+
+        ChatUser admin = CreateChatUser(messengerUser, BaseAdminRole);
+        Users.Add(admin);
     }
+
+    protected SavedMessages() { }
 
     public override void AddUser(MessengerUser user) =>
         throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support adding users");
@@ -58,11 +64,11 @@ public class SavedMessages : Chat
         throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support removing roles");
 
     public override void ChangeName(string name) =>
-        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support rename name");
+        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support renaming");
 
     public override void ChangeDescription(string description) =>
-        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support rename description");
+        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support description renaming");
 
     public override void ChangeUserRole(MessengerUser user, Role role) =>
-        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support change user role");
+        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support changing user roles");
 }

@@ -28,7 +28,7 @@ public abstract class Chat
     public IReadOnlyCollection<ChatUser> GetUsers => Users;
     public IReadOnlyCollection<Role> GetRoles => Roles;
 
-    protected int MaxNumberUsers { get; init; }
+    protected int MaxUsersAmount { get; init; }
     protected Role BaseAdminRole { get; init; }
     protected Role BaseUserRole { get; init; }
     protected List<ChatUser> Users { get; } = new ();
@@ -37,7 +37,7 @@ public abstract class Chat
     public virtual void ChangeName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException(nameof(name), "Chat name to set is null");
+            throw new ArgumentNullException(nameof(name), $"Chat name to change in chat {Name} is null");
 
         Name = name;
     }
@@ -45,16 +45,16 @@ public abstract class Chat
     public virtual void ChangeDescription(string description)
     {
         if (string.IsNullOrWhiteSpace(description))
-            throw new ArgumentNullException(nameof(description), "Chat description to set is null");
+            throw new ArgumentNullException(nameof(description), $"Chat description to set in chat {Name} is null");
 
         Description = description;
     }
 
-    public IReadOnlyCollection<ChatUser> GetUsersRole(Role role) =>
-        GetUsers.Where(user => user.Role.Equals(role)).ToList();
+    public IReadOnlyCollection<ChatUser> GetUsersByRole(Role role) =>
+        Users.Where(user => user.Role.Equals(role)).ToList();
 
     public ChatUser GetUser(string nickName) =>
-        GetUsers.SingleOrDefault(user => user.User.NickName == nickName)
+        Users.SingleOrDefault(user => user.User.NickName == nickName)
         ?? throw new Do_Svyazi_User_NotFoundException($"User is not found in chat {Name}");
 
     public abstract void AddUser(MessengerUser user);
@@ -63,15 +63,5 @@ public abstract class Chat
     public abstract void RemoveRole(Role role);
     public abstract void ChangeUserRole(MessengerUser user, Role role);
 
-    protected ChatUser CreateChatUser(MessengerUser user, Chat chat, Role role)
-    {
-        var newUser = new ChatUser
-        {
-            Role = role,
-            Chat = chat,
-            User = user,
-        };
-
-        return newUser;
-    }
+    protected ChatUser CreateChatUser(MessengerUser user, Role role) => new (user, this, role);
 }
