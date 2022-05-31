@@ -1,4 +1,3 @@
-using Do_Svyazi.User.Application.CQRS.Users.Commands;
 using Do_Svyazi.User.Application.CQRS.Users.Queries;
 using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.DataAccess;
@@ -46,7 +45,7 @@ public class Startup
             });
         });
 
-        services.AddMediatR(typeof(GetUsers).Assembly, typeof(AddUser).Assembly);
+        services.AddMediatR(typeof(GetUsers).Assembly);
         services.AddAutoMapper(typeof(MappingProfile).Assembly);
     }
 

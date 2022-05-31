@@ -1,6 +1,5 @@
 using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Chats;
-using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,8 +20,12 @@ public class UsersAndUsersAndChatDbContext : DbContext, IUsersAndChatDbContext
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
 
-        modelBuilder.Entity<Role>().HasKey(role => new { role.ChatId });
-        modelBuilder.Entity<ChatUser>().HasKey(user => user.UserId);
+        modelBuilder.Entity<Chat>()
+            .HasMany(chat => chat.GetRoles);
+
+        modelBuilder.Entity<ChatUser>()
+            .HasOne(chatUser => chatUser.Chat)
+            .WithMany(chat => chat.GetUsers);
 
         modelBuilder.Entity<Channel>();
         modelBuilder.Entity<GroupChat>();
