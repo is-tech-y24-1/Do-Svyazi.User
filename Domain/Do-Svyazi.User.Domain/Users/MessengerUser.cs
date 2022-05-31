@@ -4,7 +4,7 @@ namespace Do_Svyazi.User.Domain.Users;
 
 public class MessengerUser
 {
-    public MessengerUser(string? name, string? nickName, string? description)
+    public MessengerUser(string name, string nickName, string? description = null)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException(nameof(name), $"User name can't be null");
