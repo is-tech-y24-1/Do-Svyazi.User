@@ -32,6 +32,30 @@ public class UserController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("GetAllChatsByUserId")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<MessengerUser>> GetAllChatsByUserId(Guid userId)
+    {
+        var response = await _mediator.Send(new GetAllChatsByUserId.Command(userId));
+        return Ok(response);
+    }
+
+    [HttpGet("GetAllChatsIdByUserId")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<MessengerUser>> GetAllChatsIdByUserId(Guid userId)
+    {
+        var response = await _mediator.Send(new GetAllChatsIdByUserId.Command(userId));
+        return Ok(response);
+    }
+
+    [HttpGet("GetUserRoleByChatId")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<MessengerUser>> GetUserRoleByChatId(Guid userId, Guid chatId)
+    {
+        var response = await _mediator.Send(new GetUserRoleByChatId.Command(userId, chatId));
+        return Ok(response);
+    }
+
     [HttpPost("ChangeNickName")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> SetNickNameById(Guid userId, string nickName)
@@ -60,7 +84,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> AddUser(string name, string nickName, string description)
     {
-        var response = await _mediator.Send(new AddUser.Command(name, nickName, description));
+        Guid response = await _mediator.Send(new AddUser.Command(name, nickName, description));
         return Ok(response);
     }
 
@@ -72,7 +96,7 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("ChangName")]
+    [HttpPost("ChangeName")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> ChangeName(Guid userId,  string name)
     {

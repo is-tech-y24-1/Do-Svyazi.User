@@ -28,8 +28,8 @@ public static class GetUserRoleByChatId
             if (chat is null)
                 throw new Do_Svyazi_User_NotFoundException($"Can't find chat with id = {request.chatId}");
 
-            return chat.Users
-                .Where(user => user.UserId == foundedUser.Id)
+            return chat.GetUsers
+                .Where(user => user.Id == foundedUser.Id)
                 .Select(user => user.Role)
                 .First();
         }

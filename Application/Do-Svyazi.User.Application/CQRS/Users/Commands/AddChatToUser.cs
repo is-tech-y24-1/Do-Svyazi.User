@@ -24,7 +24,7 @@ public static class AddChatToUser
             Chat chat = await _context.Chats.FindAsync(request.chatId) ??
                         throw new Do_Svyazi_User_NotFoundException($"Chat with id {request.chatId} not found");
 
-            messengerUser.Chats.Add(chat);
+            chat.AddUser(messengerUser);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
