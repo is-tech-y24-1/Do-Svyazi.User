@@ -1,3 +1,4 @@
+using AutoMapper;
 using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Users;
@@ -14,21 +15,20 @@ public class GetAllChatsByUserId
     public class Handler : IRequestHandler<Command, List<MessengerChatDto>>
     {
         private readonly IUsersAndChatDbContext _context;
+        private readonly IMapper _mapper;
 
-        public Handler(IUsersAndChatDbContext context) => _context = context;
+        public Handler(IUsersAndChatDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
         public async Task<List<MessengerChatDto>> Handle(Command request, CancellationToken cancellationToken)
         {
-            MessengerUser? foundedUser = await _context.Users.FindAsync(request.userId);
-            if (foundedUser is null)
-                throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId}");
+            MessengerUser? messengerUser = await _context.Users.FindAsync(request.userId) ??
+                                           throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId}");
 
-            return foundedUser.Chats.Select(chat => new MessengerChatDto()
-            {
-                Id = chat.Id,
-                Description = chat.Description,
-                Name = chat.Name,
-            }).ToList();
+            return messengerUser.Chats.Select(chat => _mapper.Map<MessengerChatDto>(chat)).ToList();
         }
     }
 }

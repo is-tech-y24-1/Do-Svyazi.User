@@ -16,17 +16,17 @@ public static class AddUser
 
         public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
         {
-            var user = new MessengerUser
+            var messengerUser = new MessengerUser
             {
                 Name = request.name,
                 NickName = request.nickName,
                 Description = request.description,
             };
 
-            await _context.Users.AddAsync(user, cancellationToken);
+            await _context.Users.AddAsync(messengerUser, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return user.Id;
+            return messengerUser.Id;
         }
     }
 }

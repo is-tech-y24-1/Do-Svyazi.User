@@ -17,11 +17,10 @@ public static class GetAllChatsIdByUserId
 
         public async Task<List<Guid>> Handle(Command request, CancellationToken cancellationToken)
         {
-            MessengerUser? foundedUser = await _context.Users.FindAsync(request.userId);
-            if (foundedUser is null)
+            MessengerUser? messengerUser = await _context.Users.FindAsync(request.userId) ??
                 throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId}");
 
-            return foundedUser.Chats.Select(chat => chat.Id).ToList();
+            return messengerUser.Chats.Select(chat => chat.Id).ToList();
         }
     }
 }

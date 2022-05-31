@@ -17,11 +17,10 @@ public static class GetUser
 
         public async Task<MessengerUser> Handle(Command request, CancellationToken cancellationToken)
         {
-            MessengerUser? foundedUser = await _context.Users.FindAsync(request.userId);
-            if (foundedUser is null)
+            MessengerUser? messengerUser = await _context.Users.FindAsync(request.userId) ??
                 throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId}");
 
-            return foundedUser;
+            return messengerUser;
         }
     }
 }

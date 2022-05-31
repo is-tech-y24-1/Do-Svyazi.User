@@ -24,7 +24,7 @@ public class UserController : ControllerBase
         return Ok(response.users);
     }
 
-    [HttpGet("GetUser")]
+    [HttpGet("GetUserById")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<MessengerUser>> GetUser(Guid userId)
     {

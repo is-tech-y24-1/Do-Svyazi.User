@@ -20,18 +20,12 @@ public static class GetUserRoleByChatId
 
         public async Task<Role> Handle(Command request, CancellationToken cancellationToken)
         {
-            MessengerUser? foundedUser = await _context.Users.FindAsync(request.userId);
-            if (foundedUser is null)
-                throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId}");
-            Chat? chat = await _context.Chats.FindAsync(request.chatId);
+            MessengerUser? messengerUser = await _context.Users.FindAsync(request.userId) ??
+                                           throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId}");
+            Chat? chat = await _context.Chats.FindAsync(request.chatId) ??
+                         throw new Do_Svyazi_User_NotFoundException($"Can't find chat with id = {request.chatId}");
 
-            if (chat is null)
-                throw new Do_Svyazi_User_NotFoundException($"Can't find chat with id = {request.chatId}");
-
-            return chat.GetUsers
-                .Where(user => user.Id == foundedUser.Id)
-                .Select(user => user.Role)
-                .First();
+            return chat.GetUsers.First(user => user.Id == messengerUser.Id).Role;
         }
     }
 }
