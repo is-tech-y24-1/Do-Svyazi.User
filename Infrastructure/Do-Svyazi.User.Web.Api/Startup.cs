@@ -1,4 +1,3 @@
-using Do_Svyazi.User.Application.CQRS.Users.Commands;
 using Do_Svyazi.User.Application.CQRS.Users.Queries;
 using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.DataAccess;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
 namespace Do_Svyazi.User.Web.Api;
@@ -45,13 +45,15 @@ public class Startup
             });
         });
 
-        services.AddMediatR(typeof(GetUsers).Assembly, typeof(AddUser).Assembly);
+        services.AddMediatR(typeof(GetUsers).Assembly);
         services.AddAutoMapper(typeof(MappingProfile).Assembly);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        app.UseDeveloperExceptionPage();
+        if (env.IsDevelopment())
+            app.UseDeveloperExceptionPage();
+
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
