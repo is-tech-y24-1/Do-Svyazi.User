@@ -61,6 +61,7 @@ public abstract class Chat
     public abstract void RemoveUser(MessengerUser user);
     public abstract void AddRole(Role role);
     public abstract void RemoveRole(Role role);
+    public abstract void ChangeUserRole(MessengerUser user, Role role);
 
     protected ChatUser CreateChatUser(MessengerUser user, Chat chat, Role role)
     {

@@ -88,4 +88,16 @@ public class GroupChat : Chat
         if (!Roles.Remove(role))
             throw new Do_Svyazi_User_InnerLogicException($"Role {role.Name} doesn't exist in chat {Name}");
     }
+
+    public override void ChangeUserRole(MessengerUser user, Role role)
+    {
+        if (user is null)
+            throw new ArgumentNullException(nameof(user), "User to set is null");
+        if (role is null)
+            throw new ArgumentNullException(nameof(role), "Role to set is null");
+
+        ChatUser chatUser = GetUser(user.NickName);
+
+        chatUser.Role = role;
+    }
 }

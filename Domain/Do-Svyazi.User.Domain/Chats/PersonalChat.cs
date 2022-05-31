@@ -78,4 +78,7 @@ public class PersonalChat : Chat
 
     public override void ChangeDescription(string description) =>
         throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support rename description");
+
+    public override void ChangeUserRole(MessengerUser user, Role role) =>
+        throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support change user role");
 }
