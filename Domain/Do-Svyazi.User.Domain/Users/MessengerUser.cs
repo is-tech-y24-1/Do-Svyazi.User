@@ -4,18 +4,17 @@ namespace Do_Svyazi.User.Domain.Users;
 
 public class MessengerUser
 {
+    private const string _defaultDescription = "Description";
     public MessengerUser(string name, string nickName, string? description = null)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException(nameof(name), $"User name can't be null");
         if (string.IsNullOrWhiteSpace(nickName))
             throw new ArgumentNullException(nameof(nickName), $"User nickName can't be null");
-        if (string.IsNullOrWhiteSpace(description))
-            throw new ArgumentNullException(nameof(description), $"User description can't be null");
 
         Name = name;
         NickName = nickName;
-        Description = description;
+        Description = string.IsNullOrEmpty(description) ? _defaultDescription : description;
     }
 
     public Guid Id { get; protected init; } = Guid.NewGuid();
