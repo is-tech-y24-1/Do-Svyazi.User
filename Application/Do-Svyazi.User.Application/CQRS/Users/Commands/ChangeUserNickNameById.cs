@@ -20,10 +20,7 @@ public static class SetUserNickNameById
             MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
                                           throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
 
-            bool isNickNameInDb = _context.Users
-                .Any(user => user.NickName == request.nickName);
-
-            if (isNickNameInDb)
+            if (NickNameExists(request.nickName))
                 throw new Do_Svyazi_User_BusinessLogicException($"This {request.nickName} is already in the system");
 
             messengerUser.ChangeNickName(request.nickName);
@@ -31,6 +28,12 @@ public static class SetUserNickNameById
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
+        }
+
+        private bool NickNameExists(string nickName)
+        {
+            return _context.Users
+                .Any(user => user.NickName == nickName);
         }
     }
 }
