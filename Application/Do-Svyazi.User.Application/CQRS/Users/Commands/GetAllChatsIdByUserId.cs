@@ -7,15 +7,15 @@ namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
 
 public static class GetAllChatsIdByUserId
 {
-    public record Command(Guid userId) : IRequest<List<Guid>>;
+    public record Command(Guid userId) : IRequest<IReadOnlyList<Guid>>;
 
-    public class Handler : IRequestHandler<Command, List<Guid>>
+    public class Handler : IRequestHandler<Command, IReadOnlyList<Guid>>
     {
         private readonly IUsersAndChatDbContext _context;
 
         public Handler(IUsersAndChatDbContext context) => _context = context;
 
-        public async Task<List<Guid>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<Guid>> Handle(Command request, CancellationToken cancellationToken)
         {
             MessengerUser? messengerUser = await _context.Users.FindAsync(request.userId) ??
                 throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId}");

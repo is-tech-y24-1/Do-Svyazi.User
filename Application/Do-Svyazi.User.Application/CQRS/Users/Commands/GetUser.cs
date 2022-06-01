@@ -7,7 +7,7 @@ namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
 
 public static class GetUser
 {
-    public record Command(Guid userId) : IRequest<Guid>, IRequest<MessengerUser>;
+    public record Command(Guid userId) : IRequest<MessengerUser>;
 
     public class Handler : IRequestHandler<Command, MessengerUser>
     {

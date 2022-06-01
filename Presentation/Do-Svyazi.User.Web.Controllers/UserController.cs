@@ -1,6 +1,8 @@
 using Do_Svyazi.User.Application.CQRS.Users.Commands;
 using Do_Svyazi.User.Application.CQRS.Users.Queries;
+using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Domain.Users;
+using Do_Svyazi.User.Dtos.Chats;
 using Do_Svyazi.User.Dtos.Users;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +26,7 @@ public class UserController : ControllerBase
         return Ok(response.users);
     }
 
-    [HttpGet("GetUserById")]
+    [HttpGet(nameof(GetUser))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<MessengerUser>> GetUser(Guid userId)
     {
@@ -32,31 +34,31 @@ public class UserController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("GetAllChatsByUserId")]
+    [HttpGet(nameof(GetAllChatsByUserId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<MessengerUser>> GetAllChatsByUserId(Guid userId)
+    public async Task<ActionResult<IReadOnlyList<MessengerChatDto>>> GetAllChatsByUserId(Guid userId)
     {
-        var response = await _mediator.Send(new GetAllChatsByUserId.Command(userId));
+        IReadOnlyList<MessengerChatDto> response = await _mediator.Send(new GetAllChatsByUserId.Command(userId));
         return Ok(response);
     }
 
-    [HttpGet("GetAllChatsIdByUserId")]
+    [HttpGet(nameof(GetAllChatsIdByUserId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<MessengerUser>> GetAllChatsIdByUserId(Guid userId)
+    public async Task<ActionResult<IReadOnlyList<Guid>>> GetAllChatsIdByUserId(Guid userId)
     {
-        var response = await _mediator.Send(new GetAllChatsIdByUserId.Command(userId));
+        IReadOnlyList<Guid> response = await _mediator.Send(new GetAllChatsIdByUserId.Command(userId));
         return Ok(response);
     }
 
-    [HttpGet("GetUserRoleByChatId")]
+    [HttpGet(nameof(GetUserRoleByChatId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<MessengerUser>> GetUserRoleByChatId(Guid userId, Guid chatId)
+    public async Task<ActionResult<Role>> GetUserRoleByChatId(Guid userId, Guid chatId)
     {
         var response = await _mediator.Send(new GetUserRoleByChatId.Command(userId, chatId));
         return Ok(response);
     }
 
-    [HttpPost("ChangeNickName")]
+    [HttpPost(nameof(SetNickNameById))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> SetNickNameById(Guid userId, string nickName)
     {
@@ -64,7 +66,7 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("DeleteUser")]
+    [HttpPost(nameof(DeleteUser))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteUser(Guid userId)
     {
@@ -72,23 +74,15 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("AddChatToUser")]
+    [HttpPost(nameof(AddUser))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> AddChatToUser(Guid userId, Guid chatId)
-    {
-        await _mediator.Send(new AddChatToUser.Command(userId, chatId));
-        return Ok();
-    }
-
-    [HttpPost("AddUser")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> AddUser(string name, string nickName, string description)
+    public async Task<ActionResult<Guid>> AddUser(string name, string nickName, string description)
     {
         Guid response = await _mediator.Send(new AddUser.Command(name, nickName, description));
         return Ok(response);
     }
 
-    [HttpPost("ChangeDescription")]
+    [HttpPost(nameof(ChangeDescription))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> ChangeDescription(Guid userId,  string description)
     {
@@ -96,7 +90,7 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("ChangeName")]
+    [HttpPost(nameof(ChangeName))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> ChangeName(Guid userId,  string name)
     {

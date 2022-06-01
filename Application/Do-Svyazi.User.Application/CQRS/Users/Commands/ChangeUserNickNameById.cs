@@ -1,5 +1,6 @@
 using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Exceptions;
+using Do_Svyazi.User.Domain.Users;
 using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
@@ -16,8 +17,14 @@ public static class SetUserNickNameById
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            var messengerUser = await _context.Users.FindAsync(request.userId) ??
-                                throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
+            MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
+                                          throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
+
+            bool isNickNameInDb = _context.Users
+                .Any(user => user.NickName == request.nickName);
+
+            if (isNickNameInDb)
+                throw new Do_Svyazi_User_BusinessLogicException($"This {request.nickName} is already in the system");
 
             messengerUser.ChangeNickName(request.nickName);
             _context.Users.Update(messengerUser);
