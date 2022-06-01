@@ -6,7 +6,7 @@ public class Role
 {
     public Guid Id { get; init; } = Guid.NewGuid();
     public Chat Chat { get; init; }
-    public string Name { get; set; }
+    public string Name { get; private set; }
 
     public ActionOption CanEditMessages { get; set; }
     public ActionOption CanDeleteMessages { get; set; }
@@ -19,6 +19,14 @@ public class Role
     public ActionOption CanInviteOtherUsers { get; set; }
     public ActionOption CanEditChannelDescription { get; set; }
     public ActionOption CanDeleteChat { get; set; }
+
+    public virtual void ChangeName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentNullException(nameof(name), $"Role name to change is null");
+
+        Name = name;
+    }
 
     public override bool Equals(object? obj) => Equals(obj as Role);
 
