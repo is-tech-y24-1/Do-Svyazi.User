@@ -1,5 +1,8 @@
 using Do_Svyazi.User.Application.CQRS.Users.Commands;
 using Do_Svyazi.User.Application.CQRS.Users.Queries;
+using Do_Svyazi.User.Domain.Roles;
+using Do_Svyazi.User.Domain.Users;
+using Do_Svyazi.User.Dtos.Chats;
 using Do_Svyazi.User.Dtos.Users;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +26,39 @@ public class UserController : ControllerBase
         return Ok(response.users);
     }
 
-    [HttpPost("ChangeNickName")]
+    [HttpGet(nameof(GetUser))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<MessengerUser>> GetUser(Guid userId)
+    {
+        var response = await _mediator.Send(new GetUser.Command(userId));
+        return Ok(response);
+    }
+
+    [HttpGet(nameof(GetAllChatsByUserId))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<MessengerChatDto>>> GetAllChatsByUserId(Guid userId)
+    {
+        IReadOnlyList<MessengerChatDto> response = await _mediator.Send(new GetAllChatsByUserId.Command(userId));
+        return Ok(response);
+    }
+
+    [HttpGet(nameof(GetAllChatsIdByUserId))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<Guid>>> GetAllChatsIdByUserId(Guid userId)
+    {
+        IReadOnlyList<Guid> response = await _mediator.Send(new GetAllChatsIdByUserId.Command(userId));
+        return Ok(response);
+    }
+
+    [HttpGet(nameof(GetUserRoleByChatId))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Role>> GetUserRoleByChatId(Guid userId, Guid chatId)
+    {
+        var response = await _mediator.Send(new GetUserRoleByChatId.Command(userId, chatId));
+        return Ok(response);
+    }
+
+    [HttpPost(nameof(SetNickNameById))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> SetNickNameById(Guid userId, string nickName)
     {
@@ -31,11 +66,35 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("AddUser")]
+    [HttpPost(nameof(DeleteUser))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> AddUser(string name, string nickName, string description)
+    public async Task<ActionResult> DeleteUser(Guid userId)
     {
-        var response = await _mediator.Send(new AddUser.Command(name, nickName, description));
+        await _mediator.Send(new DeleteUser.Command(userId));
+        return Ok();
+    }
+
+    [HttpPost(nameof(AddUser))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Guid>> AddUser(string name, string nickName, string description)
+    {
+        Guid response = await _mediator.Send(new AddUser.Command(name, nickName, description));
         return Ok(response);
+    }
+
+    [HttpPost(nameof(ChangeDescription))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult> ChangeDescription(Guid userId,  string description)
+    {
+        await _mediator.Send(new ChangeUserDescriptionById.Command(userId, description));
+        return Ok();
+    }
+
+    [HttpPost(nameof(ChangeName))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult> ChangeName(Guid userId,  string name)
+    {
+        await _mediator.Send(new ChangeUserNameById.Command(userId, name));
+        return Ok();
     }
 }

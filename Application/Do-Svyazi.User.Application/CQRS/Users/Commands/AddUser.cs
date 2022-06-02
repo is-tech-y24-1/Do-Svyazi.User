@@ -1,4 +1,5 @@
 using Do_Svyazi.User.Application.DbContexts;
+using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Users;
 using MediatR;
 
@@ -16,17 +17,23 @@ public static class AddUser
 
         public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
         {
-            var user = new MessengerUser
+            if (IsUserExist(request.nickName))
             {
-                Name = request.name,
-                NickName = request.nickName,
-                Description = request.description,
-            };
+                throw new Do_Svyazi_User_BusinessLogicException(
+                    $"User with nickname = {request.nickName} is already created");
+            }
 
-            await _context.Users.AddAsync(user, cancellationToken);
+            var messengerUser = new MessengerUser(request.name, request.nickName, request.description);
+            await _context.Users.AddAsync(messengerUser, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return user.Id;
+            return messengerUser.Id;
+        }
+
+        private bool IsUserExist(string nickName)
+        {
+            MessengerUser? foundUser = _context.Users.FirstOrDefault(user => user.NickName == nickName);
+            return foundUser is not null;
         }
     }
 }

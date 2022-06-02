@@ -5,35 +5,26 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
 
-public static class SetUserNickNameById
+public static class ChangeUserNameById
 {
-    public record Command(Guid userId, string nickName) : IRequest;
+    public record Command(Guid userId, string name) : IRequest;
 
     public class Handler : IRequestHandler<Command>
     {
-        private readonly IDbContext _context;
+        private readonly IUsersAndChatDbContext _context;
 
-        public Handler(IDbContext context) => _context = context;
+        public Handler(IUsersAndChatDbContext context) => _context = context;
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
                                           throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
 
-            if (NickNameExists(request.nickName))
-                throw new Do_Svyazi_User_BusinessLogicException($"This {request.nickName} is already in the system");
-
-            messengerUser.ChangeNickName(request.nickName);
+            messengerUser.ChangeName(request.name);
             _context.Users.Update(messengerUser);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
-        }
-
-        private bool NickNameExists(string nickName)
-        {
-            return _context.Users
-                .Any(user => user.NickName == nickName);
         }
     }
 }
