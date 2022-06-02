@@ -17,7 +17,7 @@ public static class AddUser
 
         public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
         {
-            if (await IsUserExist(request.nickName))
+            if (IsUserExist(request.nickName))
             {
                 throw new Do_Svyazi_User_BusinessLogicException(
                     $"User with nickname = {request.nickName} is already created");
@@ -30,9 +30,9 @@ public static class AddUser
             return messengerUser.Id;
         }
 
-        private async Task<bool> IsUserExist(string nickName)
+        private bool IsUserExist(string nickName)
         {
-            MessengerUser? foundUser = await _context.Users.FindAsync(nickName);
+            MessengerUser? foundUser = _context.Users.FirstOrDefault(user => user.NickName == nickName);
             return foundUser is not null;
         }
     }
