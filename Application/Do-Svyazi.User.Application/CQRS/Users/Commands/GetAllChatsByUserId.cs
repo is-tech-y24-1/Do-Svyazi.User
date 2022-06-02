@@ -14,10 +14,10 @@ public class GetAllChatsByUserId
 
     public class Handler : IRequestHandler<Command, IReadOnlyList<MessengerChatDto>>
     {
-        private readonly IUsersAndChatDbContext _context;
+        private readonly IDbContext _context;
         private readonly IMapper _mapper;
 
-        public Handler(IUsersAndChatDbContext context, IMapper mapper)
+        public Handler(IDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

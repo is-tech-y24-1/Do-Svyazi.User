@@ -6,7 +6,7 @@ public class Role
 {
     public Guid Id { get; init; } = Guid.NewGuid();
     public Chat Chat { get; init; }
-    public string Name { get; private set; }
+    public string Name { get; set; }
 
     public ActionOption CanEditMessages { get; set; }
     public ActionOption CanDeleteMessages { get; set; }

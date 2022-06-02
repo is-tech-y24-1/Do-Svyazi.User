@@ -11,9 +11,9 @@ public static class GetAllChatsIdByUserId
 
     public class Handler : IRequestHandler<Command, IReadOnlyList<Guid>>
     {
-        private readonly IUsersAndChatDbContext _context;
+        private readonly IDbContext _context;
 
-        public Handler(IUsersAndChatDbContext context) => _context = context;
+        public Handler(IDbContext context) => _context = context;
 
         public async Task<IReadOnlyList<Guid>> Handle(Command request, CancellationToken cancellationToken)
         {

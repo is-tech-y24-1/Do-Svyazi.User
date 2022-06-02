@@ -11,9 +11,9 @@ public static class GetUser
 
     public class Handler : IRequestHandler<Command, MessengerUser>
     {
-        private readonly IUsersAndChatDbContext _context;
+        private readonly IDbContext _context;
 
-        public Handler(IUsersAndChatDbContext context) => _context = context;
+        public Handler(IDbContext context) => _context = context;
 
         public async Task<MessengerUser> Handle(Command request, CancellationToken cancellationToken)
         {
