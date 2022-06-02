@@ -1,5 +1,3 @@
-using Do_Svyazi.User.Domain.Chats;
-
 namespace Do_Svyazi.User.Domain.Users;
 
 public class MessengerUser
@@ -8,8 +6,6 @@ public class MessengerUser
     public string Name { get; set; }
     public string NickName { get; set; }
     public string Description { get; set; }
-
-    public IReadOnlyCollection<Chat> Chats { get; } = new List<Chat>();
 
     public override bool Equals(object? obj) => Equals(obj as MessengerUser);
 

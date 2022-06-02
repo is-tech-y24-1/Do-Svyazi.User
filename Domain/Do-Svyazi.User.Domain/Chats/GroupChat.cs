@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Domain.Users;
@@ -52,8 +51,8 @@ public class GroupChat : Chat
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
 
-        Creator = CreateChatUser(creator, BaseAdminRole);
-        Users.Add(Creator);
+        Creator = creator;
+        CreatorId = creator.Id;
     }
 
     protected GroupChat()
@@ -74,6 +73,7 @@ public class GroupChat : Chat
             CanDeleteChat = ActionOption.Disabled,
             Chat = this,
         };
+
         _baseAdminRole = new Role
         {
             Name = "admin",
@@ -92,7 +92,7 @@ public class GroupChat : Chat
         };
     }
 
-    public override void AddUser(MessengerUser user)
+    public override ChatUser AddUser(MessengerUser user)
     {
         if (user is null)
             throw new ArgumentNullException(nameof(user), $"User to add in chat {Name} is null");
@@ -103,6 +103,8 @@ public class GroupChat : Chat
             throw new Do_Svyazi_User_InnerLogicException($"User {user.Name} to add already exists in chat {Name}");
 
         Users.Add(newUser);
+
+        return newUser;
     }
 
     public override void RemoveUser(MessengerUser user)

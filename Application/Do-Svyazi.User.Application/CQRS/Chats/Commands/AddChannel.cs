@@ -13,9 +13,9 @@ public static class AddChannel
 
     public class Handler : IRequestHandler<Command, Guid>
     {
-        private readonly IUsersAndChatDbContext _context;
+        private readonly IDbContext _context;
 
-        public Handler(IUsersAndChatDbContext context) => _context = context;
+        public Handler(IDbContext context) => _context = context;
 
         public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
         {

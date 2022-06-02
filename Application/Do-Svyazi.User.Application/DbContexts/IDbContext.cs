@@ -4,9 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.DbContexts;
 
-public interface IUsersAndChatDbContext
+public interface IDbContext
 {
     public DbSet<Chat> Chats { get; init; }
     public DbSet<MessengerUser> Users { get; init; }
+    public DbSet<ChatUser> ChatUsers { get; init; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

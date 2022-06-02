@@ -1,6 +1,5 @@
 using AutoMapper;
 using Do_Svyazi.User.Application.DbContexts;
-using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Dtos.Chats;
 using MediatR;
@@ -15,10 +14,10 @@ public static class GetChatById
 
     public class Handler : IRequestHandler<Query, Response>
     {
-        private readonly IUsersAndChatDbContext _context;
+        private readonly IDbContext _context;
         private readonly IMapper _mapper;
 
-        public Handler(IUsersAndChatDbContext context, IMapper mapper)
+        public Handler(IDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -27,7 +26,9 @@ public static class GetChatById
         public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
         {
             var result = await _context.Chats
-                .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
+                             .Include(chat => chat.Creator)
+                             .Include(chat => chat.Users)
+                             .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                          throw new Do_Svyazi_User_NotFoundException($"Can't find chat with id = {request.chatId}");
 
             return new Response(_mapper.Map<MessengerChatDto>(result));

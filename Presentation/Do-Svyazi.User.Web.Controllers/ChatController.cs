@@ -1,7 +1,6 @@
 using Do_Svyazi.User.Application.CQRS.Chats.Commands;
 using Do_Svyazi.User.Application.CQRS.Chats.Queries;
 using Do_Svyazi.User.Dtos.Chats;
-using Do_Svyazi.User.Dtos.Users;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,11 +31,11 @@ public class ChatController : ControllerBase
         return Ok(response.chat);
     }
 
-    [HttpGet(nameof(GetUsersToChat))]
+    [HttpGet(nameof(GetUserIdsByChatId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyCollection<MessengerUserDto>>> GetUsersToChat(Guid chatId)
+    public async Task<ActionResult<IReadOnlyCollection<Guid>>> GetUserIdsByChatId(Guid chatId)
     {
-        var response = await _mediator.Send(new GetUsersToChat.Query(chatId));
+        var response = await _mediator.Send(new GetUserIdsByChatId.Query(chatId));
         return Ok(response);
     }
 
@@ -72,9 +71,9 @@ public class ChatController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPost(nameof(AddChatToUser))]
+    [HttpPost(nameof(AddUserToChat))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> AddChatToUser(Guid userId, Guid chatId)
+    public async Task<ActionResult> AddUserToChat(Guid userId, Guid chatId)
     {
         await _mediator.Send(new AddUserToChat.Command(userId, chatId));
         return Ok();

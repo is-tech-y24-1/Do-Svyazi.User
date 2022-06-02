@@ -13,13 +13,14 @@ public class AddUserToChat
 
     public class Handler : IRequestHandler<Command>
     {
-        private readonly IUsersAndChatDbContext _context;
+        private readonly IDbContext _context;
 
-        public Handler(IUsersAndChatDbContext context) => _context = context;
+        public Handler(IDbContext context) => _context = context;
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             Chat chat = await _context.Chats
+                            .Include(chat => chat.Users)
                             .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                         throw new Do_Svyazi_User_NotFoundException($"Chat with id {request.chatId} not found");
 
@@ -27,8 +28,10 @@ public class AddUserToChat
                                               .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
                                           throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
 
-            chat.AddUser(messengerUser);
+            ChatUser newChatUser = chat.AddUser(messengerUser);
+            _context.ChatUsers.Add(newChatUser);
             await _context.SaveChangesAsync(cancellationToken);
+
             return Unit.Value;
         }
     }

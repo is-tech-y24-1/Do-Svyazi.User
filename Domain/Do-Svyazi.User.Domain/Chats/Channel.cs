@@ -29,6 +29,7 @@ public class Channel : Chat
             CanDeleteChat = ActionOption.Enabled,
             Chat = this,
         };
+
         _baseUserRole = new Role
         {
             Name = "base",
@@ -44,11 +45,12 @@ public class Channel : Chat
             CanDeleteChat = ActionOption.Disabled,
             Chat = this,
         };
+
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
 
-        Creator = CreateChatUser(creator, BaseAdminRole);
-        Users.Add(Creator);
+        Creator = creator;
+        CreatorId = Creator.Id;
     }
 
     protected Channel()
@@ -68,6 +70,7 @@ public class Channel : Chat
             CanDeleteChat = ActionOption.Disabled,
             Chat = this,
         };
+
         _baseAdminRole = new Role
         {
             Name = "admin",
@@ -85,7 +88,7 @@ public class Channel : Chat
         };
     }
 
-    public override void AddUser(MessengerUser user)
+    public override ChatUser AddUser(MessengerUser user)
     {
         if (user is null)
             throw new ArgumentNullException(nameof(user), $"User to add in chat {Name} is null");
@@ -96,6 +99,8 @@ public class Channel : Chat
             throw new Do_Svyazi_User_InnerLogicException($"User {newUser.User.Name} already exists in chat {Name}");
 
         Users.Add(newUser);
+
+        return newUser;
     }
 
     public override void RemoveUser(MessengerUser user)

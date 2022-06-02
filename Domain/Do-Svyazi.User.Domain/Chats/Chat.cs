@@ -28,7 +28,8 @@ public abstract class Chat
     public List<ChatUser> Users { get; init; } = new ();
     public List<Role> Roles { get; init; } = new ();
     public int MaxUsersAmount { get; init; }
-    protected ChatUser Creator { get; init; }
+    public Guid CreatorId { get; init; }
+    public MessengerUser Creator { get; init; }
     protected Role BaseAdminRole { get; init; }
     protected Role BaseUserRole { get; init; }
 
@@ -55,7 +56,7 @@ public abstract class Chat
         Users.SingleOrDefault(user => user.User.NickName == nickName)
         ?? throw new Do_Svyazi_User_NotFoundException($"User is not found in chat {Name}");
 
-    public abstract void AddUser(MessengerUser user);
+    public abstract ChatUser AddUser(MessengerUser user);
     public abstract void RemoveUser(MessengerUser user);
     public abstract void AddRole(Role role);
     public abstract void RemoveRole(Role role);

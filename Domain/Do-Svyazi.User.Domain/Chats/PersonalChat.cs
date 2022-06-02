@@ -32,6 +32,7 @@ public class PersonalChat : Chat
             CanDeleteChat = ActionOption.Enabled,
             Chat = this,
         };
+
         _baseAdminRole = new Role
         {
             Name = "admin",
@@ -51,10 +52,10 @@ public class PersonalChat : Chat
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
 
-        Creator = CreateChatUser(firstMessengerUser, BaseAdminRole);
+        ChatUser firstUser = CreateChatUser(firstMessengerUser, BaseAdminRole);
         ChatUser secondUser = CreateChatUser(secondMessengerUser, _baseAdminRole);
 
-        Users.AddRange(new[] { Creator, secondUser });
+        Users.AddRange(new[] { firstUser, secondUser });
     }
 
     protected PersonalChat()
@@ -93,7 +94,7 @@ public class PersonalChat : Chat
         };
     }
 
-    public override void AddUser(MessengerUser user)
+    public override ChatUser AddUser(MessengerUser user)
     {
         if (Users.Count >= MaxUsersAmount)
             throw new Do_Svyazi_User_BusinessLogicException($"User {user.Name} can't be added in chat {Name}");
@@ -101,6 +102,8 @@ public class PersonalChat : Chat
         ChatUser newUser = CreateChatUser(user, _baseAdminRole);
 
         Users.Add(newUser);
+
+        return newUser;
     }
 
     public override void RemoveUser(MessengerUser user) =>

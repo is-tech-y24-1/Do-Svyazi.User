@@ -7,15 +7,14 @@ namespace Do_Svyazi.User.Domain.Chats;
 public class SavedMessages : Chat
 {
     private readonly int _maxUsersAmount = 1;
-
     private readonly Role _baseAdminRole;
-
     private readonly Role _baseUserRole;
 
     public SavedMessages(MessengerUser messengerUser, string name, string description)
         : base(name, description)
     {
         MaxUsersAmount = _maxUsersAmount;
+
         _baseAdminRole = new Role
         {
             Name = "admin",
@@ -32,6 +31,7 @@ public class SavedMessages : Chat
             CanDeleteChat = ActionOption.Unavailable,
             Chat = this,
         };
+
         _baseUserRole = new Role
         {
             Name = "base",
@@ -51,8 +51,8 @@ public class SavedMessages : Chat
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
 
-        Creator = CreateChatUser(messengerUser, BaseAdminRole);
-        Users.Add(Creator);
+        Creator = messengerUser;
+        CreatorId = Creator.Id;
     }
 
     protected SavedMessages()
@@ -91,7 +91,7 @@ public class SavedMessages : Chat
         };
     }
 
-    public override void AddUser(MessengerUser user) =>
+    public override ChatUser AddUser(MessengerUser user) =>
         throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support adding users");
 
     public override void RemoveUser(MessengerUser user) =>

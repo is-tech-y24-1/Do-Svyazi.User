@@ -7,5 +7,6 @@ public record MessengerChatDto
     public Guid Id { get; init; }
     public string? Name { get; init; }
     public string? Description { get; init; }
-    public List<MessengerUserDto>? Users { get; init; } = new ();
+    public MessengerUserDto? Creator { get; init; }
+    public List<Guid> Users { get; init; } = new ();
 }

@@ -13,9 +13,9 @@ public class DeleteUserToChat
 
     public class Handler : IRequestHandler<Command>
     {
-        private readonly IUsersAndChatDbContext _context;
+        private readonly IDbContext _context;
 
-        public Handler(IUsersAndChatDbContext context) => _context = context;
+        public Handler(IDbContext context) => _context = context;
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
