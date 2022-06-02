@@ -25,15 +25,12 @@ public abstract class Chat
     public string Description { get; protected set; }
 
     // public long Tag { get; init; } ??
-    public IReadOnlyCollection<ChatUser> GetUsers => Users;
-    public IReadOnlyCollection<Role> GetRoles => Roles;
-
-    protected int MaxUsersAmount { get; init; }
+    public List<ChatUser> Users { get; init; } = new ();
+    public List<Role> Roles { get; init; } = new ();
+    public int MaxUsersAmount { get; init; }
     protected ChatUser Creator { get; init; }
     protected Role BaseAdminRole { get; init; }
     protected Role BaseUserRole { get; init; }
-    protected List<ChatUser> Users { get; } = new ();
-    protected List<Role> Roles { get; } = new ();
 
     public virtual void ChangeName(string name)
     {

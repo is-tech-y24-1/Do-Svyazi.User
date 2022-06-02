@@ -13,7 +13,8 @@ public class MappingProfile : Profile
         CreateMap<Chat, MessengerChatDto>()
             .ForMember(
                 chatDto => chatDto.Users,
-                conf => conf.MapFrom(chat => chat.GetUsers));
+                conf => conf.MapFrom(chat => chat.Users));
+
         CreateMap<MessengerUser, MessengerUserDto>();
     }
 }

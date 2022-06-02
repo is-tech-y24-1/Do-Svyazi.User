@@ -31,7 +31,7 @@ public static class GetUsersToChat
             Chat chat = await _context.Chats.SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                 throw new Do_Svyazi_User_NotFoundException($"Can't find chat with id = {request.chatId}");
 
-            IReadOnlyCollection<ChatUser> result = chat.GetUsers;
+            IReadOnlyCollection<ChatUser> result = chat.Users;
 
             return new Response(_mapper.Map<IReadOnlyCollection<MessengerUserDto>>(result));
         }

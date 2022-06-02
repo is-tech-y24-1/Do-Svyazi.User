@@ -21,11 +21,11 @@ public class UsersAndUsersAndChatDbContext : DbContext, IUsersAndChatDbContext
         ArgumentNullException.ThrowIfNull(modelBuilder);
 
         modelBuilder.Entity<Chat>()
-            .HasMany(chat => chat.GetRoles);
+            .HasMany(chat => chat.Roles);
 
         modelBuilder.Entity<ChatUser>()
             .HasOne(chatUser => chatUser.Chat)
-            .WithMany(chat => chat.GetUsers);
+            .WithMany(chat => chat.Users);
 
         modelBuilder.Entity<Channel>();
         modelBuilder.Entity<GroupChat>();
