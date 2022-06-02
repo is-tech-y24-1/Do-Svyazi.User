@@ -44,32 +44,32 @@ public class ChatController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> AddChannel(Guid userId, string name, string description)
     {
-        await _mediator.Send(new AddChannel.Command(userId, name, description));
-        return Ok();
+        var response = await _mediator.Send(new AddChannel.Command(userId, name, description));
+        return Ok(response);
     }
 
     [HttpPost(nameof(AddGroupChat))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> AddGroupChat(Guid userId, string name, string description)
     {
-        await _mediator.Send(new AddGroupChat.Command(userId, name, description));
-        return Ok();
+        var response = await _mediator.Send(new AddGroupChat.Command(userId, name, description));
+        return Ok(response);
     }
 
     [HttpPost(nameof(AddPersonalChat))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> AddPersonalChat(Guid firstUserId, Guid secondUserId, string name, string description)
     {
-        await _mediator.Send(new AddPersonalChat.Command(firstUserId, secondUserId, name, description));
-        return Ok();
+        var response = await _mediator.Send(new AddPersonalChat.Command(firstUserId, secondUserId, name, description));
+        return Ok(response);
     }
 
     [HttpPost(nameof(AddSavedMessages))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> AddSavedMessages(Guid userId, string name, string description)
     {
-        await _mediator.Send(new AddSavedMessages.Command(userId, name, description));
-        return Ok();
+        var response = await _mediator.Send(new AddSavedMessages.Command(userId, name, description));
+        return Ok(response);
     }
 
     [HttpPost(nameof(AddChatToUser))]
