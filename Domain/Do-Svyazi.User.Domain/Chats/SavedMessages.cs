@@ -51,8 +51,8 @@ public class SavedMessages : Chat
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
 
-        ChatUser admin = CreateChatUser(messengerUser, BaseAdminRole);
-        Users.Add(admin);
+        Creator = CreateChatUser(messengerUser, BaseAdminRole);
+        Users.Add(Creator);
     }
 
     protected SavedMessages()

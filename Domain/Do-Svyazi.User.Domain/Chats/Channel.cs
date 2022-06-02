@@ -10,7 +10,7 @@ public class Channel : Chat
 
     private readonly Role _baseUserRole;
 
-    public Channel(MessengerUser messengerUser, string name, string description)
+    public Channel(MessengerUser creator, string name, string description)
         : base(name, description)
     {
         MaxUsersAmount = int.MaxValue;
@@ -47,9 +47,8 @@ public class Channel : Chat
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
 
-        ChatUser admin = CreateChatUser(messengerUser, BaseAdminRole);
-
-        Users.Add(admin);
+        Creator = CreateChatUser(creator, BaseAdminRole);
+        Users.Add(Creator);
     }
 
     protected Channel()

@@ -29,6 +29,7 @@ public abstract class Chat
     public IReadOnlyCollection<Role> GetRoles => Roles;
 
     protected int MaxUsersAmount { get; init; }
+    protected ChatUser Creator { get; init; }
     protected Role BaseAdminRole { get; init; }
     protected Role BaseUserRole { get; init; }
     protected List<ChatUser> Users { get; } = new ();

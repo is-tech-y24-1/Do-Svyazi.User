@@ -51,10 +51,10 @@ public class PersonalChat : Chat
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
 
-        ChatUser firstUser = CreateChatUser(firstMessengerUser, _baseAdminRole);
+        Creator = CreateChatUser(firstMessengerUser, BaseAdminRole);
         ChatUser secondUser = CreateChatUser(secondMessengerUser, _baseAdminRole);
 
-        Users.AddRange(new[] { firstUser, secondUser });
+        Users.AddRange(new[] { Creator, secondUser });
     }
 
     protected PersonalChat()

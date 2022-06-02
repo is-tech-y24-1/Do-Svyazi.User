@@ -10,7 +10,7 @@ public class GroupChat : Chat
     private readonly Role _baseAdminRole;
     private readonly Role _baseUserRole;
 
-    public GroupChat(MessengerUser messengerUser, string name, string description)
+    public GroupChat(MessengerUser creator, string name, string description)
         : base(name, description)
     {
         MaxUsersAmount = int.MaxValue;
@@ -52,12 +52,8 @@ public class GroupChat : Chat
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
 
-        ChatUser admin = CreateChatUser(messengerUser, BaseAdminRole);
-        Users.Add(admin);
-        Console.WriteLine($"Chat info ID: {Id} Name: {Name} Desc: {Description}");
-        Console.WriteLine($"Admin info Id: {admin.Id} MesUser: {admin.User.NickName} Role {admin.Role.Name}");
-        Console.WriteLine($"ChatId {admin.Role.Chat.Id}");
-        Console.WriteLine($"---");
+        Creator = CreateChatUser(creator, BaseAdminRole);
+        Users.Add(Creator);
     }
 
     protected GroupChat()
