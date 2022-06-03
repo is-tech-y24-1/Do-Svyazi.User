@@ -31,7 +31,7 @@ public static class GetUserIdsByChatId
             Chat chat = await _context.Chats
                             .Include(chat => chat.Users)
                             .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
-                throw new Do_Svyazi_User_NotFoundException($"Can't find chat with id = {request.chatId}");
+                        throw new Do_Svyazi_User_NotFoundException($"Chat with id {request.chatId} not found");
 
             IReadOnlyCollection<Guid> result = chat.Users.Select(user => user.Id).ToList();
 

@@ -21,11 +21,11 @@ public class DeleteUserToChat
         {
             Chat chat = await _context.Chats
                                .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
-                           throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.chatId}");
+                        throw new Do_Svyazi_User_NotFoundException($"Chat with id {request.chatId} not found");
 
             MessengerUser messengerUser = await _context.Users
                                               .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
-                                           throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId}");
+                                          throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
 
             chat.RemoveUser(messengerUser);
             await _context.SaveChangesAsync(cancellationToken);

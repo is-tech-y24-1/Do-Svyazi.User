@@ -21,7 +21,7 @@ public class AddGroupChat
         {
             MessengerUser user = await _context.Users
                                      .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
-                                           throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId}");
+                                 throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
 
             GroupChat chat = new GroupChat(user, request.name, request.description);
 

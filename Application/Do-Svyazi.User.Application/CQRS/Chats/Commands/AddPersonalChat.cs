@@ -20,11 +20,11 @@ public class AddPersonalChat
         public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
         {
             MessengerUser firstUser = await _context.Users.SingleOrDefaultAsync(user => user.Id == request.firstUserId, cancellationToken) ??
-                                           throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.firstUserId}");
+                                      throw new Do_Svyazi_User_NotFoundException($"User with id {request.firstUserId} not found");
 
             MessengerUser secondUser = await _context.Users
                                            .SingleOrDefaultAsync(user => user.Id == request.secondUserId, cancellationToken) ??
-                                           throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.secondUserId}");
+                                       throw new Do_Svyazi_User_NotFoundException($"User with id {request.secondUserId} not found");
 
             Chat chat = new PersonalChat(firstUser, secondUser, request.name, request.description);
 
