@@ -10,7 +10,13 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Chat, MessengerChatDto>();
+        CreateMap<Chat, MessengerChatDto>()
+            .ForMember(
+                chatDto => chatDto.Users,
+                conf => conf
+                    .MapFrom(chat => chat.Users
+                    .Select(user => user.Id)));
+
         CreateMap<MessengerUser, MessengerUserDto>();
     }
 }

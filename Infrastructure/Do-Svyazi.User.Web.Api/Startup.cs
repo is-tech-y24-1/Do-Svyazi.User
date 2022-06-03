@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 
 namespace Do_Svyazi.User.Web.Api;
 
@@ -27,7 +26,7 @@ public class Startup
             .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-        services.AddDbContext<IUsersAndChatDbContext, UsersAndUsersAndChatDbContext>(optionsBuilder =>
+        services.AddDbContext<IDbContext, DoSvaziDbContext>(optionsBuilder =>
         {
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseSqlite(Configuration.GetConnectionString("Database"));

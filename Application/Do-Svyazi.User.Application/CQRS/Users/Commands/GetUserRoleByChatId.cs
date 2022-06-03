@@ -3,7 +3,6 @@ using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Domain.Users;
-using Do_Svyazi.User.Dtos.Chats;
 using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
@@ -14,9 +13,9 @@ public static class GetUserRoleByChatId
 
     public class Handler : IRequestHandler<Command, Role>
     {
-        private readonly IUsersAndChatDbContext _context;
+        private readonly IDbContext _context;
 
-        public Handler(IUsersAndChatDbContext context) => _context = context;
+        public Handler(IDbContext context) => _context = context;
 
         public async Task<Role> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -25,7 +24,7 @@ public static class GetUserRoleByChatId
             Chat? chat = await _context.Chats.FindAsync(request.chatId) ??
                          throw new Do_Svyazi_User_NotFoundException($"Can't find chat with id = {request.chatId}");
 
-            return chat.GetUsers.First(user => user.Id == messengerUser.Id).Role;
+            return chat.Users.First(user => user.Id == messengerUser.Id).Role;
         }
     }
 }

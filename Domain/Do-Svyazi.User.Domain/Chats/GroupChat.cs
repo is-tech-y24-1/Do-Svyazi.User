@@ -6,60 +6,105 @@ namespace Do_Svyazi.User.Domain.Chats;
 
 public class GroupChat : Chat
 {
-    private readonly Role _baseAdminRole = new Role
-    {
-        CanEditMessages = ActionOption.Enabled,
-        CanDeleteMessages = ActionOption.Enabled,
-        CanWriteMessages = ActionOption.Enabled,
-        CanReadMessages = ActionOption.Enabled,
-        CanAddUsers = ActionOption.Enabled,
-        CanDeleteUsers = ActionOption.Enabled,
-        CanPinMessages = ActionOption.Enabled,
-        CanSeeChannelMembers = ActionOption.Enabled,
-        CanInviteOtherUsers = ActionOption.Enabled,
-        CanEditChannelDescription = ActionOption.Enabled,
-        CanDeleteChat = ActionOption.Enabled,
-    };
+    private readonly Role _baseAdminRole;
+    private readonly Role _baseUserRole;
 
-    private readonly Role _baseUserRole = new Role
-    {
-        CanEditMessages = ActionOption.Disabled,
-        CanDeleteMessages = ActionOption.Enabled,
-        CanWriteMessages = ActionOption.Enabled,
-        CanReadMessages = ActionOption.Enabled,
-        CanAddUsers = ActionOption.Disabled,
-        CanDeleteUsers = ActionOption.Disabled,
-        CanPinMessages = ActionOption.Enabled,
-        CanSeeChannelMembers = ActionOption.Enabled,
-        CanInviteOtherUsers = ActionOption.Enabled,
-        CanEditChannelDescription = ActionOption.Disabled,
-        CanDeleteChat = ActionOption.Disabled,
-    };
-
-    public GroupChat(MessengerUser messengerUser, string name, string description)
+    public GroupChat(MessengerUser creator, string name, string description)
         : base(name, description)
     {
         MaxUsersAmount = int.MaxValue;
+
+        _baseAdminRole = new Role
+        {
+            Name = "admin",
+            CanEditMessages = ActionOption.Enabled,
+            CanDeleteMessages = ActionOption.Enabled,
+            CanWriteMessages = ActionOption.Enabled,
+            CanReadMessages = ActionOption.Enabled,
+            CanAddUsers = ActionOption.Enabled,
+            CanDeleteUsers = ActionOption.Enabled,
+            CanPinMessages = ActionOption.Enabled,
+            CanSeeChannelMembers = ActionOption.Enabled,
+            CanInviteOtherUsers = ActionOption.Enabled,
+            CanEditChannelDescription = ActionOption.Enabled,
+            CanDeleteChat = ActionOption.Enabled,
+            Chat = this,
+        };
+
+        _baseUserRole = new Role
+        {
+            Name = "base",
+            CanEditMessages = ActionOption.Disabled,
+            CanDeleteMessages = ActionOption.Enabled,
+            CanWriteMessages = ActionOption.Enabled,
+            CanReadMessages = ActionOption.Enabled,
+            CanAddUsers = ActionOption.Disabled,
+            CanDeleteUsers = ActionOption.Disabled,
+            CanPinMessages = ActionOption.Enabled,
+            CanSeeChannelMembers = ActionOption.Enabled,
+            CanInviteOtherUsers = ActionOption.Enabled,
+            CanEditChannelDescription = ActionOption.Disabled,
+            CanDeleteChat = ActionOption.Disabled,
+            Chat = this,
+        };
+
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
 
-        ChatUser admin = CreateChatUser(messengerUser, BaseAdminRole);
-        Users.Add(admin);
+        Creator = creator;
+        CreatorId = creator.Id;
     }
 
-    protected GroupChat() { }
+    protected GroupChat()
+    {
+        _baseUserRole = new Role
+        {
+            Name = "base",
+            CanEditMessages = ActionOption.Disabled,
+            CanDeleteMessages = ActionOption.Enabled,
+            CanWriteMessages = ActionOption.Enabled,
+            CanReadMessages = ActionOption.Enabled,
+            CanAddUsers = ActionOption.Disabled,
+            CanDeleteUsers = ActionOption.Disabled,
+            CanPinMessages = ActionOption.Enabled,
+            CanSeeChannelMembers = ActionOption.Enabled,
+            CanInviteOtherUsers = ActionOption.Enabled,
+            CanEditChannelDescription = ActionOption.Disabled,
+            CanDeleteChat = ActionOption.Disabled,
+            Chat = this,
+        };
 
-    public override void AddUser(MessengerUser user)
+        _baseAdminRole = new Role
+        {
+            Name = "admin",
+            CanEditMessages = ActionOption.Enabled,
+            CanDeleteMessages = ActionOption.Enabled,
+            CanWriteMessages = ActionOption.Enabled,
+            CanReadMessages = ActionOption.Enabled,
+            CanAddUsers = ActionOption.Enabled,
+            CanDeleteUsers = ActionOption.Enabled,
+            CanPinMessages = ActionOption.Enabled,
+            CanSeeChannelMembers = ActionOption.Enabled,
+            CanInviteOtherUsers = ActionOption.Enabled,
+            CanEditChannelDescription = ActionOption.Enabled,
+            CanDeleteChat = ActionOption.Enabled,
+            Chat = this,
+        };
+    }
+
+    public override ChatUser AddUser(MessengerUser user)
     {
         if (user is null)
             throw new ArgumentNullException(nameof(user), $"User to add in chat {Name} is null");
 
         ChatUser newUser = CreateChatUser(user, _baseAdminRole);
 
-        if (Users.Contains(newUser))
+        if (IsUserExist(user))
             throw new Do_Svyazi_User_InnerLogicException($"User {user.Name} to add already exists in chat {Name}");
 
         Users.Add(newUser);
+
+        return newUser;
     }
 
     public override void RemoveUser(MessengerUser user)
@@ -67,10 +112,12 @@ public class GroupChat : Chat
         if (user is null)
             throw new ArgumentNullException(nameof(user), $"User to remove in chat {Name} is null");
 
-        ChatUser removeUser = GetUser(user.NickName);
+        ChatUser removeUser = GetUser(user.Id);
 
-        if (!Users.Remove(removeUser))
+        if (!IsUserExist(user))
             throw new Do_Svyazi_User_InnerLogicException($"User {user.Name} to remove doesn't exist in chat {Name}");
+
+        Users.Remove(removeUser);
     }
 
     public override void AddRole(Role role)

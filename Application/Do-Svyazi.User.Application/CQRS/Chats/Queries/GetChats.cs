@@ -14,10 +14,10 @@ public static class GetChats
 
     public class Handler : IRequestHandler<Query, Response>
     {
-        private readonly IUsersAndChatDbContext _context;
+        private readonly IDbContext _context;
         private readonly IMapper _mapper;
 
-        public Handler(IUsersAndChatDbContext context, IMapper mapper)
+        public Handler(IDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -25,12 +25,12 @@ public static class GetChats
 
         public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
         {
-            var result = await _context
+            List<MessengerChatDto> chats = await _context
                 .Chats
                 .ProjectTo<MessengerChatDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken: cancellationToken);
 
-            return new Response(result);
+            return new Response(chats);
         }
     }
 }

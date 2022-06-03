@@ -1,17 +1,18 @@
-using AutoMapper;
-using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Exceptions;
-using Do_Svyazi.User.Dtos.Chats;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Do_Svyazi.User.Domain.Users;
 
 namespace Do_Svyazi.User.Application.CQRS.Chats.Queries;
 
-public static class GetChatById
+using AutoMapper;
+using Do_Svyazi.User.Application.DbContexts;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+public static class GetUsersByChatId
 {
     public record Query(Guid chatId) : IRequest<Response>;
-    public record Response(MessengerChatDto chat);
+    public record Response(IReadOnlyCollection<ChatUser> users);
 
     public class Handler : IRequestHandler<Query, Response>
     {
@@ -27,12 +28,14 @@ public static class GetChatById
         public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
         {
             Chat chat = await _context.Chats
-                            .Include(chat => chat.Creator)
                             .Include(chat => chat.Users)
+                                .ThenInclude(user => user.User)
+                            .Include(chat => chat.Users)
+                                .ThenInclude(user => user.Role)
                             .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                         throw new Do_Svyazi_User_NotFoundException($"Chat with id {request.chatId} not found");
 
-            return new Response(_mapper.Map<MessengerChatDto>(chat));
+            return new Response(_mapper.Map<IReadOnlyCollection<ChatUser>>(chat.Users));
         }
     }
 }

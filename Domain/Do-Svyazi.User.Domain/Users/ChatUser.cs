@@ -18,14 +18,18 @@ public class ChatUser
 
         User = user;
         Chat = chat;
+        ChatId = chat.Id;
         Role = role;
+        MessengerUserId = user.Id;
     }
 
     protected ChatUser() { }
 
     public MessengerUser User { get; init; }
     public Guid Id { get; init; } = Guid.NewGuid();
+    public Guid MessengerUserId { get; init; }
     public Chat Chat { get; init; }
+    public Guid ChatId { get; init; }
     public Role Role { get; private set; }
 
     public void ChangeRole(Role role)
@@ -42,7 +46,8 @@ public class ChatUser
 
     private bool Equals(ChatUser? chatUser) =>
         chatUser is not null &&
-        User.Equals(chatUser.User) &&
-        Chat.Equals(chatUser.Chat) &&
+        User.Id.Equals(chatUser.User.Id) &&
+        Chat.Id.Equals(chatUser.Chat.Id) &&
+        MessengerUserId.Equals(chatUser.MessengerUserId) &&
         Role.Equals(chatUser.Role);
 }

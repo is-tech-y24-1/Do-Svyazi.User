@@ -8,52 +8,93 @@ public class PersonalChat : Chat
 {
     private readonly int _maxUsersAmount = 2;
 
-    private readonly Role _baseAdminRole = new Role
-    {
-        CanEditMessages = ActionOption.Enabled,
-        CanDeleteMessages = ActionOption.Enabled,
-        CanWriteMessages = ActionOption.Enabled,
-        CanReadMessages = ActionOption.Enabled,
-        CanAddUsers = ActionOption.Unavailable,
-        CanDeleteUsers = ActionOption.Unavailable,
-        CanPinMessages = ActionOption.Enabled,
-        CanSeeChannelMembers = ActionOption.Enabled,
-        CanInviteOtherUsers = ActionOption.Unavailable,
-        CanEditChannelDescription = ActionOption.Unavailable,
-        CanDeleteChat = ActionOption.Enabled,
-    };
+    private readonly Role _baseAdminRole;
 
-    private readonly Role _baseUserRole = new Role
-    {
-        CanEditMessages = ActionOption.Enabled,
-        CanDeleteMessages = ActionOption.Enabled,
-        CanWriteMessages = ActionOption.Enabled,
-        CanReadMessages = ActionOption.Enabled,
-        CanAddUsers = ActionOption.Unavailable,
-        CanDeleteUsers = ActionOption.Unavailable,
-        CanPinMessages = ActionOption.Enabled,
-        CanSeeChannelMembers = ActionOption.Enabled,
-        CanInviteOtherUsers = ActionOption.Unavailable,
-        CanEditChannelDescription = ActionOption.Unavailable,
-        CanDeleteChat = ActionOption.Enabled,
-    };
+    private readonly Role _baseUserRole;
 
     public PersonalChat(MessengerUser firstMessengerUser, MessengerUser secondMessengerUser, string name, string description)
         : base(name, description)
     {
         MaxUsersAmount = _maxUsersAmount;
+        _baseUserRole = new Role
+        {
+            Name = "base",
+            CanEditMessages = ActionOption.Enabled,
+            CanDeleteMessages = ActionOption.Enabled,
+            CanWriteMessages = ActionOption.Enabled,
+            CanReadMessages = ActionOption.Enabled,
+            CanAddUsers = ActionOption.Unavailable,
+            CanDeleteUsers = ActionOption.Unavailable,
+            CanPinMessages = ActionOption.Enabled,
+            CanSeeChannelMembers = ActionOption.Enabled,
+            CanInviteOtherUsers = ActionOption.Unavailable,
+            CanEditChannelDescription = ActionOption.Unavailable,
+            CanDeleteChat = ActionOption.Enabled,
+            Chat = this,
+        };
+
+        _baseAdminRole = new Role
+        {
+            Name = "admin",
+            CanEditMessages = ActionOption.Enabled,
+            CanDeleteMessages = ActionOption.Enabled,
+            CanWriteMessages = ActionOption.Enabled,
+            CanReadMessages = ActionOption.Enabled,
+            CanAddUsers = ActionOption.Unavailable,
+            CanDeleteUsers = ActionOption.Unavailable,
+            CanPinMessages = ActionOption.Enabled,
+            CanSeeChannelMembers = ActionOption.Enabled,
+            CanInviteOtherUsers = ActionOption.Unavailable,
+            CanEditChannelDescription = ActionOption.Unavailable,
+            CanDeleteChat = ActionOption.Enabled,
+            Chat = this,
+        };
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
 
-        ChatUser firstUser = CreateChatUser(firstMessengerUser, _baseAdminRole);
+        ChatUser firstUser = CreateChatUser(firstMessengerUser, BaseAdminRole);
         ChatUser secondUser = CreateChatUser(secondMessengerUser, _baseAdminRole);
 
         Users.AddRange(new[] { firstUser, secondUser });
     }
 
-    protected PersonalChat() { }
+    protected PersonalChat()
+    {
+        _baseAdminRole = new Role
+        {
+            Name = "admin",
+            CanEditMessages = ActionOption.Enabled,
+            CanDeleteMessages = ActionOption.Enabled,
+            CanWriteMessages = ActionOption.Enabled,
+            CanReadMessages = ActionOption.Enabled,
+            CanAddUsers = ActionOption.Unavailable,
+            CanDeleteUsers = ActionOption.Unavailable,
+            CanPinMessages = ActionOption.Enabled,
+            CanSeeChannelMembers = ActionOption.Enabled,
+            CanInviteOtherUsers = ActionOption.Unavailable,
+            CanEditChannelDescription = ActionOption.Unavailable,
+            CanDeleteChat = ActionOption.Enabled,
+            Chat = this,
+        };
+        _baseUserRole = new Role
+        {
+            Name = "base",
+            CanEditMessages = ActionOption.Enabled,
+            CanDeleteMessages = ActionOption.Enabled,
+            CanWriteMessages = ActionOption.Enabled,
+            CanReadMessages = ActionOption.Enabled,
+            CanAddUsers = ActionOption.Unavailable,
+            CanDeleteUsers = ActionOption.Unavailable,
+            CanPinMessages = ActionOption.Enabled,
+            CanSeeChannelMembers = ActionOption.Enabled,
+            CanInviteOtherUsers = ActionOption.Unavailable,
+            CanEditChannelDescription = ActionOption.Unavailable,
+            CanDeleteChat = ActionOption.Enabled,
+            Chat = this,
+        };
+    }
 
-    public override void AddUser(MessengerUser user)
+    public override ChatUser AddUser(MessengerUser user)
     {
         if (Users.Count >= MaxUsersAmount)
             throw new Do_Svyazi_User_BusinessLogicException($"User {user.Name} can't be added in chat {Name}");
@@ -61,6 +102,8 @@ public class PersonalChat : Chat
         ChatUser newUser = CreateChatUser(user, _baseAdminRole);
 
         Users.Add(newUser);
+
+        return newUser;
     }
 
     public override void RemoveUser(MessengerUser user) =>
