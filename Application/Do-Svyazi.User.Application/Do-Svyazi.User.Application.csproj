@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>Do_Svyazi.User.Application</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Folder Include="CQRS\Chats\Commands" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EditorConfigFiles Remove="..\..\.editorconfig" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\.editorconfig" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="11.0.1" />
+        <PackageReference Include="MediatR" Version="10.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
+        <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Domain\Do-Svyazi.User.Domain\Do-Svyazi.User.Domain.csproj" />
+        <ProjectReference Include="..\Do-Svyazi.User.Dtos\Do-Svyazi.User.Dtos.csproj" />
+    </ItemGroup>
+
+</Project>
