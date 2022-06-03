@@ -10,7 +10,6 @@ public class DoSvaziDbContext : DbContext, IDbContext
     public DoSvaziDbContext(DbContextOptions<DoSvaziDbContext> options)
         : base(options)
     {
-        // Database.EnsureDeleted();
         Database.EnsureCreated();
     }
 

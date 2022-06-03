@@ -3,12 +3,11 @@ using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
-using Do_Svyazi.User.Dtos.Users;
 using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
 
-public class GetAllChatsByUserId
+public static class GetAllChatsByUserId
 {
     public record Command(Guid userId) : IRequest<IReadOnlyList<MessengerChatDto>>;
 

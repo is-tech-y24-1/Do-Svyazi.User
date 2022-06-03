@@ -1,5 +1,6 @@
 using Do_Svyazi.User.Application.CQRS.Chats.Commands;
 using Do_Svyazi.User.Application.CQRS.Chats.Queries;
+using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -36,6 +37,14 @@ public class ChatController : ControllerBase
     public async Task<ActionResult<IReadOnlyCollection<Guid>>> GetUserIdsByChatId(Guid chatId)
     {
         var response = await _mediator.Send(new GetUserIdsByChatId.Query(chatId));
+        return Ok(response);
+    }
+
+    [HttpGet(nameof(GetUsersByChatId))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyCollection<ChatUser>>> GetUsersByChatId(Guid chatId)
+    {
+        var response = await _mediator.Send(new GetUsersByChatId.Query(chatId));
         return Ok(response);
     }
 

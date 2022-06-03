@@ -3,7 +3,6 @@ using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Domain.Users;
-using Do_Svyazi.User.Dtos.Chats;
 using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
