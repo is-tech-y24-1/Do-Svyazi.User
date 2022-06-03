@@ -17,6 +17,7 @@ export interface IChatClient {
     getChats(): Promise<MessengerChatDto[]>;
     getChatById(chatId: string): Promise<MessengerChatDto>;
     getUserIdsByChatId(chatId: string): Promise<string[]>;
+    getUsersByChatId(chatId: string): Promise<ChatUser[]>;
     addChannel(userId: string, name: string | null, description: string | null): Promise<void>;
     addGroupChat(userId: string, name: string | null, description: string | null): Promise<void>;
     addPersonalChat(firstUserId: string, secondUserId: string, name: string | null, description: string | null): Promise<void>;
@@ -204,6 +205,66 @@ export class ChatClient implements IChatClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<string[]>(null as any);
+    }
+
+    getUsersByChatId(chatId: string , cancelToken?: CancelToken | undefined): Promise<ChatUser[]> {
+        let url_ = this.baseUrl + "/api/Chat/GetUsersByChatId?";
+        if (chatId === undefined || chatId === null)
+            throw new Error("The parameter 'chatId' must be defined and cannot be null.");
+        else
+            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetUsersByChatId(_response);
+        });
+    }
+
+    protected processGetUsersByChatId(response: AxiosResponse): Promise<ChatUser[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        let _mappings: { source: any, target: any }[] = [];
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ChatUser.fromJS(item, _mappings));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<ChatUser[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ChatUser[]>(null as any);
     }
 
     addChannel(userId: string, name: string | null, description: string | null , cancelToken?: CancelToken | undefined): Promise<void> {
@@ -1220,6 +1281,60 @@ export interface IMessengerUserDto {
     description: string | undefined;
 }
 
+export class ChatUser implements IChatUser {
+    user!: MessengerUser;
+    id!: string;
+    messengerUserId!: string;
+    chat!: Chat;
+    chatId!: string;
+    role!: Role;
+
+    constructor(data?: IChatUser) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.user = _data["user"] ? MessengerUser.fromJS(_data["user"], _mappings) : <any>undefined;
+            this.id = _data["id"];
+            this.messengerUserId = _data["messengerUserId"];
+            this.chat = _data["chat"] ? Chat.fromJS(_data["chat"], _mappings) : <any>undefined;
+            this.chatId = _data["chatId"];
+            this.role = _data["role"] ? Role.fromJS(_data["role"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): ChatUser | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<ChatUser>(data, _mappings, ChatUser);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["id"] = this.id;
+        data["messengerUserId"] = this.messengerUserId;
+        data["chat"] = this.chat ? this.chat.toJSON() : <any>undefined;
+        data["chatId"] = this.chatId;
+        data["role"] = this.role ? this.role.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IChatUser {
+    user: MessengerUser;
+    id: string;
+    messengerUserId: string;
+    chat: Chat;
+    chatId: string;
+    role: Role;
+}
+
 export class MessengerUser implements IMessengerUser {
     id!: string;
     name!: string;
@@ -1354,56 +1469,6 @@ export interface IChat {
     maxUsersAmount: number;
     creatorId: string;
     creator: MessengerUser;
-}
-
-export class ChatUser implements IChatUser {
-    user!: MessengerUser;
-    id!: string;
-    chat!: Chat;
-    chatId!: string;
-    role!: Role;
-
-    constructor(data?: IChatUser) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any, _mappings?: any) {
-        if (_data) {
-            this.user = _data["user"] ? MessengerUser.fromJS(_data["user"], _mappings) : <any>undefined;
-            this.id = _data["id"];
-            this.chat = _data["chat"] ? Chat.fromJS(_data["chat"], _mappings) : <any>undefined;
-            this.chatId = _data["chatId"];
-            this.role = _data["role"] ? Role.fromJS(_data["role"], _mappings) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any, _mappings?: any): ChatUser | null {
-        data = typeof data === 'object' ? data : {};
-        return createInstance<ChatUser>(data, _mappings, ChatUser);
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
-        data["id"] = this.id;
-        data["chat"] = this.chat ? this.chat.toJSON() : <any>undefined;
-        data["chatId"] = this.chatId;
-        data["role"] = this.role ? this.role.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IChatUser {
-    user: MessengerUser;
-    id: string;
-    chat: Chat;
-    chatId: string;
-    role: Role;
 }
 
 export class Role implements IRole {
