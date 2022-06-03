@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Chats.Commands;
 
-public class AddUserToChat
+public static class AddUserToChat
 {
     public record Command(Guid userId, Guid chatId) : IRequest;
 
@@ -21,6 +21,9 @@ public class AddUserToChat
         {
             Chat chat = await _context.Chats
                             .Include(chat => chat.Users)
+                                .ThenInclude(user => user.User)
+                            .Include(chat => chat.Users)
+                                .ThenInclude(user => user.Role)
                             .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                         throw new Do_Svyazi_User_NotFoundException($"Chat with id {request.chatId} not found");
 

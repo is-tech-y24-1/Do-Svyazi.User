@@ -20,12 +20,14 @@ public class ChatUser
         Chat = chat;
         ChatId = chat.Id;
         Role = role;
+        MessengerUserId = user.Id;
     }
 
     protected ChatUser() { }
 
     public MessengerUser User { get; init; }
     public Guid Id { get; init; } = Guid.NewGuid();
+    public Guid MessengerUserId { get; init; }
     public Chat Chat { get; init; }
     public Guid ChatId { get; init; }
     public Role Role { get; private set; }
@@ -46,5 +48,6 @@ public class ChatUser
         chatUser is not null &&
         User.Id.Equals(chatUser.User.Id) &&
         Chat.Id.Equals(chatUser.Chat.Id) &&
+        MessengerUserId.Equals(chatUser.MessengerUserId) &&
         Role.Equals(chatUser.Role);
 }

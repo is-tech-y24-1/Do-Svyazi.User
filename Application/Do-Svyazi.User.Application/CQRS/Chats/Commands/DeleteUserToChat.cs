@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Chats.Commands;
 
-public class DeleteUserToChat
+public static class DeleteUserToChat
 {
     public record Command(Guid userId, Guid chatId) : IRequest;
 
@@ -20,7 +20,11 @@ public class DeleteUserToChat
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             Chat chat = await _context.Chats
-                               .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
+                            .Include(chat => chat.Users)
+                                .ThenInclude(user => user.User)
+                            .Include(chat => chat.Users)
+                                .ThenInclude(user => user.Role)
+                            .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                         throw new Do_Svyazi_User_NotFoundException($"Chat with id {request.chatId} not found");
 
             MessengerUser messengerUser = await _context.Users
@@ -28,6 +32,7 @@ public class DeleteUserToChat
                                           throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
 
             chat.RemoveUser(messengerUser);
+            _context.Chats.Update(chat);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

@@ -56,11 +56,20 @@ public abstract class Chat
         Users.SingleOrDefault(user => user.User.NickName == nickName)
         ?? throw new Do_Svyazi_User_NotFoundException($"User is not found in chat {Name}");
 
+    public ChatUser GetUser(Guid id) =>
+        Users.SingleOrDefault(user => user.MessengerUserId == id)
+        ?? throw new Do_Svyazi_User_NotFoundException($"User is not found in chat {Name}");
+
     public abstract ChatUser AddUser(MessengerUser user);
     public abstract void RemoveUser(MessengerUser user);
     public abstract void AddRole(Role role);
     public abstract void RemoveRole(Role role);
     public abstract void ChangeUserRole(MessengerUser user, Role role);
+
+    public bool IsUserExist(MessengerUser messengerUser)
+    {
+        return Users.Any(user => user.MessengerUserId == messengerUser.Id);
+    }
 
     protected ChatUser CreateChatUser(MessengerUser user, Role role) => new (user, this, role);
 }

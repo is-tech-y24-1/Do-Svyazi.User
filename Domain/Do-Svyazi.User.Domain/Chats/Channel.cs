@@ -95,8 +95,8 @@ public class Channel : Chat
 
         ChatUser newUser = CreateChatUser(user, _baseAdminRole);
 
-        if (Users.Contains(newUser))
-            throw new Do_Svyazi_User_InnerLogicException($"User {newUser.User.Name} already exists in chat {Name}");
+        if (IsUserExist(user))
+            throw new Do_Svyazi_User_InnerLogicException($"User {user.Name} to add already exists in chat {Name}");
 
         Users.Add(newUser);
 
@@ -108,10 +108,12 @@ public class Channel : Chat
         if (user is null)
             throw new ArgumentNullException(nameof(user), $"User to remove from chat {Name} is null");
 
-        ChatUser userToRemove = GetUser(user.NickName);
+        ChatUser userToRemove = GetUser(user.Id);
 
-        if (!Users.Remove(userToRemove))
-            throw new Do_Svyazi_User_InnerLogicException($"User {userToRemove.User.Name} to remove doesn't exist in chat {Name}");
+        if (!IsUserExist(user))
+            throw new Do_Svyazi_User_InnerLogicException($"User {user.Name} to remove doesn't exist in chat {Name}");
+
+        Users.Remove(userToRemove);
     }
 
     public override void AddRole(Role role)

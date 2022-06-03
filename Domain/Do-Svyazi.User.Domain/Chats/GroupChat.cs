@@ -99,7 +99,7 @@ public class GroupChat : Chat
 
         ChatUser newUser = CreateChatUser(user, _baseAdminRole);
 
-        if (Users.Contains(newUser))
+        if (IsUserExist(user))
             throw new Do_Svyazi_User_InnerLogicException($"User {user.Name} to add already exists in chat {Name}");
 
         Users.Add(newUser);
@@ -112,10 +112,12 @@ public class GroupChat : Chat
         if (user is null)
             throw new ArgumentNullException(nameof(user), $"User to remove in chat {Name} is null");
 
-        ChatUser removeUser = GetUser(user.NickName);
+        ChatUser removeUser = GetUser(user.Id);
 
-        if (!Users.Remove(removeUser))
+        if (!IsUserExist(user))
             throw new Do_Svyazi_User_InnerLogicException($"User {user.Name} to remove doesn't exist in chat {Name}");
+
+        Users.Remove(removeUser);
     }
 
     public override void AddRole(Role role)

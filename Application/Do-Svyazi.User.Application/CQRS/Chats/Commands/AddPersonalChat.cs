@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Chats.Commands;
 
-public class AddPersonalChat
+public static class AddPersonalChat
 {
     public record Command(Guid firstUserId, Guid secondUserId, string name, string description) : IRequest<Guid>;
 
