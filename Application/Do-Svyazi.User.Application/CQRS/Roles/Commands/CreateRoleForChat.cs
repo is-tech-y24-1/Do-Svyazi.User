@@ -6,7 +6,7 @@ using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Dtos.Roles;
 using MediatR;
 
-namespace Do_Svyazi.User.Application.CQRS.Roles;
+namespace Do_Svyazi.User.Application.CQRS.Roles.Commands;
 
 public static class CreateRoleForChat
 {
@@ -32,10 +32,23 @@ public static class CreateRoleForChat
                     $"Chat with id = {request.chatId} is not created");
             }
 
+            if (IsRoleNameExist(chat.Roles, request))
+            {
+                throw new Do_Svyazi_User_BusinessLogicException(
+                    $"Role with name = {request.role.Name} is already exist");
+            }
+
             Role? newRole = _mapper.Map<Role>(request.role);
             chat.AddRole(newRole);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
+        }
+
+        private bool IsRoleNameExist(List<Role> roles, Command request)
+        {
+            Role? role = roles
+                .FirstOrDefault(chatRole => chatRole.Name == request.role.Name);
+            return role is not null;
         }
     }
 }
