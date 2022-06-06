@@ -11,11 +11,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <EditorConfigFiles Remove="..\..\.editorconfig" />
+        <EditorConfigFiles Remove="..\..\.editorconfig"/>
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\..\.editorconfig" />
+        <None Include="..\..\.editorconfig"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -25,13 +25,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.5" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-        <PackageReference Include="NSwag.AspNetCore" Version="13.16.1" />
-        <PackageReference Include="NSwag.CodeGeneration.CSharp" Version="13.16.0" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0"/>
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.5"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0"/>
+        <PackageReference Include="NSwag.AspNetCore" Version="13.16.1"/>
+        <PackageReference Include="NSwag.CodeGeneration.CSharp" Version="13.16.0"/>
         <PackageReference Include="NSwag.MSBuild" Version="13.16.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -40,12 +40,12 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Presentation\Do-Svyazi.User.Web.Controllers\Do-Svyazi.User.Web.Controllers.csproj" />
-        <ProjectReference Include="..\Do-Svyazi.User.DataAccess\Do-Svyazi.User.DataAccess.csproj" />
+        <ProjectReference Include="..\..\Presentation\Do-Svyazi.User.Web.Controllers\Do-Svyazi.User.Web.Controllers.csproj"/>
+        <ProjectReference Include="..\Do-Svyazi.User.DataAccess\Do-Svyazi.User.DataAccess.csproj"/>
     </ItemGroup>
 
 </Project>
