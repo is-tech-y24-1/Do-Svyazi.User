@@ -3,6 +3,7 @@ using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Roles;
+using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Roles;
 using MediatR;
 
@@ -25,23 +26,49 @@ public static class CreateRoleForChat
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            Chat? chat = await _context.Chats.FindAsync(request.chatId);
-            if (chat is null)
+            try
             {
-                throw new Do_Svyazi_User_NotFoundException(
-                    $"Chat with id = {request.chatId} is not created");
-            }
+                Chat? chat = await _context.Chats.FindAsync(request.chatId);
+                if (chat is null)
+                {
+                    throw new Do_Svyazi_User_NotFoundException(
+                        $"Chat with id = {request.chatId} is not created");
+                }
 
-            if (IsRoleNameExist(chat.Roles, request))
+                if (IsRoleNameExist(chat.Roles, request))
+                {
+                    throw new Do_Svyazi_User_BusinessLogicException(
+                        $"Role with name = {request.role.Name} is already exist");
+                }
+
+                Role? newRole = new Role()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = request.role.Name,
+                    Chat = chat,
+                    CanAddUsers = request.role.CanAddUsers,
+                    CanDeleteChat = request.role.CanDeleteChat,
+                    CanDeleteMessages = request.role.CanDeleteMessages,
+                    CanDeleteUsers = request.role.CanDeleteUsers,
+                    CanEditMessages = request.role.CanEditMessages,
+                    CanPinMessages = request.role.CanPinMessages,
+                    CanReadMessages = request.role.CanReadMessages,
+                    CanWriteMessages = request.role.CanWriteMessages,
+                    CanEditChannelDescription = request.role.CanEditMessages,
+                    CanInviteOtherUsers = request.role.CanInviteOtherUsers,
+                    CanSeeChannelMembers = request.role.CanSeeChannelMembers,
+                };
+
+                chat.AddRole(newRole);
+                _context.Chats.Update(chat);
+                await _context.Role.AddAsync(newRole, cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken);
+                return Unit.Value;
+            }
+            catch (Exception e)
             {
-                throw new Do_Svyazi_User_BusinessLogicException(
-                    $"Role with name = {request.role.Name} is already exist");
+                throw new Do_Svyazi_User_InnerLogicException(e.Message, e);
             }
-
-            Role? newRole = _mapper.Map<Role>(request.role);
-            chat.AddRole(newRole);
-            await _context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
         }
 
         private bool IsRoleNameExist(List<Role> roles, Command request)
