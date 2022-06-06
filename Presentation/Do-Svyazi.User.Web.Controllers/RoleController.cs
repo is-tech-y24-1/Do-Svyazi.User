@@ -2,6 +2,7 @@ using Do_Svyazi.User.Application.CQRS.Chats.Commands;
 using Do_Svyazi.User.Application.CQRS.Chats.Queries;
 using Do_Svyazi.User.Application.CQRS.Roles;
 using Do_Svyazi.User.Application.CQRS.Roles.Commands;
+using Do_Svyazi.User.Application.CQRS.Users.Commands;
 using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
@@ -26,5 +27,13 @@ public class RoleController : ControllerBase
     {
         await _mediator.Send(new CreateRoleForChat.Command(role, chatId));
         return Ok();
+    }
+
+    [HttpGet(nameof(GetRoleByUserId))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Role>> GetRoleByUserId(Guid userId, Guid chatId)
+    {
+        Role response = await _mediator.Send(new GetRoleByUserId.Command(userId, chatId));
+        return Ok(response);
     }
 }
