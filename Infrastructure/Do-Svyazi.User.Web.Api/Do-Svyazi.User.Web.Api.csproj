@@ -30,9 +30,9 @@
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.5"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0"/>
-        <PackageReference Include="NSwag.AspNetCore" Version="13.16.0"/>
+        <PackageReference Include="NSwag.AspNetCore" Version="13.16.1"/>
         <PackageReference Include="NSwag.CodeGeneration.CSharp" Version="13.16.0"/>
-        <PackageReference Include="NSwag.MSBuild" Version="13.16.0">
+        <PackageReference Include="NSwag.MSBuild" Version="13.16.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -48,13 +48,4 @@
         <ProjectReference Include="..\Do-Svyazi.User.DataAccess\Do-Svyazi.User.DataAccess.csproj"/>
     </ItemGroup>
 
-    <Target Name="NSwag" BeforeTargets="AfterBuild" Condition="'$(TF_BUILD)'!='True'">
-        <Exec ConsoleToMSBuild="true" ContinueOnError="true" Command="$(NSwagExe_Net60) run nswag.json /variables:TypescriptOutputPath=..\..\Presentation\Do-Svyazi.User.Web.ApiClient.Frontend">
-            <Output TaskParameter="ExitCode" PropertyName="NSwagExitCode"/>
-            <Output TaskParameter="ConsoleOutput" PropertyName="NSwagOutput"/>
-        </Exec>
-
-        <Message Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' == '0'" Importance="low"/>
-        <Error Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' != '0'"/>
-    </Target>
 </Project>
