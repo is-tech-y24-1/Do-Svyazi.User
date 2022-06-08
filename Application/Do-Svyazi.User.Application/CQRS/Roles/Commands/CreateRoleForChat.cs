@@ -43,7 +43,6 @@ public static class CreateRoleForChat
 
                 Role? newRole = new Role()
                 {
-                    Id = Guid.NewGuid(),
                     Name = request.role.Name,
                     Chat = chat,
                     CanAddUsers = request.role.CanAddUsers,
