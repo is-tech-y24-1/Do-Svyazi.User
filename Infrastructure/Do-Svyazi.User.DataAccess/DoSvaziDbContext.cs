@@ -7,15 +7,16 @@ namespace Do_Svyazi.User.DataAccess;
 
 public class DoSvaziDbContext : DbContext, IDbContext
 {
+    public DoSvaziDbContext() { }
+
     public DoSvaziDbContext(DbContextOptions<DoSvaziDbContext> options)
         : base(options)
     {
-        Database.EnsureCreated();
     }
 
-    public DbSet<Chat> Chats { get; init; }
-    public DbSet<MessengerUser> Users { get; init; }
-    public DbSet<ChatUser> ChatUsers { get; init; }
+    public virtual DbSet<Chat> Chats { get; init; }
+    public virtual DbSet<MessengerUser> Users { get; init; }
+    public virtual DbSet<ChatUser> ChatUsers { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

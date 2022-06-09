@@ -5,6 +5,9 @@ namespace Do_Svyazi.User.Domain.Users;
 public class MessengerUser
 {
     private const string _defaultDescription = "Description";
+
+    public MessengerUser() { }
+
     public MessengerUser(string name, string nickName, string? description = null)
     {
         if (string.IsNullOrWhiteSpace(name))
