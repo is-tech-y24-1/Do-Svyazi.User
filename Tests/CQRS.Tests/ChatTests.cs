@@ -16,10 +16,8 @@ public class UserTests
 {
     [Theory, AutoData]
     public async Task Test1(
-        [Frozen] IFixture fixture,
         GroupChat chat,
-        MessengerUser user,
-        [Greedy] Mock<DoSvaziDbContext> dbContext)
+        MessengerUser user)
     {
         var dbContextMock = new DbContextMock<DoSvaziDbContext>();
         dbContextMock.CreateDbSetMock(x => x.Chats, new[] {chat});
