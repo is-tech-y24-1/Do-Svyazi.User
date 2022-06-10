@@ -6,12 +6,13 @@ using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Roles;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Roles;
 
 public static class ChangeUserRoleInChat
 {
-    public record Command(Guid userId, Guid chatId, RoleDto newRole) : IRequest<ChatAndUserId>;
+    public record Command(Guid userId, Guid chatId, Guid chatUserId,  RoleDto newRole) : IRequest<ChatAndUserId>;
 
     public class Handler : IRequestHandler<Command, ChatAndUserId>
     {
@@ -26,20 +27,19 @@ public static class ChangeUserRoleInChat
 
         public async Task<ChatAndUserId> Handle(Command request, CancellationToken cancellationToken)
         {
-            MessengerUser? messengerUser = await _context.Users.FindAsync(request.userId) ??
-                                      throw new Do_Svyazi_User_NotFoundException(
-                                          $"Can't find user with id = {request.userId}");
+            ChatUser? chatUser = await _context.ChatUsers
+                                     .Include(chatUser => chatUser.Role)
+                                     .FirstOrDefaultAsync(
+                                         user => user.User.Id == request.userId
+                                                 && user.ChatId == request.chatId,
+                                         cancellationToken: cancellationToken) ??
+                                 throw new Do_Svyazi_User_NotFoundException(
+                                     $"Chat user with userId = {request.userId} and chatId = {request.chatId} not found");
 
-            Chat chat = await _context.Chats.FindAsync(request.chatId) ??
-                        throw new Do_Svyazi_User_NotFoundException($"Can't find chat with id = {request.chatId}");
-            if (request.newRole is null)
-            {
-                throw new Do_Svyazi_User_BusinessLogicException("Roles to set is null");
-            }
-
-            chat.ChangeUserRole(messengerUser, _mapper.Map<Role>(request.newRole));
-            _context.Users.Update(messengerUser);
-            _context.Roles.Add(_mapper.Map<Role>(request.newRole));
+            var role = _mapper.Map<Role>(request.newRole);
+            chatUser.ChangeRole(role);
+            _context.Roles.Add(role);
+            _context.ChatUsers.Update(chatUser);
             await _context.SaveChangesAsync(cancellationToken);
 
             var chatAndUserId = new ChatAndUserId()

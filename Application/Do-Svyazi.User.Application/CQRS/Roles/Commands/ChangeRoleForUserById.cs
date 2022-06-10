@@ -6,6 +6,7 @@ using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Roles;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Roles;
 
@@ -26,9 +27,15 @@ public static class ChangeRoleForUserById
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            var chatUser = await _context.ChatUsers.FindAsync(request.userId) ??
-                                      throw new Do_Svyazi_User_NotFoundException(
-                                          $"Can't find user with id = {request.userId}");
+            ChatUser? chatUser = await _context.ChatUsers
+                                     .Include(chatUser => chatUser.Role)
+                                     .FirstOrDefaultAsync(
+                                         user => user.User.Id == request.userId
+                                                 && user.ChatId == request.chatId,
+                                         cancellationToken: cancellationToken) ??
+                                 throw new Do_Svyazi_User_NotFoundException(
+                                     $"Chat user with userId = {request.userId} and chatId = {request.chatId} not found");
+
             Chat chat = await _context.Chats.FindAsync(request.chatId) ??
                         throw new Do_Svyazi_User_NotFoundException($"Can't find chat with id = {request.chatId}");
 
@@ -51,6 +58,7 @@ public static class ChangeRoleForUserById
 
             chatUser.ChangeRole(newRole);
             _context.ChatUsers.Update(chatUser);
+            _context.Roles.Add(newRole);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
