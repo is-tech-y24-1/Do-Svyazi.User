@@ -28,7 +28,6 @@ public static class GetRoleByUserId
                                          cancellationToken: cancellationToken) ??
                                  throw new Do_Svyazi_User_NotFoundException(
                                      $"Chat user with userId = {request.userId} and chatId = {request.chatId} not found");
-
             return chatUser.Role;
         }
     }

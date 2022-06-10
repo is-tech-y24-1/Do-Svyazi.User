@@ -38,7 +38,7 @@ public static class CreateRoleForChat
                 if (IsRoleNameExist(chat.Roles, request))
                 {
                     throw new Do_Svyazi_User_BusinessLogicException(
-                        $"Role with name = {request.role.Name} is already exist");
+                        $"Roles with name = {request.role.Name} is already exist");
                 }
 
                 Role? newRole = new Role()
@@ -60,7 +60,7 @@ public static class CreateRoleForChat
 
                 chat.AddRole(newRole);
                 _context.Chats.Update(chat);
-                await _context.Role.AddAsync(newRole, cancellationToken);
+                await _context.Roles.AddAsync(newRole, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
                 return Unit.Value;
             }

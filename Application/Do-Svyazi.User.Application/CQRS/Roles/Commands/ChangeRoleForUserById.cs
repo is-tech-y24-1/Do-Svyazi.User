@@ -11,7 +11,7 @@ namespace Do_Svyazi.User.Application.CQRS.Roles;
 
 public static class ChangeRoleForUserById
 {
-    public record Command(Guid userId, RoleDto role) : IRequest;
+    public record Command(Guid userId, Guid chatId,  RoleDto role) : IRequest;
 
     public class Handler : IRequestHandler<Command>
     {
@@ -29,8 +29,12 @@ public static class ChangeRoleForUserById
             var chatUser = await _context.ChatUsers.FindAsync(request.userId) ??
                                       throw new Do_Svyazi_User_NotFoundException(
                                           $"Can't find user with id = {request.userId}");
+            Chat chat = await _context.Chats.FindAsync(request.chatId) ??
+                        throw new Do_Svyazi_User_NotFoundException($"Can't find chat with id = {request.chatId}");
+
             Role? newRole = new Role()
             {
+                Chat = chat,
                 Name = request.role.Name,
                 CanAddUsers = request.role.CanAddUsers,
                 CanDeleteChat = request.role.CanDeleteChat,

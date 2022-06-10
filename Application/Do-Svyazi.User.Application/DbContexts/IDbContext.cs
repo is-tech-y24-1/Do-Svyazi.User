@@ -10,6 +10,6 @@ public interface IDbContext
     public DbSet<Chat> Chats { get; init; }
     public DbSet<MessengerUser> Users { get; init; }
     public DbSet<ChatUser> ChatUsers { get; init; }
-    public DbSet<Role> Role { get; init; }
+    public DbSet<Role> Roles { get; init; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

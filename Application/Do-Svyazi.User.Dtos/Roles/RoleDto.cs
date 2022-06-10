@@ -2,7 +2,7 @@ using Do_Svyazi.User.Domain.Roles;
 
 namespace Do_Svyazi.User.Dtos.Roles;
 
-public class RoleDto
+public record RoleDto
 {
     public string Name { get; init; }
     public ActionOption CanEditMessages { get; init; }
