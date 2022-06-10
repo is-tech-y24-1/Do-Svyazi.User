@@ -12,9 +12,9 @@ namespace Do_Svyazi.User.Application.CQRS.Roles;
 
 public static class ChangeUserRoleInChat
 {
-    public record Command(Guid userId, Guid chatId, Guid chatUserId,  RoleDto newRole) : IRequest<ChatAndUserId>;
+    public record Command(Guid userId, Guid chatId, Guid chatUserId,  RoleDto newRole) : IRequest;
 
-    public class Handler : IRequestHandler<Command, ChatAndUserId>
+    public class Handler : IRequestHandler<Command>
     {
         private readonly IDbContext _context;
         private readonly IMapper _mapper;
@@ -25,7 +25,7 @@ public static class ChangeUserRoleInChat
             _mapper = mapper;
         }
 
-        public async Task<ChatAndUserId> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             ChatUser? chatUser = await _context.ChatUsers
                                      .Include(chatUser => chatUser.Role)
@@ -41,14 +41,7 @@ public static class ChangeUserRoleInChat
             _context.Roles.Add(role);
             _context.ChatUsers.Update(chatUser);
             await _context.SaveChangesAsync(cancellationToken);
-
-            var chatAndUserId = new ChatAndUserId()
-            {
-                ChatId = request.chatId,
-                UserId = request.userId,
-            };
-
-            return chatAndUserId;
+            return Unit.Value;
         }
     }
 }
