@@ -9,15 +9,15 @@ namespace Do_Svyazi.User.Application.CQRS.Chats.Commands;
 
 public static class AddGroupChat
 {
-    public record Command(Guid userId, string name, string description) : IRequest<GroupChat>;
+    public record Command(Guid userId, string name, string description) : IRequest<Guid>;
 
-    public class Handler : IRequestHandler<Command, GroupChat>
+    public class Handler : IRequestHandler<Command, Guid>
     {
         private readonly IDbContext _context;
 
         public Handler(IDbContext context) => _context = context;
 
-        public async Task<GroupChat> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
         {
             MessengerUser user = await _context.Users
                                      .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
@@ -28,7 +28,7 @@ public static class AddGroupChat
             await _context.Chats.AddAsync(chat, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return chat;
+            return chat.Id;
         }
     }
 }
