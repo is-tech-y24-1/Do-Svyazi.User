@@ -33,12 +33,6 @@ public static class CreateRoleForChat
                     $"Chat with id = {request.chatId} is not created");
             }
 
-            if (IsRoleNameExist(chat.Roles, request))
-            {
-                throw new Do_Svyazi_User_BusinessLogicException(
-                    $"Roles with name = {request.role.Name} is already exist");
-            }
-
             Role? newRole = new Role()
             {
                 Name = request.role.Name,
@@ -61,12 +55,6 @@ public static class CreateRoleForChat
             await _context.Roles.AddAsync(newRole, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
-        }
-
-        private bool IsRoleNameExist(List<Role> roles, Command request)
-        {
-            return roles
-                .Any(chatRole => chatRole.Name == request.role.Name);
         }
     }
 }
