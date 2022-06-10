@@ -23,7 +23,7 @@ public class ChatUser
         MessengerUserId = user.Id;
     }
 
-    protected ChatUser() { }
+    public ChatUser() { }
 
     public MessengerUser User { get; init; }
     public Guid Id { get; init; } = Guid.NewGuid();
