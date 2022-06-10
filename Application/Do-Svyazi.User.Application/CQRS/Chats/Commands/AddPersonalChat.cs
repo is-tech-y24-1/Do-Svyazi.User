@@ -9,15 +9,15 @@ namespace Do_Svyazi.User.Application.CQRS.Chats.Commands;
 
 public static class AddPersonalChat
 {
-    public record Command(Guid firstUserId, Guid secondUserId, string name, string description) : IRequest<Guid>;
+    public record Command(Guid firstUserId, Guid secondUserId, string name, string description) : IRequest<PersonalChat>;
 
-    public class Handler : IRequestHandler<Command, Guid>
+    public class Handler : IRequestHandler<Command, PersonalChat>
     {
         private readonly IDbContext _context;
 
         public Handler(IDbContext context) => _context = context;
 
-        public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<PersonalChat> Handle(Command request, CancellationToken cancellationToken)
         {
             MessengerUser firstUser = await _context.Users.SingleOrDefaultAsync(user => user.Id == request.firstUserId, cancellationToken) ??
                                       throw new Do_Svyazi_User_NotFoundException($"User with id {request.firstUserId} not found");
@@ -26,12 +26,12 @@ public static class AddPersonalChat
                                            .SingleOrDefaultAsync(user => user.Id == request.secondUserId, cancellationToken) ??
                                        throw new Do_Svyazi_User_NotFoundException($"User with id {request.secondUserId} not found");
 
-            Chat chat = new PersonalChat(firstUser, secondUser, request.name, request.description);
+            var chat = new PersonalChat(firstUser, secondUser, request.name, request.description);
 
             await _context.Chats.AddAsync(chat, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return chat.Id;
+            return chat;
         }
     }
 }
