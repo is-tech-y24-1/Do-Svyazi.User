@@ -48,6 +48,5 @@ public class ChatUser
         chatUser is not null &&
         User.Id.Equals(chatUser.User.Id) &&
         Chat.Id.Equals(chatUser.Chat.Id) &&
-        MessengerUserId.Equals(chatUser.MessengerUserId) &&
-        Role.Equals(chatUser.Role);
+        MessengerUserId.Equals(chatUser.MessengerUserId);
 }

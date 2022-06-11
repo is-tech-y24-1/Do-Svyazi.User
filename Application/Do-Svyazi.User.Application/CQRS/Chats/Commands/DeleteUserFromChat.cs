@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Chats.Commands;
 
-public static class DeleteUserToChat
+public static class DeleteUserFromChat
 {
     public record Command(Guid userId, Guid chatId) : IRequest;
 

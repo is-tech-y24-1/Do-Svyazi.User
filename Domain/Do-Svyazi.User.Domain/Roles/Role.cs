@@ -2,7 +2,7 @@ using Do_Svyazi.User.Domain.Chats;
 
 namespace Do_Svyazi.User.Domain.Roles;
 
-public class Role
+public record Role
 {
     public Guid Id { get; init; } = Guid.NewGuid();
     public Chat Chat { get; init; }
@@ -28,12 +28,5 @@ public class Role
         Name = name;
     }
 
-    public override bool Equals(object? obj) => Equals(obj as Role);
-
     public override int GetHashCode() => HashCode.Combine(Chat, Name);
-
-    private bool Equals(Role? role) =>
-        role is not null &&
-        Chat.Equals(role.Chat) &&
-        Name.Equals(role.Name);
 }
