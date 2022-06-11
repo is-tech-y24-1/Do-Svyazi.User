@@ -15,17 +15,25 @@ namespace Do_Svyazi.User.Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class RoleController : ControllerBase
+public class RolesController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public RoleController(IMediator mediator) => _mediator = mediator;
+    public RolesController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost(nameof(CreateRoleForChat))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> CreateRoleForChat(RoleDto role, Guid chatId)
     {
         await _mediator.Send(new CreateRoleForChat.Command(role, chatId));
+        return Ok();
+    }
+
+    [HttpPost(nameof(ChangeRoleForUserById))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult> ChangeRoleForUserById(Guid userId, Guid chatId, RoleDto role)
+    {
+        await _mediator.Send(new ChangeRoleForUserById.Command(userId, chatId, role));
         return Ok();
     }
 
