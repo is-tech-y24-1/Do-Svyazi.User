@@ -92,7 +92,7 @@ public class ChatController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteUserToChat(Guid userId, Guid chatId)
     {
-        await _mediator.Send(new DeleteUserToChat.Command(userId, chatId));
+        await _mediator.Send(new DeleteUserFromChat.Command(userId, chatId));
         return Ok();
     }
 }
