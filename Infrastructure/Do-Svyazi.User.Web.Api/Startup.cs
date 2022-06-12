@@ -40,10 +40,10 @@ public class Startup
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.EnableSensitiveDataLogging();
-            options.UseSqlite(Configuration.GetConnectionString("Database"));
+            options.UseSqlite(Configuration.GetConnectionString("Identity"));
         });
 
-        services.AddIdentity<ParsedIdentityUser, ParsedIdentityRole>()
+        services.AddIdentity<MessageIdentityUser, MessageIdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 

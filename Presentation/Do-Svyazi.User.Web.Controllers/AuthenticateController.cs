@@ -15,13 +15,13 @@ namespace Do_Svyazi.User.Web.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<MessageIdentityUser> _userManager;
+        private readonly RoleManager<MessageIdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
 
         public AuthenticateController(
-            UserManager<IdentityUser> userManager,
-            RoleManager<IdentityRole> roleManager,
+            UserManager<MessageIdentityUser> userManager,
+            RoleManager<MessageIdentityRole> roleManager,
             IConfiguration configuration)
         {
             _userManager = userManager;
@@ -33,7 +33,7 @@ namespace Do_Svyazi.User.Web.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            IdentityUser? user = await _userManager.FindByNameAsync(model.NickName);
+            MessageIdentityUser user = await _userManager.FindByNameAsync(model.NickName);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 IList<string>? userRoles = await _userManager.GetRolesAsync(user);
@@ -43,7 +43,9 @@ namespace Do_Svyazi.User.Web.Controllers
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
-                authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
+                authClaims
+                    .AddRange(userRoles
+                    .Select(userRole => new Claim(ClaimTypes.Role, userRole)));
 
                 JwtSecurityToken token = GetToken(authClaims);
 
@@ -61,19 +63,21 @@ namespace Do_Svyazi.User.Web.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var userExists = await _userManager.FindByNameAsync(model.NickName);
+            MessageIdentityUser? userExists = await _userManager.FindByNameAsync(model.NickName);
+
             if (userExists != null)
             {
                 throw new Do_Svyazi_User_BusinessLogicException(
                     "User already exists");
             }
 
-            IdentityUser user = new ()
+            MessageIdentityUser user = new ()
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.NickName,
             };
-            var result = await _userManager.CreateAsync(user, model.Password);
+
+            IdentityResult? result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
                 throw new Do_Svyazi_User_BusinessLogicException(
@@ -87,38 +91,38 @@ namespace Do_Svyazi.User.Web.Controllers
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
         {
-            IdentityUser? userExists = await _userManager.FindByNameAsync(model.NickName);
+            MessageIdentityUser userExists = await _userManager.FindByNameAsync(model.NickName);
             if (userExists != null)
             {
                 throw new Do_Svyazi_User_BusinessLogicException(
                     "User already exists");
             }
 
-            IdentityUser user = new ()
+            MessageIdentityUser user = new ()
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.NickName,
             };
-            var result = await _userManager.CreateAsync(user, model.Password);
+            IdentityResult? result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
                 throw new Do_Svyazi_User_BusinessLogicException(
                     "User creation failed! Please check user details and try again.");
             }
 
-            if (!await _roleManager.RoleExistsAsync(ParsedIdentityRole.Admin))
-                await _roleManager.CreateAsync(new IdentityRole(ParsedIdentityRole.Admin));
-            if (!await _roleManager.RoleExistsAsync(ParsedIdentityRole.User))
-                await _roleManager.CreateAsync(new IdentityRole(ParsedIdentityRole.User));
+            if (!await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
+                await _roleManager.CreateAsync(new MessageIdentityRole(MessageIdentityRole.Admin));
+            if (!await _roleManager.RoleExistsAsync(MessageIdentityRole.User))
+                await _roleManager.CreateAsync(new MessageIdentityRole(MessageIdentityRole.User));
 
-            if (await _roleManager.RoleExistsAsync(ParsedIdentityRole.Admin))
+            if (await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
             {
-                await _userManager.AddToRoleAsync(user, ParsedIdentityRole.Admin);
+                await _userManager.AddToRoleAsync(user, MessageIdentityRole.Admin);
             }
 
-            if (await _roleManager.RoleExistsAsync(ParsedIdentityRole.Admin))
+            if (await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
             {
-                await _userManager.AddToRoleAsync(user, ParsedIdentityRole.User);
+                await _userManager.AddToRoleAsync(user, MessageIdentityRole.User);
             }
 
             return Ok();
