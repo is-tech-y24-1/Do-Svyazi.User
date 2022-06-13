@@ -1,11 +1,9 @@
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.Xunit2;
 using Do_Svyazi.User.Application.CQRS.Chats.Commands;
-using Do_Svyazi.User.Application.CQRS.Users.Commands;
 using Do_Svyazi.User.DataAccess;
 using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Users;
@@ -42,25 +40,21 @@ public class ChatTests
         gainChatUser.Should().BeEquivalentTo(expectedChatUser);
     }
     
-    [Xunit.Theory, AutoData]
+    [Theory, AutoData]
     public async Task DeleteUserToChat([Greedy] MessengerUser user, [Greedy] GroupChat chat)
     {
         var dbContextMock = new DbContextMock<DoSvaziDbContext>();
         dbContextMock.CreateDbSetMock(x => x.Chats, new[] {chat});
-        dbContextMock.CreateDbSetMock(x => x.Users);
+        dbContextMock.CreateDbSetMock(x => x.Users, new[] {user});
         dbContextMock.CreateDbSetMock(x => x.ChatUsers);
-
-        var addUserHandler = new AddUser.Handler(dbContextMock.Object);
-        var addUserCommand = new AddUser.Command(user.Name, user.NickName, user.Description);
-        Guid userId = await addUserHandler.Handle(addUserCommand, CancellationToken.None);
         
         var addUserToChatHandler = new AddUserToChat.Handler(dbContextMock.Object);
-        var addUserToChatCommand = new AddUserToChat.Command(userId, chat.Id);
+        var addUserToChatCommand = new AddUserToChat.Command(user.Id, chat.Id);
         await addUserToChatHandler.Handle(addUserToChatCommand, CancellationToken.None);
         chat.Users.Count.Should().Be(1);
 
         var deleteUserToChatHandler = new DeleteUserFromChat.Handler(dbContextMock.Object);
-        var deleteUserToChatCommand = new DeleteUserFromChat.Command(userId, chat.Id);
+        var deleteUserToChatCommand = new DeleteUserFromChat.Command(user.Id, chat.Id);
         await deleteUserToChatHandler.Handle(deleteUserToChatCommand, CancellationToken.None);  
         chat.Users.Count.Should().Be(0);
     }
