@@ -39,7 +39,7 @@ public class ChatTests
 
         gainChatUser.Should().BeEquivalentTo(expectedChatUser);
     }
-    
+
     [Theory, AutoData]
     public async Task DeleteUserToChat([Greedy] MessengerUser user, [Greedy] GroupChat chat)
     {

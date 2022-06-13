@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,16 +5,16 @@ using AutoFixture;
 using AutoFixture.Xunit2;
 using Do_Svyazi.User.Application.CQRS.Users.Commands;
 using Do_Svyazi.User.DataAccess;
-using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Users;
 using EntityFrameworkCoreMock;
 using FluentAssertions;
+using Xunit;
 
 namespace CQRS.Tests;
 
 public class UserTests
 {
-    [Xunit.Theory, AutoData]
+    [Theory, AutoData]
     public async Task AddUser(IFixture fixture, [Greedy] MessengerUser user)
     {
         var dbContextMock = new DbContextMock<DoSvaziDbContext>();
@@ -31,8 +30,8 @@ public class UserTests
         gainMessengerUser.NickName.Should().Be(user.NickName);
         gainMessengerUser.Description.Should().Be(user.Description);
     }
-    
-    [Xunit.Theory, AutoData]
+
+    [Theory, AutoData]
     public async Task ChangeUserNameById([Greedy] MessengerUser user, string newName)
     {
         var dbContextMock = new DbContextMock<DoSvaziDbContext>();
