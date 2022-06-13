@@ -15,7 +15,7 @@ namespace CQRS.Tests;
 public class UserTests
 {
     [Theory, AutoData]
-    public async Task AddUser(IFixture fixture, [Greedy] MessengerUser user)
+    public async Task AddUser_UserAdded([Greedy] MessengerUser user)
     {
         var dbContextMock = new DbContextMock<DoSvaziDbContext>();
         dbContextMock.CreateDbSetMock(x => x.Users);
@@ -32,7 +32,7 @@ public class UserTests
     }
 
     [Theory, AutoData]
-    public async Task ChangeUserNameById([Greedy] MessengerUser user, string newName)
+    public async Task ChangeUserNameById_UserNameChanged([Greedy] MessengerUser user, string newName)
     {
         var dbContextMock = new DbContextMock<DoSvaziDbContext>();
         dbContextMock.CreateDbSetMock(x => x.Users, new[] {user});

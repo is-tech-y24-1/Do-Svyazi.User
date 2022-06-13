@@ -16,7 +16,7 @@ namespace CQRS.Tests;
 public class ChatTests
 {
     [Theory, AutoData]
-    public async Task AddUserToChat(IFixture fixture, [Greedy] MessengerUser user, [Greedy] GroupChat chat)
+    public async Task AddUserToChat_UserAdded(IFixture fixture, [Greedy] MessengerUser user, [Greedy] GroupChat chat)
     {
         var dbContextMock = new DbContextMock<DoSvaziDbContext>();
         dbContextMock.CreateDbSetMock(x => x.Chats, new[] {chat});
@@ -41,7 +41,7 @@ public class ChatTests
     }
 
     [Theory, AutoData]
-    public async Task DeleteUserToChat([Greedy] MessengerUser user, [Greedy] GroupChat chat)
+    public async Task DeleteUserToChat_UsersListEmpty([Greedy] MessengerUser user, [Greedy] GroupChat chat)
     {
         var dbContextMock = new DbContextMock<DoSvaziDbContext>();
         dbContextMock.CreateDbSetMock(x => x.Chats, new[] {chat});
@@ -51,11 +51,11 @@ public class ChatTests
         var addUserToChatHandler = new AddUserToChat.Handler(dbContextMock.Object);
         var addUserToChatCommand = new AddUserToChat.Command(user.Id, chat.Id);
         await addUserToChatHandler.Handle(addUserToChatCommand, CancellationToken.None);
-        chat.Users.Count.Should().Be(1);
+        chat.Users.Should().HaveCount(1);
 
         var deleteUserToChatHandler = new DeleteUserFromChat.Handler(dbContextMock.Object);
         var deleteUserToChatCommand = new DeleteUserFromChat.Command(user.Id, chat.Id);
         await deleteUserToChatHandler.Handle(deleteUserToChatCommand, CancellationToken.None);  
-        chat.Users.Count.Should().Be(0);
+        chat.Users.Should().HaveCount(0);
     }
 }
