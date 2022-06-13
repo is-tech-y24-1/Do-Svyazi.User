@@ -8,12 +8,12 @@ namespace Do_Svyazi.User.DataAccess;
 
 public class DoSvaziDbContext : DbContext, IDbContext
 {
-    protected DoSvaziDbContext() { }
-
     public DoSvaziDbContext(DbContextOptions<DoSvaziDbContext> options)
         : base(options)
     {
     }
+
+    protected DoSvaziDbContext() { }
 
     public virtual DbSet<Chat> Chats { get; init; }
     public virtual DbSet<MessengerUser> Users { get; init; }
