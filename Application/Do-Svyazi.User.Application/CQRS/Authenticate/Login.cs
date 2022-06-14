@@ -1,7 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Authenticate;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -17,12 +16,10 @@ public static class Login
     public class Handler : IRequestHandler<Command, JwtSecurityToken>
     {
         private readonly UserManager<MessageIdentityUser> _userManager;
-        private readonly RoleManager<MessageIdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
-        public Handler(IDbContext context, UserManager<MessageIdentityUser> userManager, RoleManager<MessageIdentityRole> roleManager, IConfiguration configuration)
+        public Handler(UserManager<MessageIdentityUser> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
             _configuration = configuration;
         }
 

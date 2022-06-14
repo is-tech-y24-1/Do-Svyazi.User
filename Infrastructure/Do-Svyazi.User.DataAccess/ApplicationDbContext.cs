@@ -16,9 +16,6 @@ namespace Do_Svyazi.User.DataAccess
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<MessageIdentityUser>()
-                .Ignore(u => u.Email)
-                .Ignore(u => u.PhoneNumber);
         }
     }
 }

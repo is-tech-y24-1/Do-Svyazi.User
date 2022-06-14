@@ -14,13 +14,9 @@ public static class Register
     public class Handler : IRequestHandler<Command, Unit>
     {
         private readonly UserManager<MessageIdentityUser> _userManager;
-        private readonly RoleManager<MessageIdentityRole> _roleManager;
-        private readonly IConfiguration _configuration;
-        public Handler(IDbContext context, UserManager<MessageIdentityUser> userManager, RoleManager<MessageIdentityRole> roleManager, IConfiguration configuration)
+        public Handler(UserManager<MessageIdentityUser> userManager)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
-            _configuration = configuration;
         }
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -37,6 +33,7 @@ public static class Register
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = request.model.NickName,
+                Email = request.model.Email,
             };
 
             IdentityResult? result = await _userManager.CreateAsync(user, request.model.Password);

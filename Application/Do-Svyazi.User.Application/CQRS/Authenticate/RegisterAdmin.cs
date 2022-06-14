@@ -19,12 +19,10 @@ public static class RegisterAdmin
     {
         private readonly UserManager<MessageIdentityUser> _userManager;
         private readonly RoleManager<MessageIdentityRole> _roleManager;
-        private readonly IConfiguration _configuration;
-        public Handler(IDbContext context, UserManager<MessageIdentityUser> userManager, RoleManager<MessageIdentityRole> roleManager, IConfiguration configuration)
+        public Handler(UserManager<MessageIdentityUser> userManager, RoleManager<MessageIdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _configuration = configuration;
         }
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -50,18 +48,15 @@ public static class RegisterAdmin
 
             if (!await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
                 await _roleManager.CreateAsync(new MessageIdentityRole(MessageIdentityRole.Admin));
+
             if (!await _roleManager.RoleExistsAsync(MessageIdentityRole.User))
                 await _roleManager.CreateAsync(new MessageIdentityRole(MessageIdentityRole.User));
 
             if (await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
-            {
                 await _userManager.AddToRoleAsync(user, MessageIdentityRole.Admin);
-            }
 
-            if (await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
-            {
+            if (await _roleManager.RoleExistsAsync(MessageIdentityRole.User))
                 await _userManager.AddToRoleAsync(user, MessageIdentityRole.User);
-            }
 
             return Unit.Value;
         }
