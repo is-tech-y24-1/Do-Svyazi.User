@@ -5,6 +5,7 @@ namespace Do_Svyazi.User.Domain.Users;
 public class MessengerUser
 {
     private const string _defaultDescription = "Description";
+
     public MessengerUser(string name, string nickName, string? description = null)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -16,6 +17,8 @@ public class MessengerUser
         NickName = nickName;
         Description = string.IsNullOrEmpty(description) ? _defaultDescription : description;
     }
+
+    protected MessengerUser() { }
 
     public Guid Id { get; protected init; } = Guid.NewGuid();
     public string Name { get; private set; }

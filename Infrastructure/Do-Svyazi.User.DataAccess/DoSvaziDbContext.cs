@@ -11,13 +11,14 @@ public class DoSvaziDbContext : DbContext, IDbContext
     public DoSvaziDbContext(DbContextOptions<DoSvaziDbContext> options)
         : base(options)
     {
-        Database.EnsureCreated();
     }
 
-    public DbSet<Chat> Chats { get; init; }
-    public DbSet<MessengerUser> Users { get; init; }
-    public DbSet<ChatUser> ChatUsers { get; init; }
-    public DbSet<Role> Roles { get; init; }
+    protected DoSvaziDbContext() { }
+
+    public virtual DbSet<Chat> Chats { get; init; }
+    public virtual DbSet<MessengerUser> Users { get; init; }
+    public virtual DbSet<ChatUser> ChatUsers { get; init; }
+    public virtual DbSet<Role> Roles { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
