@@ -7,7 +7,6 @@ namespace Do_Svyazi.User.Domain.Chats;
 public class Channel : Chat
 {
     private readonly Role _baseAdminRole;
-
     private readonly Role _baseUserRole;
 
     public Channel(MessengerUser creator, string name, string description)
