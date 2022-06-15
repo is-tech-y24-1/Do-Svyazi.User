@@ -32,6 +32,8 @@ public static class DeleteUserFromChat
                                           throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
 
             chat.RemoveUser(messengerUser);
+
+            // TODO: debug, if chat removes from user's List<Chat> property
             _context.Chats.Update(chat);
             await _context.SaveChangesAsync(cancellationToken);
 

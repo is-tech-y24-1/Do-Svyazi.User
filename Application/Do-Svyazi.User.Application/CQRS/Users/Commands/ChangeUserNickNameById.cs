@@ -18,22 +18,21 @@ public static class SetUserNickNameById
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
-                                          throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
+                                          throw new Do_Svyazi_User_NotFoundException(
+                                              $"User with id {request.userId} to change nickName was not found");
 
             if (NickNameExists(request.nickName))
-                throw new Do_Svyazi_User_BusinessLogicException($"This {request.nickName} is already in the system");
+                throw new Do_Svyazi_User_BusinessLogicException($"Nickname = {request.nickName} already exists in messenger");
 
             messengerUser.ChangeNickName(request.nickName);
+
             _context.Users.Update(messengerUser);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }
 
-        private bool NickNameExists(string nickName)
-        {
-            return _context.Users
-                .Any(user => user.NickName == nickName);
-        }
+        private bool NickNameExists(string nickName) =>
+            _context.Users.Any(user => user.NickName == nickName);
     }
 }

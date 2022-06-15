@@ -25,14 +25,17 @@ public static class AddUserToChat
                             .Include(chat => chat.Users)
                                 .ThenInclude(user => user.Role)
                             .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
-                        throw new Do_Svyazi_User_NotFoundException($"Chat with id {request.chatId} not found");
+                        throw new Do_Svyazi_User_NotFoundException(
+                            $"Chat with id = {request.chatId} to add user {request.userId} was not found");
 
             MessengerUser messengerUser = await _context.Users
                                               .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
-                                          throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
+                                          throw new Do_Svyazi_User_NotFoundException(
+                                              $"User with id = {request.userId} to be added into chat with id = {request.chatId} not found");
 
             ChatUser newChatUser = chat.AddUser(messengerUser);
-            _context.ChatUsers.Add(newChatUser);
+
+            await _context.ChatUsers.AddAsync(newChatUser, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

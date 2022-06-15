@@ -33,7 +33,7 @@ public static class GetUsersByChatId
                             .Include(chat => chat.Users)
                                 .ThenInclude(user => user.Role)
                             .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
-                        throw new Do_Svyazi_User_NotFoundException($"Chat with id {request.chatId} not found");
+                        throw new Do_Svyazi_User_NotFoundException($"Chat with id = {request.chatId} to get users was not found");
 
             return new Response(_mapper.Map<IReadOnlyCollection<ChatUser>>(chat.Users));
         }

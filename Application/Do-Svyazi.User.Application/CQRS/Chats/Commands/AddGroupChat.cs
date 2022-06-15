@@ -9,7 +9,7 @@ namespace Do_Svyazi.User.Application.CQRS.Chats.Commands;
 
 public static class AddGroupChat
 {
-    public record Command(Guid userId, string name, string description) : IRequest<Guid>;
+    public record Command(Guid adminId, string name, string description) : IRequest<Guid>;
 
     public class Handler : IRequestHandler<Command, Guid>
     {
@@ -20,8 +20,9 @@ public static class AddGroupChat
         public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
         {
             MessengerUser user = await _context.Users
-                                     .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
-                                 throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
+                                     .SingleOrDefaultAsync(user => user.Id == request.adminId, cancellationToken) ??
+                                 throw new Do_Svyazi_User_NotFoundException(
+                                     $"User with id = {request.adminId} to create a group chat was not found");
 
             GroupChat chat = new GroupChat(user, request.name, request.description);
 

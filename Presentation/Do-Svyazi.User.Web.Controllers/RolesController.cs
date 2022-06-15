@@ -1,11 +1,7 @@
-using Do_Svyazi.User.Application.CQRS.Chats.Commands;
-using Do_Svyazi.User.Application.CQRS.Chats.Queries;
 using Do_Svyazi.User.Application.CQRS.Roles;
 using Do_Svyazi.User.Application.CQRS.Roles.Commands;
-using Do_Svyazi.User.Application.CQRS.Users.Commands;
+using Do_Svyazi.User.Application.CQRS.Roles.Queries;
 using Do_Svyazi.User.Domain.Roles;
-using Do_Svyazi.User.Domain.Users;
-using Do_Svyazi.User.Dtos.Chats;
 using Do_Svyazi.User.Dtos.Roles;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -41,7 +37,7 @@ public class RolesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Role>> GetRoleByUserId(Guid userId, Guid chatId)
     {
-        Role response = await _mediator.Send(new GetRoleByUserId.Command(userId, chatId));
-        return Ok(response);
+        var response = await _mediator.Send(new GetRoleByUserId.Query(userId, chatId));
+        return Ok(response.userRole);
     }
 }
