@@ -19,6 +19,7 @@ public static class RegisterAdmin
     {
         private readonly UserManager<MessageIdentityUser> _userManager;
         private readonly RoleManager<MessageIdentityRole> _roleManager;
+
         public Handler(UserManager<MessageIdentityUser> userManager, RoleManager<MessageIdentityRole> roleManager)
         {
             _userManager = userManager;
@@ -46,17 +47,17 @@ public static class RegisterAdmin
                     "User creation failed! Please check user details and try again.");
             }
 
-            if (!await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
-                await _roleManager.CreateAsync(new MessageIdentityRole(MessageIdentityRole.Admin));
-
-            if (!await _roleManager.RoleExistsAsync(MessageIdentityRole.User))
-                await _roleManager.CreateAsync(new MessageIdentityRole(MessageIdentityRole.User));
-
             if (await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
+            {
                 await _userManager.AddToRoleAsync(user, MessageIdentityRole.Admin);
+                await _roleManager.CreateAsync(new MessageIdentityRole(MessageIdentityRole.User));
+            }
 
             if (await _roleManager.RoleExistsAsync(MessageIdentityRole.User))
+            {
                 await _userManager.AddToRoleAsync(user, MessageIdentityRole.User);
+                await _roleManager.CreateAsync(new MessageIdentityRole(MessageIdentityRole.Admin));
+            }
 
             return Unit.Value;
         }
