@@ -1,8 +1,7 @@
 {
   "name": "@do-svyazi/user.clients",
-  "version": "1.2.0-alpha8",
+  "version": "1.2.0-alpha11",
   "description": "User module clients",
-  "main": "index.js",
   "dependencies": {
     "axios": "^0.27.2",
     "asynckit": "^0.4.0",
@@ -14,23 +13,5 @@
     "mime-db": "^1.52.0",
     "moment": "^2.29.3"
   },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm rebuild",
-    "publish": "npm publish --access public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/is-tech-y24-1/Do-Svyazi.User.git"
-  },
-  "keywords": [
-    "messenger"
-  ],
-  "author": "do-svyazi.user team",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/is-tech-y24-1/Do-Svyazi.User/issues"
-  },
-  "homepage": "https://github.com/is-tech-y24-1/Do-Svyazi.User#readme"
+  "devDependencies": {}
 }
