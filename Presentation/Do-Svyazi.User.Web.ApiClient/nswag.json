@@ -5,7 +5,7 @@
     "aspNetCoreToOpenApi": {
       "project": "../../Infrastructure/Do-Svyazi.User.Web.Api/Do-Svyazi.User.Web.Api.csproj",
       "msBuildProjectExtensionsPath": null,
-      "configuration": null,
+      "configuration": "$(Configuration)",
       "runtime": "",
       "targetFramework": "",
       "noBuild": true,
