@@ -1,6 +1,6 @@
 {
   "name": "@do-svyazi/user.clients",
-  "version": "1.2.0-alpha7",
+  "version": "1.2.0-alpha8",
   "description": "User module clients",
   "main": "index.js",
   "dependencies": {
