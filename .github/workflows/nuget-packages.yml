@@ -1,8 +1,14 @@
 name: publish to nuget
 on:
-  push:
-    branches:
-      - main # Default release branch, may also be named 'master' or 'develop'
+#   push:
+#     branches:
+#       - main # Default release branch, may also be named 'master' or 'develop'
+  pull_request:
+      branches:
+        - master
+        - dev
+  release:
+    types: [created]
 jobs:
   publish:
     name: build, pack & publish
