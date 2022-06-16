@@ -13,6 +13,179 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } fr
 
 import * as moment from 'moment';
 
+export interface IAuthenticateClient {
+    login(model: LoginModel): Promise<FileResponse>;
+    register(model: RegisterModel): Promise<FileResponse>;
+    registerAdmin(model: RegisterModel): Promise<FileResponse>;
+}
+
+export class AuthenticateClient implements IAuthenticateClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance ? instance : axios.create();
+
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+
+    }
+
+    login(model: LoginModel , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Authenticate/login";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            responseType: "blob",
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processLogin(_response);
+        });
+    }
+
+    protected processLogin(response: AxiosResponse): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+
+    register(model: RegisterModel , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Authenticate/register";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            responseType: "blob",
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRegister(_response);
+        });
+    }
+
+    protected processRegister(response: AxiosResponse): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+
+    registerAdmin(model: RegisterModel , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Authenticate/register-admin";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            responseType: "blob",
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRegisterAdmin(_response);
+        });
+    }
+
+    protected processRegisterAdmin(response: AxiosResponse): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+}
+
 export interface IChatClient {
     getChats(): Promise<MessengerChatDto[]>;
     getChatById(chatId: string): Promise<MessengerChatDto>;
@@ -23,7 +196,7 @@ export interface IChatClient {
     addPersonalChat(firstUserId: string, secondUserId: string, name: string | null, description: string | null): Promise<void>;
     addSavedMessages(userId: string, name: string | null, description: string | null): Promise<void>;
     addUserToChat(userId: string, chatId: string): Promise<void>;
-    deleteUserToChat(userId: string, chatId: string): Promise<void>;
+    deleteUserFromChat(userId: string, chatId: string): Promise<void>;
 }
 
 export class ChatClient implements IChatClient {
@@ -547,8 +720,8 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<void>(null as any);
     }
 
-    deleteUserToChat(userId: string, chatId: string , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/Chat/DeleteUserToChat?";
+    deleteUserFromChat(userId: string, chatId: string , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Chat/DeleteUserFromChat?";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined and cannot be null.");
         else
@@ -574,11 +747,11 @@ export class ChatClient implements IChatClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processDeleteUserToChat(_response);
+            return this.processDeleteUserFromChat(_response);
         });
     }
 
-    protected processDeleteUserToChat(response: AxiosResponse): Promise<void> {
+    protected processDeleteUserFromChat(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1362,6 +1535,94 @@ export class UserClient implements IUserClient {
     }
 }
 
+export class LoginModel implements ILoginModel {
+    id!: string;
+    nickName!: string;
+    password!: string;
+
+    constructor(data?: ILoginModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.nickName = _data["nickName"];
+            this.password = _data["password"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): LoginModel | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<LoginModel>(data, _mappings, LoginModel);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["nickName"] = this.nickName;
+        data["password"] = this.password;
+        return data;
+    }
+}
+
+export interface ILoginModel {
+    id: string;
+    nickName: string;
+    password: string;
+}
+
+export class RegisterModel implements IRegisterModel {
+    name!: string;
+    nickName!: string;
+    email!: string;
+    password!: string;
+
+    constructor(data?: IRegisterModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.nickName = _data["nickName"];
+            this.email = _data["email"];
+            this.password = _data["password"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): RegisterModel | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<RegisterModel>(data, _mappings, RegisterModel);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["nickName"] = this.nickName;
+        data["email"] = this.email;
+        data["password"] = this.password;
+        return data;
+    }
+}
+
+export interface IRegisterModel {
+    name: string;
+    nickName: string;
+    email: string;
+    password: string;
+}
+
 export class MessengerChatDto implements IMessengerChatDto {
     id!: string;
     name!: string | undefined;
@@ -1885,6 +2146,13 @@ function createInstance<T>(data: any, mappings: any, type: any): T | null {
   mappings.push({ source: data, target: result });
   result.init(data, mappings);
   return result;
+}
+
+export interface FileResponse {
+    data: Blob;
+    status: number;
+    fileName?: string;
+    headers?: { [name: string]: any };
 }
 
 export class Do_Svyazi_User_ApiClient_Exception extends Error {

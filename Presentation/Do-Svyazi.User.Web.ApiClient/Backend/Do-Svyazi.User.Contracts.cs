@@ -18,6 +18,32 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial interface IAuthenticateClient
+    {
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FileResponse> LoginAsync(LoginModel model);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FileResponse> LoginAsync(LoginModel model, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FileResponse> RegisterAsync(RegisterModel model);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FileResponse> RegisterAsync(RegisterModel model, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FileResponse> RegisterAdminAsync(RegisterModel model);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FileResponse> RegisterAdminAsync(RegisterModel model, System.Threading.CancellationToken cancellationToken);
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IChatClient
     {
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
@@ -84,11 +110,11 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
         System.Threading.Tasks.Task AddUserToChatAsync(System.Guid userId, System.Guid chatId, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task DeleteUserToChatAsync(System.Guid userId, System.Guid chatId);
+        System.Threading.Tasks.Task DeleteUserFromChatAsync(System.Guid userId, System.Guid chatId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task DeleteUserToChatAsync(System.Guid userId, System.Guid chatId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task DeleteUserFromChatAsync(System.Guid userId, System.Guid chatId, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -190,6 +216,63 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task ChangeNameAsync(System.Guid userId, string name, System.Threading.CancellationToken cancellationToken);
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class LoginModel
+    {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("nickName", Required = Newtonsoft.Json.Required.Always)]
+        public string NickName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.Always)]
+        public string Password { get; set; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static LoginModel FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<LoginModel>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class RegisterModel
+    {
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
+        public string Name { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("nickName", Required = Newtonsoft.Json.Required.Always)]
+        public string NickName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.Always)]
+        public string Email { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.Always)]
+        public string Password { get; set; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static RegisterModel FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<RegisterModel>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
 
     }
 
@@ -493,6 +576,41 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
 
     }
 
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class FileResponse : System.IDisposable
+    {
+        private System.IDisposable _client;
+        private System.IDisposable _response;
+
+        public int StatusCode { get; private set; }
+
+        public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
+
+        public System.IO.Stream Stream { get; private set; }
+
+        public bool IsPartial
+        {
+            get { return StatusCode == 206; }
+        }
+
+        public FileResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.IO.Stream stream, System.IDisposable client, System.IDisposable response)
+        {
+            StatusCode = statusCode;
+            Headers = headers;
+            Stream = stream;
+            _client = client;
+            _response = response;
+        }
+
+        public void Dispose()
+        {
+            Stream.Dispose();
+            if (_response != null)
+                _response.Dispose();
+            if (_client != null)
+                _client.Dispose();
+        }
+    }
 
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
