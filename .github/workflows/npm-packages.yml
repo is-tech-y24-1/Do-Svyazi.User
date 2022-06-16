@@ -15,8 +15,7 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
-      - run: cd .\Presentation\Do-Svyazi.User.Web.ApiClient\Frontend\
-      - run: npm ci
-      - run: npm publish --access public
+      - run: npm ci --prefix project Presentation/Do-Svyazi.User.Web.ApiClient/Frontend/
+      - run: npm publish --access public --prefix project Presentation/Do-Svyazi.User.Web.ApiClient/Frontend/
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
