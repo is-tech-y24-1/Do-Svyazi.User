@@ -7,6 +7,7 @@
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageVersion>1.2.0-alpha2</PackageVersion>
+        <PackageId>Do_Svyazi.User.Web.ApiClient.Backend</PackageId>
         <Authors>Do-Svyazi.User team</Authors>
         <Title>Do-Svyazi.User module</Title>
     </PropertyGroup>
