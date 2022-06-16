@@ -10,5 +10,21 @@
     "@types/node": "^17.0.36",
     "axios": "^0.27.2",
     "moment": "^2.29.3"
-  }
+  },
+  "description": "User module clients",
+  "main": "do-svyazi.user.clients.ts",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/is-tech-y24-1/Do-Svyazi.User.git"
+  },
+  "keywords": [
+    "messenger"
+  ],
+  "author": "do-svyazi.user team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/is-tech-y24-1/Do-Svyazi.User/issues"
+  },
+  "homepage": "https://github.com/is-tech-y24-1/Do-Svyazi.User#readme"
 }
