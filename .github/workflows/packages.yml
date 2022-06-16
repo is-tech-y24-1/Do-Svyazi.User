@@ -2,6 +2,7 @@ name: Publish Package to npmjs
 on:
   pull_request:
       branches:
+        - master
         - dev
   release:
     types: [created]
@@ -15,6 +16,7 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
+      - run: dotnet nuget add source --username lipa44 --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/lipa44/index.json"
       - run: npm i --prefix project Presentation/Do-Svyazi.User.Web.ApiClient/Frontend/
       - run: npm ci --prefix project Presentation/Do-Svyazi.User.Web.ApiClient/Frontend/
       - run: npm publish --access public --prefix project Presentation/Do-Svyazi.User.Web.ApiClient/Frontend/
