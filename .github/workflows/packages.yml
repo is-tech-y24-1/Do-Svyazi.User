@@ -3,6 +3,7 @@ on:
   pull_request:
       branches:
         - master
+        - dev
   release:
     types: [created]
 jobs:
@@ -18,5 +19,6 @@ jobs:
       - run: npm i --prefix project Presentation/Do-Svyazi.User.Web.ApiClient/Frontend/
       - run: npm ci --prefix project Presentation/Do-Svyazi.User.Web.ApiClient/Frontend/
       - run: npm publish --access public --prefix project Presentation/Do-Svyazi.User.Web.ApiClient/Frontend/
+      - run: dotnet nuget add source --username lipa44 --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/lipa44/index.json"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
