@@ -1,7 +1,11 @@
 {
-  "name": "do-svyazi.user.clients",
-  "version": "1.0.0",
+  "name": "@do-svyazi/user.clients",
+  "version": "1.2.0",
   "private": false,
+  "scripts": {
+    "build": "npm rebuild",
+    "publish": "npm publish --access public"
+  },
   "dependencies": {
     "@types/node": "^17.0.36",
     "axios": "^0.27.2",
