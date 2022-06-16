@@ -1,9 +1,5 @@
 name: Publish Package to npmjs
 on:
-  pull_request:
-      branches:
-        - master
-        - dev
   release:
     types: [created]
 jobs:

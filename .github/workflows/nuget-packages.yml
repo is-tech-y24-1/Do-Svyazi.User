@@ -1,12 +1,5 @@
 name: Publish Package to nuget
 on:
-#   push:
-#     branches:
-#       - main # Default release branch, may also be named 'master' or 'develop'
-  pull_request:
-      branches:
-        - master
-        - dev
   release:
     types: [created]
 jobs:
