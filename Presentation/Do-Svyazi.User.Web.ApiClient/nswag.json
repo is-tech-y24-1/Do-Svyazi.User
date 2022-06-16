@@ -8,7 +8,7 @@
       "configuration": "$(Configuration)",
       "runtime": "",
       "targetFramework": "net6.0",
-      "noBuild": true,
+      "noBuild": false,
       "verbose": true,
       "workingDirectory": null,
       "requireParametersWithoutDefault": true,
