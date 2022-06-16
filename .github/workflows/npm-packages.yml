@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
-      - run: cd Presentation\Do-Svyazi.User.Web.ApiClient\Frontend |
+      - run: cd .\Presentation\Do-Svyazi.User.Web.ApiClient\Frontend\
       - run: npm ci
       - run: npm publish --access public
         env:
