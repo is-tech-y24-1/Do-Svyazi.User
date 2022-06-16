@@ -30,32 +30,32 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<MessengerUser>> GetUser(Guid userId)
     {
-        var response = await _mediator.Send(new GetUser.Command(userId));
-        return Ok(response);
+        var response = await _mediator.Send(new GetUser.Query(userId));
+        return Ok(response.messengerUser);
     }
 
     [HttpGet(nameof(GetAllChatsByUserId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<MessengerChatDto>>> GetAllChatsByUserId(Guid userId)
     {
-        IReadOnlyList<MessengerChatDto> response = await _mediator.Send(new GetAllChatsByUserId.Command(userId));
-        return Ok(response);
+        var response = await _mediator.Send(new GetAllChatsByUserId.Query(userId));
+        return Ok(response.users);
     }
 
     [HttpGet(nameof(GetAllChatsIdByUserId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<Guid>>> GetAllChatsIdByUserId(Guid userId)
     {
-        IReadOnlyList<Guid> response = await _mediator.Send(new GetAllChatsIdByUserId.Command(userId));
-        return Ok(response);
+        var response = await _mediator.Send(new GetAllChatsIdsByUserId.Query(userId));
+        return Ok(response.chatIds);
     }
 
     [HttpGet(nameof(GetUserRoleByChatId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Role>> GetUserRoleByChatId(Guid userId, Guid chatId)
     {
-        var response = await _mediator.Send(new GetUserRoleByChatId.Command(userId, chatId));
-        return Ok(response);
+        var response = await _mediator.Send(new GetUserRoleByChatId.Query(userId, chatId));
+        return Ok(response.role);
     }
 
     [HttpPost(nameof(SetNickNameById))]

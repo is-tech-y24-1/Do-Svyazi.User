@@ -1,13 +1,13 @@
 {
   "runtime": "Net60",
-  "defaultVariables": "CSharpOutputPath=..\\..\\Presentation\\Do-Svyazi.User.Web.ApiClient.Backend",
+  "defaultVariables": "",
   "documentGenerator": {
     "aspNetCoreToOpenApi": {
-      "project": "Do-Svyazi.User.Web.Api.csproj",
+      "project": "../../Infrastructure/Do-Svyazi.User.Web.Api/Do-Svyazi.User.Web.Api.csproj",
       "msBuildProjectExtensionsPath": null,
-      "configuration": null,
+      "configuration": "$(Configuration)",
       "runtime": "",
-      "targetFramework": "",
+      "targetFramework": "net6.0",
       "noBuild": true,
       "verbose": true,
       "workingDirectory": null,
@@ -30,9 +30,9 @@
       "serviceHost": null,
       "serviceBasePath": null,
       "serviceSchemes": [],
-      "infoTitle": "My Title",
+      "infoTitle": "Do-Svyazi user module",
       "infoDescription": null,
-      "infoVersion": "1.0.0",
+      "infoVersion": "2.0.0",
       "documentTemplate": null,
       "documentProcessorTypes": [],
       "operationProcessorTypes": [],
@@ -41,12 +41,12 @@
       "contractResolverType": null,
       "serializerSettingsType": null,
       "useDocumentProvider": false,
-      "documentName": "v1",
+      "documentName": "v2.0.0",
       "aspNetCoreEnvironment": null,
       "createWebHostBuilderMethod": null,
       "startupType": null,
       "allowNullableBodyParameters": true,
-      "output": null,
+      "output": "openApiContracts.json",
       "outputType": "OpenApi3",
       "newLineBehavior": "Auto",
       "assemblyPaths": [],
@@ -79,7 +79,7 @@
       "typeAccessModifier": "public",
       "generateContractsOutput": true,
       "contractsNamespace": "Do_Svyazi.User.Web.ApiClient.Contracts",
-      "contractsOutputFilePath": "$(CSharpOutputPath)/Do-Svyazi.User.Contracts.cs",
+      "contractsOutputFilePath": "Backend/Do-Svyazi.User.Contracts.cs",
       "parameterDateTimeFormat": "s",
       "parameterDateFormat": "yyyy-MM-dd",
       "generateUpdateJsonSerializerSettingsMethod": true,
@@ -137,7 +137,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "$(CSharpOutputPath)/Do-Svyazi.User.Client.cs",
+      "output": "Backend/Do-Svyazi.User.Client.cs",
       "newLineBehavior": "Auto"
     },
     "openApiToTypeScriptClient": {
@@ -194,7 +194,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "$(TypescriptOutputPath)/do-svyazi.user.clients.ts"
+      "output": "Frontend/do-svyazi.user.clients.ts"
     }
   }
 }

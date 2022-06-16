@@ -6,11 +6,6 @@ on:
       - master
       - dev
     types: [opened, synchronize, reopened]
-
-  push:
-    branches:
-      - master
-      - dev
    
 jobs:
   build:

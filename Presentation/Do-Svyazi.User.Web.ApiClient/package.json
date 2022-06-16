@@ -1,0 +1,20 @@
+{
+  "main": "Frontend/do-svyazi.user.clients.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "publish": "npm publish --access public Frontend/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/is-tech-y24-1/Do-Svyazi.User.git"
+  },
+  "keywords": [
+    "messenger"
+  ],
+  "author": "lipa44",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/is-tech-y24-1/Do-Svyazi.User/issues"
+  },
+  "homepage": "https://github.com/is-tech-y24-1/Do-Svyazi.User#readme"
+}

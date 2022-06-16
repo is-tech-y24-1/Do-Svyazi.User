@@ -37,7 +37,7 @@ public class ChatController : ControllerBase
     public async Task<ActionResult<IReadOnlyCollection<Guid>>> GetUserIdsByChatId(Guid chatId)
     {
         var response = await _mediator.Send(new GetUserIdsByChatId.Query(chatId));
-        return Ok(response);
+        return Ok(response.users);
     }
 
     [HttpGet(nameof(GetUsersByChatId))]
@@ -45,7 +45,7 @@ public class ChatController : ControllerBase
     public async Task<ActionResult<IReadOnlyCollection<ChatUser>>> GetUsersByChatId(Guid chatId)
     {
         var response = await _mediator.Send(new GetUsersByChatId.Query(chatId));
-        return Ok(response);
+        return Ok(response.users);
     }
 
     [HttpPost(nameof(AddChannel))]
@@ -88,11 +88,11 @@ public class ChatController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete(nameof(DeleteUserToChat))]
+    [HttpDelete(nameof(DeleteUserFromChat))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> DeleteUserToChat(Guid userId, Guid chatId)
+    public async Task<ActionResult> DeleteUserFromChat(Guid userId, Guid chatId)
     {
-        await _mediator.Send(new DeleteUserToChat.Command(userId, chatId));
+        await _mediator.Send(new DeleteUserFromChat.Command(userId, chatId));
         return Ok();
     }
 }

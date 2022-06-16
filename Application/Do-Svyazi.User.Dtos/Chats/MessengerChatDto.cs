@@ -8,5 +8,5 @@ public record MessengerChatDto
     public string? Name { get; init; }
     public string? Description { get; init; }
     public MessengerUserDto? Creator { get; init; }
-    public List<Guid> Users { get; init; } = new ();
+    public IReadOnlyCollection<Guid> Users { get; init; } = new List<Guid>();
 }

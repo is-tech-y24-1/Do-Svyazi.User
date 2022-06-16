@@ -7,23 +7,14 @@ public class ChatUser
 {
     public ChatUser(MessengerUser user, Chat chat, Role role)
     {
-        if (user is null)
-            throw new ArgumentNullException(nameof(user), $"User to create chatUser in chat {chat?.Name} is null");
-
-        if (chat is null)
-            throw new ArgumentNullException(nameof(chat), $"Chat to create chatUser to {user.NickName} is null");
-
-        if (role is null)
-            throw new ArgumentNullException(nameof(role), $"Role to create chatUser to {user.NickName} is null");
-
-        User = user;
-        Chat = chat;
+        User = user ?? throw new ArgumentNullException(nameof(user), $"User to create chatUser in chat {chat.Name} is null");
+        Chat = chat ?? throw new ArgumentNullException(nameof(chat), $"Chat to create chatUser to {user.NickName} is null");
+        Role = role ?? throw new ArgumentNullException(nameof(role), $"Role to create chatUser to {user.NickName} is null");
         ChatId = chat.Id;
-        Role = role;
         MessengerUserId = user.Id;
     }
 
-    protected ChatUser() { }
+    public ChatUser() { }
 
     public MessengerUser User { get; init; }
     public Guid Id { get; init; } = Guid.NewGuid();
@@ -32,13 +23,8 @@ public class ChatUser
     public Guid ChatId { get; init; }
     public Role Role { get; private set; }
 
-    public void ChangeRole(Role role)
-    {
-        if (role is null)
-            throw new ArgumentNullException(nameof(role), $"Role to set to {User.NickName} in chat {Chat.Name} is null");
-
-        Role = role;
-    }
+    public void ChangeRole(Role role) =>
+        Role = role ?? throw new ArgumentNullException(nameof(role), $"Role to set to {User.NickName} in chat {Chat.Name} is null");
 
     public override bool Equals(object? obj) => Equals(obj as ChatUser);
 
@@ -48,6 +34,5 @@ public class ChatUser
         chatUser is not null &&
         User.Id.Equals(chatUser.User.Id) &&
         Chat.Id.Equals(chatUser.Chat.Id) &&
-        MessengerUserId.Equals(chatUser.MessengerUserId) &&
-        Role.Equals(chatUser.Role);
+        MessengerUserId.Equals(chatUser.MessengerUserId);
 }

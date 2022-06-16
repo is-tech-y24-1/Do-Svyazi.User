@@ -1,6 +1,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Do_Svyazi.User.Application.DbContexts;
+using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Dtos.Chats;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -25,12 +26,9 @@ public static class GetChats
 
         public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
         {
-            List<MessengerChatDto> chats = await _context
-                .Chats
-                .ProjectTo<MessengerChatDto>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken: cancellationToken);
+            List<Chat> chats = await _context.Chats.ToListAsync(cancellationToken: cancellationToken);
 
-            return new Response(chats);
+            return new Response(_mapper.Map<IReadOnlyCollection<MessengerChatDto>>(chats));
         }
     }
 }

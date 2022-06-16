@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Chats.Commands;
 
-public static class DeleteUserToChat
+public static class DeleteUserFromChat
 {
     public record Command(Guid userId, Guid chatId) : IRequest;
 
@@ -32,6 +32,8 @@ public static class DeleteUserToChat
                                           throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
 
             chat.RemoveUser(messengerUser);
+
+            // TODO: debug, if chat removes from user's List<Chat> property
             _context.Chats.Update(chat);
             await _context.SaveChangesAsync(cancellationToken);
 
