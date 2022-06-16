@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>1.2.0-alpha5</PackageVersion>
+        <PackageVersion>1.2.0-alpha6</PackageVersion>
         <PackageId>Do-Svyazi.User.Web.ApiClient.Backend</PackageId>
         <Authors>Do-Svyazi.User team</Authors>
         <Title>Do-Svyazi.User module</Title>
@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <Target Name="NSwag" BeforeTargets="AfterBuild" Condition="'$(TF_BUILD)'!='True'">
-        <Exec ConsoleToMSBuild="true" ContinueOnError="true" Command="$(NSwagExe_Net60) run nswag.json">
+        <Exec ConsoleToMSBuild="true" ContinueOnError="true" Command="$(NSwagExe_Net60) run nswag.json /variables:Configuration=$(Configuration)">
             <Output TaskParameter="ExitCode" PropertyName="NSwagExitCode" />
             <Output TaskParameter="ConsoleOutput" PropertyName="NSwagOutput" />
         </Exec>
