@@ -24,6 +24,10 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Infrastructure\Do-Svyazi.User.Web.Api\Do-Svyazi.User.Web.Api.csproj" />
+    </ItemGroup>
+
     <Target Name="NSwag" BeforeTargets="AfterBuild" Condition="'$(TF_BUILD)'!='True'">
         <Exec ConsoleToMSBuild="true" ContinueOnError="true" Command="$(NSwagExe_Net60) run nswag.json /variables:Configuration=$(Configuration),OutDir=$(OutDir)">
             <Output TaskParameter="ExitCode" PropertyName="NSwagExitCode" />
