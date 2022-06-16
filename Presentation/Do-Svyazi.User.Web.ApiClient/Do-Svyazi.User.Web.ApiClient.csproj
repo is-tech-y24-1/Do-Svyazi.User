@@ -5,9 +5,10 @@
         <RootNamespace>Do_Svyazi.User.Web.ApiClient</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Title>Do-Svyazi.User module</Title>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>1.2.0</PackageVersion>
+        <PackageVersion>1.2.0-alpha1</PackageVersion>
+        <Authors>Do-Svyazi.User team</Authors>
+        <Title>Do-Svyazi.User module</Title>
     </PropertyGroup>
 
     <ItemGroup>
