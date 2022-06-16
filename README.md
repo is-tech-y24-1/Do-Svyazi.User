@@ -13,3 +13,26 @@
 `CQRS`, `NSwag`, `FluentAssertions`, `xUnit`, `Moq`, `AutoFixture`, `MediatR`, `AspNetCore.Identity` и многое другое 
 
 > Надеюсь, с тем, как запустить проект, ни у кого проблем не возникнет :)
+
+## Download project
+```bash
+git clone https://github.com/is-tech-y24-1/Do-Svyazi.User.git
+```
+
+## Restore dependencies
+```bash
+dotnet restore
+```
+
+## Start project
+```bash
+dotnet run --project .\Infrastructure\Do-Svyazi.User.Web.Api\
+```
+
+## Run unit tests
+```
+dotnet test --no-build
+```
+
+## License
+MIT
