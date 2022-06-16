@@ -18,9 +18,10 @@ public static class ChangeUserNameById
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
-                                          throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
+                                          throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} to change name was not found");
 
             messengerUser.ChangeName(request.name);
+
             _context.Users.Update(messengerUser);
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -23,13 +23,12 @@ public abstract class Chat
     public Guid Id { get; protected init; } = Guid.NewGuid();
     public string Name { get; protected set; }
     public string Description { get; protected set; }
-
-    // public long Tag { get; init; } ??
+    public MessengerUser Creator { get; init; }
+    public Guid CreatorId { get; init; }
+    public int MaxUsersAmount { get; init; }
     public List<ChatUser> Users { get; init; } = new ();
     public List<Role> Roles { get; init; } = new ();
-    public int MaxUsersAmount { get; init; }
-    public Guid CreatorId { get; init; }
-    public MessengerUser Creator { get; init; }
+
     protected Role BaseAdminRole { get; init; }
     protected Role BaseUserRole { get; init; }
 
@@ -66,10 +65,8 @@ public abstract class Chat
     public abstract void RemoveRole(Role role);
     public abstract void ChangeUserRole(MessengerUser user, Role role);
 
-    public bool IsUserExist(MessengerUser messengerUser)
-    {
-        return Users.Any(user => user.MessengerUserId == messengerUser.Id);
-    }
+    public bool IsUserExist(MessengerUser messengerUser) =>
+        Users.Any(user => user.MessengerUserId == messengerUser.Id);
 
     protected ChatUser CreateChatUser(MessengerUser user, Role role) => new (user, this, role);
 }

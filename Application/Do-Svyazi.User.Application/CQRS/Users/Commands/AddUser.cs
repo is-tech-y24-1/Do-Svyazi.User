@@ -20,20 +20,18 @@ public static class AddUser
             if (IsUserExist(request.nickName))
             {
                 throw new Do_Svyazi_User_BusinessLogicException(
-                    $"User with nickname = {request.nickName} is already created");
+                    $"User with nickname = {request.nickName} already exists in messenger");
             }
 
-            var messengerUser = new MessengerUser(request.name, request.nickName, request.description);
+            MessengerUser messengerUser = new (request.name, request.nickName, request.description);
+
             await _context.Users.AddAsync(messengerUser, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
             return messengerUser.Id;
         }
 
-        private bool IsUserExist(string nickName)
-        {
-            MessengerUser? foundUser = _context.Users.FirstOrDefault(user => user.NickName == nickName);
-            return foundUser is not null;
-        }
+        private bool IsUserExist(string nickName) =>
+            _context.Users.Any(user => user.NickName == nickName);
     }
 }

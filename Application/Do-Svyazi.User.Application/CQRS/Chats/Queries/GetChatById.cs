@@ -30,7 +30,7 @@ public static class GetChatById
                             .Include(chat => chat.Creator)
                             .Include(chat => chat.Users)
                             .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
-                        throw new Do_Svyazi_User_NotFoundException($"Chat with id {request.chatId} not found");
+                        throw new Do_Svyazi_User_NotFoundException($"Chat with id = {request.chatId} was not found");
 
             return new Response(_mapper.Map<MessengerChatDto>(chat));
         }

@@ -25,17 +25,13 @@ public static class CreateRoleForChat
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            Chat? chat = await _context.Chats.FindAsync(request.chatId);
-            if (chat is null)
-            {
-                throw new Do_Svyazi_User_NotFoundException(
-                    $"Chat with id = {request.chatId} is not created");
-            }
+            Chat chat = await _context.Chats.FindAsync(request.chatId)
+                        ?? throw new Do_Svyazi_User_NotFoundException($"Chat with id = {request.chatId} to create role was not found");
 
-            Role? newRole = new Role()
+            Role newRole = new ()
             {
-                Name = request.role.Name,
                 Chat = chat,
+                Name = request.role.Name,
                 CanAddUsers = request.role.CanAddUsers,
                 CanDeleteChat = request.role.CanDeleteChat,
                 CanDeleteMessages = request.role.CanDeleteMessages,
@@ -44,15 +40,17 @@ public static class CreateRoleForChat
                 CanPinMessages = request.role.CanPinMessages,
                 CanReadMessages = request.role.CanReadMessages,
                 CanWriteMessages = request.role.CanWriteMessages,
-                CanEditChannelDescription = request.role.CanEditMessages,
+                CanEditChannelDescription = request.role.CanEditChannelDescription,
                 CanInviteOtherUsers = request.role.CanInviteOtherUsers,
                 CanSeeChannelMembers = request.role.CanSeeChannelMembers,
             };
 
             chat.AddRole(newRole);
+
             _context.Chats.Update(chat);
             await _context.Roles.AddAsync(newRole, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+
             return Unit.Value;
         }
     }

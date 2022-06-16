@@ -1,6 +1,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Do_Svyazi.User.Application.DbContexts;
+using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -25,12 +26,10 @@ public static class GetUsers
 
         public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
         {
-            var result = await _context
-                .Users
-                .ProjectTo<MessengerUserDto>(_mapper.ConfigurationProvider)
+            List<MessengerUser> users = await _context.Users
                 .ToListAsync(cancellationToken: cancellationToken);
 
-            return new Response(result);
+            return new Response(_mapper.Map<IReadOnlyCollection<MessengerUserDto>>(users));
         }
     }
 }

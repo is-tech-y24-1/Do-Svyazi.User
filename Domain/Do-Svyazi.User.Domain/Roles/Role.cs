@@ -23,7 +23,7 @@ public record Role
     public virtual void ChangeName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException(nameof(name), $"Role name to change is null");
+            throw new ArgumentNullException(nameof(name), "Role name to change is null");
 
         Name = name;
     }

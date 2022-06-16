@@ -13,6 +13,179 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } fr
 
 import * as moment from 'moment';
 
+export interface IAuthenticateClient {
+    login(model: LoginModel): Promise<FileResponse>;
+    register(model: RegisterModel): Promise<FileResponse>;
+    registerAdmin(model: RegisterModel): Promise<FileResponse>;
+}
+
+export class AuthenticateClient implements IAuthenticateClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance ? instance : axios.create();
+
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+
+    }
+
+    login(model: LoginModel , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Authenticate/login";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            responseType: "blob",
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processLogin(_response);
+        });
+    }
+
+    protected processLogin(response: AxiosResponse): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+
+    register(model: RegisterModel , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Authenticate/register";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            responseType: "blob",
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRegister(_response);
+        });
+    }
+
+    protected processRegister(response: AxiosResponse): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+
+    registerAdmin(model: RegisterModel , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Authenticate/register-admin";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            responseType: "blob",
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRegisterAdmin(_response);
+        });
+    }
+
+    protected processRegisterAdmin(response: AxiosResponse): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+}
+
 export interface IChatClient {
     getChats(): Promise<MessengerChatDto[]>;
     getChatById(chatId: string): Promise<MessengerChatDto>;
@@ -23,7 +196,7 @@ export interface IChatClient {
     addPersonalChat(firstUserId: string, secondUserId: string, name: string | null, description: string | null): Promise<void>;
     addSavedMessages(userId: string, name: string | null, description: string | null): Promise<void>;
     addUserToChat(userId: string, chatId: string): Promise<void>;
-    deleteUserToChat(userId: string, chatId: string): Promise<void>;
+    deleteUserFromChat(userId: string, chatId: string): Promise<void>;
 }
 
 export class ChatClient implements IChatClient {
@@ -547,8 +720,8 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<void>(null as any);
     }
 
-    deleteUserToChat(userId: string, chatId: string , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/Chat/DeleteUserToChat?";
+    deleteUserFromChat(userId: string, chatId: string , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Chat/DeleteUserFromChat?";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined and cannot be null.");
         else
@@ -574,11 +747,11 @@ export class ChatClient implements IChatClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processDeleteUserToChat(_response);
+            return this.processDeleteUserFromChat(_response);
         });
     }
 
-    protected processDeleteUserToChat(response: AxiosResponse): Promise<void> {
+    protected processDeleteUserFromChat(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -597,6 +770,191 @@ export class ChatClient implements IChatClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<void>(null as any);
+    }
+}
+
+export interface IRolesClient {
+    createRoleForChat(role: RoleDto, chatId: string): Promise<void>;
+    changeRoleForUserById(userId: string, chatId: string, role: RoleDto): Promise<void>;
+    getRoleByUserId(userId: string, chatId: string): Promise<Role>;
+}
+
+export class RolesClient implements IRolesClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance ? instance : axios.create();
+
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+
+    }
+
+    createRoleForChat(role: RoleDto, chatId: string , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Roles/CreateRoleForChat?";
+        if (chatId === undefined || chatId === null)
+            throw new Error("The parameter 'chatId' must be defined and cannot be null.");
+        else
+            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(role);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateRoleForChat(_response);
+        });
+    }
+
+    protected processCreateRoleForChat(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    changeRoleForUserById(userId: string, chatId: string, role: RoleDto , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Roles/ChangeRoleForUserById?";
+        if (userId === undefined || userId === null)
+            throw new Error("The parameter 'userId' must be defined and cannot be null.");
+        else
+            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+        if (chatId === undefined || chatId === null)
+            throw new Error("The parameter 'chatId' must be defined and cannot be null.");
+        else
+            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(role);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processChangeRoleForUserById(_response);
+        });
+    }
+
+    protected processChangeRoleForUserById(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    getRoleByUserId(userId: string, chatId: string , cancelToken?: CancelToken | undefined): Promise<Role> {
+        let url_ = this.baseUrl + "/api/Roles/GetRoleByUserId?";
+        if (userId === undefined || userId === null)
+            throw new Error("The parameter 'userId' must be defined and cannot be null.");
+        else
+            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+        if (chatId === undefined || chatId === null)
+            throw new Error("The parameter 'chatId' must be defined and cannot be null.");
+        else
+            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetRoleByUserId(_response);
+        });
+    }
+
+    protected processGetRoleByUserId(response: AxiosResponse): Promise<Role> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        let _mappings: { source: any, target: any }[] = [];
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = Role.fromJS(resultData200, _mappings);
+            return Promise.resolve<Role>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Role>(null as any);
     }
 }
 
@@ -1177,6 +1535,94 @@ export class UserClient implements IUserClient {
     }
 }
 
+export class LoginModel implements ILoginModel {
+    id!: string;
+    nickName!: string;
+    password!: string;
+
+    constructor(data?: ILoginModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.nickName = _data["nickName"];
+            this.password = _data["password"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): LoginModel | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<LoginModel>(data, _mappings, LoginModel);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["nickName"] = this.nickName;
+        data["password"] = this.password;
+        return data;
+    }
+}
+
+export interface ILoginModel {
+    id: string;
+    nickName: string;
+    password: string;
+}
+
+export class RegisterModel implements IRegisterModel {
+    name!: string;
+    nickName!: string;
+    email!: string;
+    password!: string;
+
+    constructor(data?: IRegisterModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.nickName = _data["nickName"];
+            this.email = _data["email"];
+            this.password = _data["password"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): RegisterModel | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<RegisterModel>(data, _mappings, RegisterModel);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["nickName"] = this.nickName;
+        data["email"] = this.email;
+        data["password"] = this.password;
+        return data;
+    }
+}
+
+export interface IRegisterModel {
+    name: string;
+    nickName: string;
+    email: string;
+    password: string;
+}
+
 export class MessengerChatDto implements IMessengerChatDto {
     id!: string;
     name!: string | undefined;
@@ -1397,11 +1843,11 @@ export abstract class Chat implements IChat {
     id!: string;
     name!: string;
     description!: string;
+    creator!: MessengerUser;
+    creatorId!: string;
+    maxUsersAmount!: number;
     users!: ChatUser[];
     roles!: Role[];
-    maxUsersAmount!: number;
-    creatorId!: string;
-    creator!: MessengerUser;
 
     constructor(data?: IChat) {
         if (data) {
@@ -1417,6 +1863,9 @@ export abstract class Chat implements IChat {
             this.id = _data["id"];
             this.name = _data["name"];
             this.description = _data["description"];
+            this.creator = _data["creator"] ? MessengerUser.fromJS(_data["creator"], _mappings) : <any>undefined;
+            this.creatorId = _data["creatorId"];
+            this.maxUsersAmount = _data["maxUsersAmount"];
             if (Array.isArray(_data["users"])) {
                 this.users = [] as any;
                 for (let item of _data["users"])
@@ -1427,9 +1876,6 @@ export abstract class Chat implements IChat {
                 for (let item of _data["roles"])
                     this.roles!.push(Role.fromJS(item, _mappings));
             }
-            this.maxUsersAmount = _data["maxUsersAmount"];
-            this.creatorId = _data["creatorId"];
-            this.creator = _data["creator"] ? MessengerUser.fromJS(_data["creator"], _mappings) : <any>undefined;
         }
     }
 
@@ -1443,6 +1889,9 @@ export abstract class Chat implements IChat {
         data["id"] = this.id;
         data["name"] = this.name;
         data["description"] = this.description;
+        data["creator"] = this.creator ? this.creator.toJSON() : <any>undefined;
+        data["creatorId"] = this.creatorId;
+        data["maxUsersAmount"] = this.maxUsersAmount;
         if (Array.isArray(this.users)) {
             data["users"] = [];
             for (let item of this.users)
@@ -1453,9 +1902,6 @@ export abstract class Chat implements IChat {
             for (let item of this.roles)
                 data["roles"].push(item.toJSON());
         }
-        data["maxUsersAmount"] = this.maxUsersAmount;
-        data["creatorId"] = this.creatorId;
-        data["creator"] = this.creator ? this.creator.toJSON() : <any>undefined;
         return data;
     }
 }
@@ -1464,11 +1910,11 @@ export interface IChat {
     id: string;
     name: string;
     description: string;
+    creator: MessengerUser;
+    creatorId: string;
+    maxUsersAmount: number;
     users: ChatUser[];
     roles: Role[];
-    maxUsersAmount: number;
-    creatorId: string;
-    creator: MessengerUser;
 }
 
 export class Role implements IRole {
@@ -1563,6 +2009,84 @@ export enum ActionOption {
     Disabled = 2,
 }
 
+export class RoleDto implements IRoleDto {
+    name!: string;
+    canEditMessages!: ActionOption;
+    canDeleteMessages!: ActionOption;
+    canWriteMessages!: ActionOption;
+    canReadMessages!: ActionOption;
+    canAddUsers!: ActionOption;
+    canDeleteUsers!: ActionOption;
+    canPinMessages!: ActionOption;
+    canSeeChannelMembers!: ActionOption;
+    canInviteOtherUsers!: ActionOption;
+    canEditChannelDescription!: ActionOption;
+    canDeleteChat!: ActionOption;
+
+    constructor(data?: IRoleDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.canEditMessages = _data["canEditMessages"];
+            this.canDeleteMessages = _data["canDeleteMessages"];
+            this.canWriteMessages = _data["canWriteMessages"];
+            this.canReadMessages = _data["canReadMessages"];
+            this.canAddUsers = _data["canAddUsers"];
+            this.canDeleteUsers = _data["canDeleteUsers"];
+            this.canPinMessages = _data["canPinMessages"];
+            this.canSeeChannelMembers = _data["canSeeChannelMembers"];
+            this.canInviteOtherUsers = _data["canInviteOtherUsers"];
+            this.canEditChannelDescription = _data["canEditChannelDescription"];
+            this.canDeleteChat = _data["canDeleteChat"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): RoleDto | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<RoleDto>(data, _mappings, RoleDto);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["canEditMessages"] = this.canEditMessages;
+        data["canDeleteMessages"] = this.canDeleteMessages;
+        data["canWriteMessages"] = this.canWriteMessages;
+        data["canReadMessages"] = this.canReadMessages;
+        data["canAddUsers"] = this.canAddUsers;
+        data["canDeleteUsers"] = this.canDeleteUsers;
+        data["canPinMessages"] = this.canPinMessages;
+        data["canSeeChannelMembers"] = this.canSeeChannelMembers;
+        data["canInviteOtherUsers"] = this.canInviteOtherUsers;
+        data["canEditChannelDescription"] = this.canEditChannelDescription;
+        data["canDeleteChat"] = this.canDeleteChat;
+        return data;
+    }
+}
+
+export interface IRoleDto {
+    name: string;
+    canEditMessages: ActionOption;
+    canDeleteMessages: ActionOption;
+    canWriteMessages: ActionOption;
+    canReadMessages: ActionOption;
+    canAddUsers: ActionOption;
+    canDeleteUsers: ActionOption;
+    canPinMessages: ActionOption;
+    canSeeChannelMembers: ActionOption;
+    canInviteOtherUsers: ActionOption;
+    canEditChannelDescription: ActionOption;
+    canDeleteChat: ActionOption;
+}
+
 function jsonParse(json: any, reviver?: any) {
     json = JSON.parse(json, reviver);
 
@@ -1622,6 +2146,13 @@ function createInstance<T>(data: any, mappings: any, type: any): T | null {
   mappings.push({ source: data, target: result });
   result.init(data, mappings);
   return result;
+}
+
+export interface FileResponse {
+    data: Blob;
+    status: number;
+    fileName?: string;
+    headers?: { [name: string]: any };
 }
 
 export class Do_Svyazi_User_ApiClient_Exception extends Error {

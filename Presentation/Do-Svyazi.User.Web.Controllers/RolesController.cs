@@ -1,5 +1,6 @@
 using Do_Svyazi.User.Application.CQRS.Roles;
 using Do_Svyazi.User.Application.CQRS.Roles.Commands;
+using Do_Svyazi.User.Application.CQRS.Roles.Queries;
 using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Dtos.Roles;
 using MediatR;
@@ -36,7 +37,7 @@ public class RolesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Role>> GetRoleByUserId(Guid userId, Guid chatId)
     {
-        Role response = await _mediator.Send(new GetRoleByUserId.Command(userId, chatId));
-        return Ok(response);
+        var response = await _mediator.Send(new GetRoleByUserId.Query(userId, chatId));
+        return Ok(response.userRole);
     }
 }
