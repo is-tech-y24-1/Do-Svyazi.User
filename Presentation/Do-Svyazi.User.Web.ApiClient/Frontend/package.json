@@ -1,19 +1,25 @@
 {
   "name": "@do-svyazi/user.clients",
-  "version": "1.2.0",
-  "private": false,
+  "version": "1.2.0-alpha6",
+  "description": "User module clients",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "asynckit": "^0.4.0",
+    "follow-redirects": "^1.15.1",
+    "combined-stream": "^1.0.8",
+    "form-data": "^4.0.0",
+    "delayed-stream": "^1.0.0",
+    "mime-types": "^2.1.35",
+    "mime-db": "^1.52.0",
+    "moment": "^2.29.3"
+  },
+  "devDependencies": {},
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm rebuild",
     "publish": "npm publish --access public"
   },
-  "dependencies": {
-    "@types/node": "^17.0.36",
-    "axios": "^0.27.2",
-    "moment": "^2.29.3"
-  },
-  "description": "User module clients",
-  "main": "do-svyazi.user.clients.ts",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/is-tech-y24-1/Do-Svyazi.User.git"
