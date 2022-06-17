@@ -1,30 +1,30 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{B2FA993B-4092-4479-8356-D5A5BE85420E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Source\Domain", "{B2FA993B-4092-4479-8356-D5A5BE85420E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{05F9A372-9340-451B-BB86-7210915DDE90}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Source\Application", "{05F9A372-9340-451B-BB86-7210915DDE90}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{59E51AFC-B9CC-4C76-8D3B-6E719F3636E4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Source\Infrastructure", "{59E51AFC-B9CC-4C76-8D3B-6E719F3636E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application/Do-Svyazi.User.Application", "Application\Do-Svyazi.User.Application\Do-Svyazi.User.Application.csproj", "{ADA73903-610D-4130-A730-EBD3F6CA44DD}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Source\Presentation", "{EE6ADA46-41F6-4D21-838F-9DCA315A389E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application/Do-Svyazi.User.Dtos", "Application\Do-Svyazi.User.Dtos\Do-Svyazi.User.Dtos.csproj", "{5CEC461F-0965-4096-BB11-5FE366B241AF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Source\Tests", "{4C3C26B8-EAE0-410F-92E6-3965E7AFEECE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do-Svyazi.User.Domain", "Domain\Do-Svyazi.User.Domain\Do-Svyazi.User.Domain.csproj", "{2FAF2FAF-B3EC-4B28-AA32-DE3F21D685AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do-Svyazi.User.Application", "Source\Application\Do-Svyazi.User.Application\Do-Svyazi.User.Application.csproj", "{ADA73903-610D-4130-A730-EBD3F6CA44DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do-Svyazi.User.DataAccess", "Infrastructure\Do-Svyazi.User.DataAccess\Do-Svyazi.User.DataAccess.csproj", "{720127AF-5B1B-46DE-BC4D-F7EFA76DA462}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do-Svyazi.User.Dtos", "Source\Application\Do-Svyazi.User.Dtos\Do-Svyazi.User.Dtos.csproj", "{5CEC461F-0965-4096-BB11-5FE366B241AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do-Svyazi.User.Web.Api", "Infrastructure\Do-Svyazi.User.Web.Api\Do-Svyazi.User.Web.Api.csproj", "{1208E9C0-5D83-4794-93E6-2648FD28197B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do-Svyazi.User.Domain", "Source\Domain\Do-Svyazi.User.Domain\Do-Svyazi.User.Domain.csproj", "{2FAF2FAF-B3EC-4B28-AA32-DE3F21D685AF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{EE6ADA46-41F6-4D21-838F-9DCA315A389E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do-Svyazi.User.DataAccess", "Source\Infrastructure\Do-Svyazi.User.DataAccess\Do-Svyazi.User.DataAccess.csproj", "{720127AF-5B1B-46DE-BC4D-F7EFA76DA462}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do-Svyazi.User.Web.Controllers", "Presentation\Do-Svyazi.User.Web.Controllers\Do-Svyazi.User.Web.Controllers.csproj", "{BB4721E0-196B-4B3F-8701-5B17DD09C036}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do-Svyazi.User.Web.Api", "Source\Infrastructure\Do-Svyazi.User.Web.Api\Do-Svyazi.User.Web.Api.csproj", "{1208E9C0-5D83-4794-93E6-2648FD28197B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4C3C26B8-EAE0-410F-92E6-3965E7AFEECE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do-Svyazi.User.Web.Controllers", "Source\Presentation\Do-Svyazi.User.Web.Controllers\Do-Svyazi.User.Web.Controllers.csproj", "{BB4721E0-196B-4B3F-8701-5B17DD09C036}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do-Svyazi.User.Web.ApiClient", "Presentation\Do-Svyazi.User.Web.ApiClient\Do-Svyazi.User.Web.ApiClient.csproj", "{A5520DDE-4790-46C6-BD8B-FD65BD5E32B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do-Svyazi.User.Web.ApiClient", "Source\Presentation\Do-Svyazi.User.Web.ApiClient\Do-Svyazi.User.Web.ApiClient.csproj", "{A5520DDE-4790-46C6-BD8B-FD65BD5E32B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRS.Tests", "Tests\CQRS.Tests\CQRS.Tests.csproj", "{86C8E30B-B631-46E7-A0DD-815D0F447079}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRS.Tests", "Source\Tests\CQRS.Tests\CQRS.Tests.csproj", "{86C8E30B-B631-46E7-A0DD-815D0F447079}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,9 +70,9 @@ Global
 		{A5520DDE-4790-46C6-BD8B-FD65BD5E32B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5520DDE-4790-46C6-BD8B-FD65BD5E32B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5520DDE-4790-46C6-BD8B-FD65BD5E32B9}.Release|Any CPU.Build.0 = Release|Any CPU
-								{86C8E30B-B631-46E7-A0DD-815D0F447079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-								{86C8E30B-B631-46E7-A0DD-815D0F447079}.Debug|Any CPU.Build.0 = Debug|Any CPU
-								{86C8E30B-B631-46E7-A0DD-815D0F447079}.Release|Any CPU.ActiveCfg = Release|Any CPU
-								{86C8E30B-B631-46E7-A0DD-815D0F447079}.Release|Any CPU.Build.0 = Release|Any CPU
+        {86C8E30B-B631-46E7-A0DD-815D0F447079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {86C8E30B-B631-46E7-A0DD-815D0F447079}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {86C8E30B-B631-46E7-A0DD-815D0F447079}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {86C8E30B-B631-46E7-A0DD-815D0F447079}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
