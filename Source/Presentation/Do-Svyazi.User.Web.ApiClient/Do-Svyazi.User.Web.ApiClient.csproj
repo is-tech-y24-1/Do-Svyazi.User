@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>2.0.0</PackageVersion>
+        <PackageVersion>2.0.2</PackageVersion>
         <PackageId>Do-Svyazi.User.Web.ApiClient.Backend</PackageId>
         <Authors>Do-Svyazi.User team</Authors>
         <Title>Do-Svyazi.User module</Title>
@@ -22,10 +22,6 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\Infrastructure\Do-Svyazi.User.Web.Api\Do-Svyazi.User.Web.Api.csproj" />
     </ItemGroup>
 
     <Target Name="NSwag" BeforeTargets="AfterBuild" Condition="'$(TF_BUILD)'!='True'">
