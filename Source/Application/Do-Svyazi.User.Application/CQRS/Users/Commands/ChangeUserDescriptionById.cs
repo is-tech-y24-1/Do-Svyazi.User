@@ -5,23 +5,24 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
 
-public static class ChangeUserDescriptionById
+public class ChangeUserDescriptionById : IRequest
 {
-    public record Command(Guid userId, string description) : IRequest;
+    public Guid UserId { get; init; }
+    public string Description { get; init; }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<ChangeUserDescriptionById>
     {
         private readonly IDbContext _context;
 
         public Handler(IDbContext context) => _context = context;
 
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(ChangeUserDescriptionById request, CancellationToken cancellationToken)
         {
-            MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
+            MessengerUser messengerUser = await _context.Users.FindAsync(request.UserId) ??
                                           throw new Do_Svyazi_User_NotFoundException(
-                                              $"User with id {request.userId} to change description was not found");
+                                              $"User with id {request.UserId} to change description was not found");
 
-            messengerUser.ChangeDescription(request.description);
+            messengerUser.ChangeDescription(request.Description);
 
             _context.Users.Update(messengerUser);
             await _context.SaveChangesAsync(cancellationToken);

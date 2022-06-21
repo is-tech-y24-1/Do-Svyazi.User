@@ -1,27 +1,22 @@
-using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Authenticate;
 using Do_Svyazi.User.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 
-namespace Do_Svyazi.User.Application.CQRS.Chats.Commands;
+namespace Do_Svyazi.User.Application.CQRS.Authenticate;
 
-public static class Register
+public class Register : IRequest
 {
-    public record Command(RegisterModel model) : IRequest<Unit>;
+    public RegisterModel Model { get; init; }
 
-    public class Handler : IRequestHandler<Command, Unit>
+    public class Handler : IRequestHandler<Register>
     {
         private readonly UserManager<MessageIdentityUser> _userManager;
-        public Handler(UserManager<MessageIdentityUser> userManager)
-        {
-            _userManager = userManager;
-        }
+        public Handler(UserManager<MessageIdentityUser> userManager) => _userManager = userManager;
 
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(Register request, CancellationToken cancellationToken)
         {
-            MessageIdentityUser? userExists = await _userManager.FindByNameAsync(request.model.NickName);
+            MessageIdentityUser? userExists = await _userManager.FindByNameAsync(request.Model.NickName);
 
             if (userExists != null)
             {
@@ -32,11 +27,11 @@ public static class Register
             MessageIdentityUser user = new ()
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = request.model.NickName,
-                Email = request.model.Email,
+                UserName = request.Model.NickName,
+                Email = request.Model.Email,
             };
 
-            IdentityResult? result = await _userManager.CreateAsync(user, request.model.Password);
+            IdentityResult? result = await _userManager.CreateAsync(user, request.Model.Password);
             if (!result.Succeeded)
             {
                 throw new Do_Svyazi_User_BusinessLogicException(

@@ -9,12 +9,11 @@ using Do_Svyazi.User.Application.DbContexts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-public static class GetUsersByChatId
+public record GetUsersByChatId : IRequest<IReadOnlyCollection<ChatUser>>
 {
-    public record Query(Guid chatId) : IRequest<Response>;
-    public record Response(IReadOnlyCollection<ChatUser> users);
+    public Guid ChatId { get; init; }
 
-    public class Handler : IRequestHandler<Query, Response>
+    public class Handler : IRequestHandler<GetUsersByChatId, IReadOnlyCollection<ChatUser>>
     {
         private readonly IDbContext _context;
         private readonly IMapper _mapper;
@@ -25,17 +24,17 @@ public static class GetUsersByChatId
             _mapper = mapper;
         }
 
-        public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<ChatUser>> Handle(GetUsersByChatId request, CancellationToken cancellationToken)
         {
             Chat chat = await _context.Chats
                             .Include(chat => chat.Users)
                                 .ThenInclude(user => user.User)
                             .Include(chat => chat.Users)
                                 .ThenInclude(user => user.Role)
-                            .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
-                        throw new Do_Svyazi_User_NotFoundException($"Chat with id = {request.chatId} to get users was not found");
+                            .SingleOrDefaultAsync(chat => chat.Id == request.ChatId, cancellationToken) ??
+                        throw new Do_Svyazi_User_NotFoundException($"Chat with id = {request.ChatId} to get users was not found");
 
-            return new Response(_mapper.Map<IReadOnlyCollection<ChatUser>>(chat.Users));
+            return _mapper.Map<IReadOnlyCollection<ChatUser>>(chat.Users);
         }
     }
 }

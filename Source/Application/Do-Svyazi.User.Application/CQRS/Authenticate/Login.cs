@@ -7,27 +7,28 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Do_Svyazi.User.Application.CQRS.Chats.Commands;
+namespace Do_Svyazi.User.Application.CQRS.Authenticate;
 
-public static class Login
+public class Login : IRequest<JwtSecurityToken>
 {
-    public record Command(LoginModel model) : IRequest<JwtSecurityToken>;
+    public LoginModel Model { get; init; }
 
-    public class Handler : IRequestHandler<Command, JwtSecurityToken>
+    public class Handler : IRequestHandler<Login, JwtSecurityToken>
     {
         private readonly UserManager<MessageIdentityUser> _userManager;
         private readonly IConfiguration _configuration;
+
         public Handler(UserManager<MessageIdentityUser> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _configuration = configuration;
         }
 
-        public async Task<JwtSecurityToken> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<JwtSecurityToken> Handle(Login request, CancellationToken cancellationToken)
         {
             var token = new JwtSecurityToken();
-            MessageIdentityUser user = await _userManager.FindByNameAsync(request.model.NickName);
-            if (user != null && await _userManager.CheckPasswordAsync(user, request.model.Password))
+            MessageIdentityUser user = await _userManager.FindByNameAsync(request.Model.NickName);
+            if (user != null && await _userManager.CheckPasswordAsync(user, request.Model.Password))
             {
                 IList<string>? userRoles = await _userManager.GetRolesAsync(user);
 

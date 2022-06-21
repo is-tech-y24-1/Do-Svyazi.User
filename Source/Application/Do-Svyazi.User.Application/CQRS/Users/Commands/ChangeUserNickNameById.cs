@@ -5,26 +5,27 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
 
-public static class SetUserNickNameById
+public class SetUserNickNameById : IRequest
 {
-    public record Command(Guid userId, string nickName) : IRequest;
+    public Guid UserId { get; init; }
+    public string NickName { get; init; }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<SetUserNickNameById>
     {
         private readonly IDbContext _context;
 
         public Handler(IDbContext context) => _context = context;
 
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(SetUserNickNameById request, CancellationToken cancellationToken)
         {
-            MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
+            MessengerUser messengerUser = await _context.Users.FindAsync(request.UserId) ??
                                           throw new Do_Svyazi_User_NotFoundException(
-                                              $"User with id {request.userId} to change nickName was not found");
+                                              $"User with id {request.UserId} to change nickName was not found");
 
-            if (NickNameExists(request.nickName))
-                throw new Do_Svyazi_User_BusinessLogicException($"Nickname = {request.nickName} already exists in messenger");
+            if (NickNameExists(request.NickName))
+                throw new Do_Svyazi_User_BusinessLogicException($"Nickname = {request.NickName} already exists in messenger");
 
-            messengerUser.ChangeNickName(request.nickName);
+            messengerUser.ChangeNickName(request.NickName);
 
             _context.Users.Update(messengerUser);
             await _context.SaveChangesAsync(cancellationToken);

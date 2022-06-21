@@ -5,6 +5,7 @@ using Do_Svyazi.User.DataAccess;
 using Do_Svyazi.User.Domain.Authenticate;
 using Do_Svyazi.User.Dtos.Mapping;
 using Do_Svyazi.User.Web.Controllers;
+using Do_Svyazi.User.Web.Controllers.Tools;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;

@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
-using Do_Svyazi.User.Application.CQRS.Chats.Commands;
-using Do_Svyazi.User.Domain.Authenticate;
+using Do_Svyazi.User.Application.CQRS.Authenticate;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +15,9 @@ namespace Do_Svyazi.User.Web.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<ActionResult> Login([FromBody] LoginModel model)
+        public async Task<ActionResult> Login([FromBody] Login model)
         {
-            JwtSecurityToken token = await _mediator.Send(new Login.Command(model));
+            JwtSecurityToken token = await _mediator.Send(model);
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -28,17 +27,17 @@ namespace Do_Svyazi.User.Web.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult> Register([FromBody] RegisterModel model)
+        public async Task<ActionResult> Register([FromBody] Register model)
         {
-            await _mediator.Send(new Register.Command(model));
+            await _mediator.Send(model);
             return Ok();
         }
 
         [HttpPost]
         [Route("register-admin")]
-        public async Task<ActionResult> RegisterAdmin([FromBody] RegisterModel model)
+        public async Task<ActionResult> RegisterAdmin([FromBody] RegisterAdmin model)
         {
-            await _mediator.Send(new RegisterAdmin.Command(model));
+            await _mediator.Send(model);
             return Ok();
         }
     }

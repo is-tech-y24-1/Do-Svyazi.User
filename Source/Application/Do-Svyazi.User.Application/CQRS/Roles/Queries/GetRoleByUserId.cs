@@ -7,27 +7,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Roles.Queries;
 
-public static class GetRoleByUserId
+public class GetRoleByUserId : IRequest<Role>
 {
-    public record Query(Guid userId, Guid chatId) : IRequest<Response>;
-    public record Response(Role userRole);
+    public Guid UserId { get; init; }
+    public Guid ChatId { get; init; }
 
-    public class Handler : IRequestHandler<Query, Response>
+    public class Handler : IRequestHandler<GetRoleByUserId, Role>
     {
         private readonly IDbContext _context;
-
         public Handler(IDbContext context) => _context = context;
 
-        public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Role> Handle(GetRoleByUserId request, CancellationToken cancellationToken)
         {
             ChatUser chatUser =
                 await _context.ChatUsers
                     .Include(chatUser => chatUser.Role)
-                    .FirstOrDefaultAsync(user => user.MessengerUserId == request.userId && user.ChatId == request.chatId, cancellationToken: cancellationToken) ??
+                    .FirstOrDefaultAsync(user => user.MessengerUserId == request.UserId && user.ChatId == request.ChatId, cancellationToken: cancellationToken) ??
                 throw new Do_Svyazi_User_NotFoundException(
-                    $"Chat user with userId = {request.userId} and chatId = {request.chatId} to get user role was not found");
+                    $"Chat user with userId = {request.UserId} and chatId = {request.ChatId} to get user role was not found");
 
-            return new Response(chatUser.Role);
+            return chatUser.Role;
         }
     }
 }

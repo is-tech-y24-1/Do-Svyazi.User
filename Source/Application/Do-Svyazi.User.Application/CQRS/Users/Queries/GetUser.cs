@@ -5,23 +5,21 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Queries;
 
-public static class GetUser
+public class GetUser : IRequest<MessengerUser>
 {
-    public record Query(Guid userId) : IRequest<Response>;
-    public record Response(MessengerUser messengerUser);
+    public Guid UserId { get; init; }
 
-    public class Handler : IRequestHandler<Query, Response>
+    public class Handler : IRequestHandler<GetUser, MessengerUser>
     {
         private readonly IDbContext _context;
-
         public Handler(IDbContext context) => _context = context;
 
-        public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<MessengerUser> Handle(GetUser request, CancellationToken cancellationToken)
         {
-            MessengerUser user = await _context.Users.FindAsync(request.userId) ??
-                                 throw new Do_Svyazi_User_NotFoundException($"User with id = {request.userId} doesn't exist");
+            MessengerUser user = await _context.Users.FindAsync(request.UserId) ??
+                                 throw new Do_Svyazi_User_NotFoundException($"User with id = {request.UserId} doesn't exist");
 
-            return new Response(user);
+            return user;
         }
     }
 }

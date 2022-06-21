@@ -28,73 +28,73 @@ public class UserController : ControllerBase
 
     [HttpGet(nameof(GetUser))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<MessengerUser>> GetUser(Guid userId)
+    public async Task<ActionResult<MessengerUser>> GetUser([FromQuery] GetUser getUser)
     {
-        var response = await _mediator.Send(new GetUser.Query(userId));
-        return Ok(response.messengerUser);
+        var response = await _mediator.Send(getUser);
+        return Ok(response);
     }
 
     [HttpGet(nameof(GetAllChatsByUserId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<MessengerChatDto>>> GetAllChatsByUserId(Guid userId)
+    public async Task<ActionResult<IReadOnlyList<MessengerChatDto>>> GetAllChatsByUserId([FromQuery] GetAllChatsByUserId getAllChatsByUserId)
     {
-        var response = await _mediator.Send(new GetAllChatsByUserId.Query(userId));
-        return Ok(response.users);
+        var response = await _mediator.Send(getAllChatsByUserId);
+        return Ok(response);
     }
 
-    [HttpGet(nameof(GetAllChatsIdByUserId))]
+    [HttpGet(nameof(GetAllChatsIdsByUserId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<Guid>>> GetAllChatsIdByUserId(Guid userId)
+    public async Task<ActionResult<IReadOnlyList<Guid>>> GetAllChatsIdsByUserId([FromQuery] GetAllChatsIdsByUserId getAllChatsIdsByUserId)
     {
-        var response = await _mediator.Send(new GetAllChatsIdsByUserId.Query(userId));
-        return Ok(response.chatIds);
+        var response = await _mediator.Send(getAllChatsIdsByUserId);
+        return Ok(response);
     }
 
     [HttpGet(nameof(GetUserRoleByChatId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<Role>> GetUserRoleByChatId(Guid userId, Guid chatId)
+    public async Task<ActionResult<Role>> GetUserRoleByChatId([FromQuery] GetUserRoleByChatId getUserRoleByChatId)
     {
-        var response = await _mediator.Send(new GetUserRoleByChatId.Query(userId, chatId));
-        return Ok(response.role);
+        var response = await _mediator.Send(getUserRoleByChatId);
+        return Ok(response);
     }
 
     [HttpPost(nameof(SetNickNameById))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> SetNickNameById(Guid userId, string nickName)
+    public async Task<ActionResult> SetNickNameById(SetUserNickNameById setUserNickNameById)
     {
-        await _mediator.Send(new SetUserNickNameById.Command(userId, nickName));
+        await _mediator.Send(setUserNickNameById);
         return Ok();
     }
 
     [HttpPost(nameof(DeleteUser))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> DeleteUser(Guid userId)
+    public async Task<ActionResult> DeleteUser(DeleteUser deleteUser)
     {
-        await _mediator.Send(new DeleteUser.Command(userId));
+        await _mediator.Send(deleteUser);
         return Ok();
     }
 
     [HttpPost(nameof(AddUser))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<Guid>> AddUser(string name, string nickName, string description)
+    public async Task<ActionResult<Guid>> AddUser(AddUser addUser)
     {
-        Guid response = await _mediator.Send(new AddUser.Command(name, nickName, description));
+        var response = await _mediator.Send(addUser);
         return Ok(response);
     }
 
     [HttpPost(nameof(ChangeDescription))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> ChangeDescription(Guid userId,  string description)
+    public async Task<ActionResult> ChangeDescription(ChangeUserDescriptionById changeUserDescriptionById)
     {
-        await _mediator.Send(new ChangeUserDescriptionById.Command(userId, description));
+        await _mediator.Send(changeUserDescriptionById);
         return Ok();
     }
 
     [HttpPost(nameof(ChangeName))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> ChangeName(Guid userId,  string name)
+    public async Task<ActionResult> ChangeName(ChangeUserNameById changeUserNameById)
     {
-        await _mediator.Send(new ChangeUserNameById.Command(userId, name));
+        await _mediator.Send(changeUserNameById);
         return Ok();
     }
 }

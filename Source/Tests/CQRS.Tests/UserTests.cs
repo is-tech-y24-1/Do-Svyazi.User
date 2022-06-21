@@ -21,7 +21,8 @@ public class UserTests
         dbContextMock.CreateDbSetMock(x => x.Users, Array.Empty<MessengerUser>());
 
         var addUserHandler = new AddUser.Handler(dbContextMock.Object);
-        var addUserCommand = new AddUser.Command(user.Name, user.NickName, user.Description);
+        
+        var addUserCommand = new AddUser { Name = user.Name, NickName = user.NickName, Description = user.Description };
         await addUserHandler.Handle(addUserCommand, CancellationToken.None);
 
         MessengerUser gainMessengerUser = dbContextMock.Object.Users.Single();
@@ -37,11 +38,11 @@ public class UserTests
         string newName)
     {
         var dbContextMock = new DbContextMock<DoSvaziDbContext>();
-
         dbContextMock.CreateDbSetMock(x => x.Users, new[] {user});
 
         var changeUserNameHandler = new ChangeUserNameById.Handler(dbContextMock.Object);
-        var changeUserNameCommand = new ChangeUserNameById.Command(user.Id, newName);
+
+        var changeUserNameCommand = new ChangeUserNameById { UserId = user.Id, Name = newName };
         await changeUserNameHandler.Handle(changeUserNameCommand, CancellationToken.None);
 
         MessengerUser gainMessengerUser = dbContextMock.Object.Users.Single();

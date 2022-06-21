@@ -8,12 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Chats.Queries;
 
-public static class GetChatById
+public record GetChatById : IRequest<MessengerChatDto>
 {
-    public record Query(Guid chatId) : IRequest<Response>;
-    public record Response(MessengerChatDto chat);
+    public Guid ChatId { get; init; }
 
-    public class Handler : IRequestHandler<Query, Response>
+    public class Handler : IRequestHandler<GetChatById, MessengerChatDto>
     {
         private readonly IDbContext _context;
         private readonly IMapper _mapper;
@@ -24,15 +23,15 @@ public static class GetChatById
             _mapper = mapper;
         }
 
-        public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<MessengerChatDto> Handle(GetChatById request, CancellationToken cancellationToken)
         {
             Chat chat = await _context.Chats
                             .Include(chat => chat.Creator)
                             .Include(chat => chat.Users)
-                            .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
-                        throw new Do_Svyazi_User_NotFoundException($"Chat with id = {request.chatId} was not found");
+                            .SingleOrDefaultAsync(chat => chat.Id == request.ChatId, cancellationToken) ??
+                        throw new Do_Svyazi_User_NotFoundException($"Chat with id = {request.ChatId} was not found");
 
-            return new Response(_mapper.Map<MessengerChatDto>(chat));
+            return _mapper.Map<MessengerChatDto>(chat);
         }
     }
 }

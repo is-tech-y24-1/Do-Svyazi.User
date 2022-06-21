@@ -5,25 +5,23 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Queries;
 
-public static class GetAllChatsIdsByUserId
+public class GetAllChatsIdsByUserId : IRequest<IReadOnlyList<Guid>>
 {
-    public record Query(Guid userId) : IRequest<Response>;
-    public record Response(IReadOnlyList<Guid> chatIds);
+    public Guid UserId { get; init; }
 
-    public class Handler : IRequestHandler<Query, Response>
+    public class Handler : IRequestHandler<GetAllChatsIdsByUserId, IReadOnlyList<Guid>>
     {
         private readonly IDbContext _context;
-
         public Handler(IDbContext context) => _context = context;
 
-        public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<Guid>> Handle(GetAllChatsIdsByUserId request, CancellationToken cancellationToken)
         {
-            MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
-                                          throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId} to get user chat ids");
+            MessengerUser messengerUser = await _context.Users.FindAsync(request.UserId) ??
+                                          throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.UserId} to get user chat ids");
 
             var chatIds = messengerUser.Chats.Select(chat => chat.Id).ToList();
 
-            return new Response(chatIds);
+            return chatIds;
         }
     }
 }

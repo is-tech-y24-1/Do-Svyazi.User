@@ -5,25 +5,26 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
 
-public static class AddUser
+public class AddUser : IRequest<Guid>
 {
-    public record Command(string name, string nickName, string description) : IRequest<Guid>;
+    public string Name { get; init; }
+    public string NickName { get; init; }
+    public string Description { get; init; }
 
-    public class Handler : IRequestHandler<Command, Guid>
+    public class Handler : IRequestHandler<AddUser, Guid>
     {
         private readonly IDbContext _context;
-
         public Handler(IDbContext context) => _context = context;
 
-        public async Task<Guid> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(AddUser request, CancellationToken cancellationToken)
         {
-            if (IsUserExist(request.nickName))
+            if (IsUserExist(request.NickName))
             {
                 throw new Do_Svyazi_User_BusinessLogicException(
-                    $"User with nickname = {request.nickName} already exists in messenger");
+                    $"User with nickname = {request.NickName} already exists in messenger");
             }
 
-            MessengerUser messengerUser = new (request.name, request.nickName, request.description);
+            MessengerUser messengerUser = new (request.Name, request.NickName, request.Description);
 
             await _context.Users.AddAsync(messengerUser, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

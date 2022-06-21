@@ -1,4 +1,3 @@
-using AutoMapper;
 using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Exceptions;
@@ -10,50 +9,46 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Roles.Commands;
 
-public static class ChangeRoleForUserById
+public class ChangeRoleForUserById : IRequest
 {
-    public record Command(Guid userId, Guid chatId, RoleDto role) : IRequest;
+    public Guid UserId { get; init; }
+    public Guid ChatId { get; init; }
+    public RoleDto Role { get; init; }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<ChangeRoleForUserById, Unit>
     {
         private readonly IDbContext _context;
-        private readonly IMapper _mapper;
+        public Handler(IDbContext context) => _context = context;
 
-        public Handler(IDbContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(ChangeRoleForUserById request, CancellationToken cancellationToken)
         {
             ChatUser chatUser =
                 await _context.ChatUsers
                     .Include(chatUser => chatUser.Role)
                     .FirstOrDefaultAsync(
-                        user => user.MessengerUserId == request.userId && user.ChatId == request.chatId, cancellationToken: cancellationToken) ??
+                        user => user.MessengerUserId == request.UserId && user.ChatId == request.ChatId, cancellationToken: cancellationToken) ??
                 throw new Do_Svyazi_User_NotFoundException(
-                    $"Chat user with userId = {request.userId} and chatId = {request.chatId} to change user role in chat was not found");
+                    $"Chat user with userId = {request.UserId} and chatId = {request.ChatId} to change user role in chat was not found");
 
-            Chat chat = await _context.Chats.FindAsync(request.chatId) ??
+            Chat chat = await _context.Chats.FindAsync(request.ChatId) ??
                         throw new Do_Svyazi_User_NotFoundException(
-                            $"Can't find chat with id = {request.chatId} to change user role in chat");
+                            $"Can't find chat with id = {request.ChatId} to change user role in chat");
 
             Role newRole = new ()
             {
                 Chat = chat,
-                Name = request.role.Name,
-                CanAddUsers = request.role.CanAddUsers,
-                CanDeleteChat = request.role.CanDeleteChat,
-                CanDeleteMessages = request.role.CanDeleteMessages,
-                CanDeleteUsers = request.role.CanDeleteUsers,
-                CanEditMessages = request.role.CanEditMessages,
-                CanPinMessages = request.role.CanPinMessages,
-                CanReadMessages = request.role.CanReadMessages,
-                CanWriteMessages = request.role.CanWriteMessages,
-                CanEditChannelDescription = request.role.CanEditChannelDescription,
-                CanInviteOtherUsers = request.role.CanInviteOtherUsers,
-                CanSeeChannelMembers = request.role.CanSeeChannelMembers,
+                Name = request.Role.Name,
+                CanAddUsers = request.Role.CanAddUsers,
+                CanDeleteChat = request.Role.CanDeleteChat,
+                CanDeleteMessages = request.Role.CanDeleteMessages,
+                CanDeleteUsers = request.Role.CanDeleteUsers,
+                CanEditMessages = request.Role.CanEditMessages,
+                CanPinMessages = request.Role.CanPinMessages,
+                CanReadMessages = request.Role.CanReadMessages,
+                CanWriteMessages = request.Role.CanWriteMessages,
+                CanEditChannelDescription = request.Role.CanEditChannelDescription,
+                CanInviteOtherUsers = request.Role.CanInviteOtherUsers,
+                CanSeeChannelMembers = request.Role.CanSeeChannelMembers,
             };
 
             chatUser.ChangeRole(newRole);

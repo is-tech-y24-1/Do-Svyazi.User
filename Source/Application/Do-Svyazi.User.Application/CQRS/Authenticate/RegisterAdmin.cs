@@ -1,21 +1,15 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Authenticate;
 using Do_Svyazi.User.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
-namespace Do_Svyazi.User.Application.CQRS.Chats.Commands;
+namespace Do_Svyazi.User.Application.CQRS.Authenticate;
 
-public static class RegisterAdmin
+public class RegisterAdmin : IRequest<Unit>
 {
-    public record Command(RegisterModel model) : IRequest<Unit>;
+    public RegisterModel Model { get; init; }
 
-    public class Handler : IRequestHandler<Command, Unit>
+    public class Handler : IRequestHandler<RegisterAdmin>
     {
         private readonly UserManager<MessageIdentityUser> _userManager;
         private readonly RoleManager<MessageIdentityRole> _roleManager;
@@ -26,9 +20,9 @@ public static class RegisterAdmin
             _roleManager = roleManager;
         }
 
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(RegisterAdmin request, CancellationToken cancellationToken)
         {
-            MessageIdentityUser userExists = await _userManager.FindByNameAsync(request.model.NickName);
+            MessageIdentityUser userExists = await _userManager.FindByNameAsync(request.Model.NickName);
             if (userExists != null)
             {
                 throw new Do_Svyazi_User_BusinessLogicException(
@@ -38,9 +32,9 @@ public static class RegisterAdmin
             MessageIdentityUser user = new ()
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = request.model.NickName,
+                UserName = request.Model.NickName,
             };
-            IdentityResult? result = await _userManager.CreateAsync(user, request.model.Password);
+            IdentityResult? result = await _userManager.CreateAsync(user, request.Model.Password);
             if (!result.Succeeded)
             {
                 throw new Do_Svyazi_User_BusinessLogicException(
