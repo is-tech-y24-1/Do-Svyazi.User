@@ -17,7 +17,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoginModel"
+                "$ref": "#/components/schemas/Login"
               }
             }
           },
@@ -50,7 +50,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterModel"
+                "$ref": "#/components/schemas/Register"
               }
             }
           },
@@ -83,7 +83,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterModel"
+                "$ref": "#/components/schemas/RegisterAdmin"
               }
             }
           },
@@ -136,7 +136,7 @@
         "operationId": "Chat_GetChatById",
         "parameters": [
           {
-            "name": "chatId",
+            "name": "ChatId",
             "in": "query",
             "required": true,
             "schema": {
@@ -168,7 +168,7 @@
         "operationId": "Chat_GetUserIdsByChatId",
         "parameters": [
           {
-            "name": "chatId",
+            "name": "ChatId",
             "in": "query",
             "required": true,
             "schema": {
@@ -204,7 +204,7 @@
         "operationId": "Chat_GetUsersByChatId",
         "parameters": [
           {
-            "name": "chatId",
+            "name": "ChatId",
             "in": "query",
             "required": true,
             "schema": {
@@ -237,38 +237,18 @@
           "Chat"
         ],
         "operationId": "Chat_AddChannel",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
+        "requestBody": {
+          "x-name": "addChannelCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddChannel"
+              }
+            }
           },
-          {
-            "name": "name",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 2
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 3
-          }
-        ],
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": ""
@@ -282,38 +262,18 @@
           "Chat"
         ],
         "operationId": "Chat_AddGroupChat",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
+        "requestBody": {
+          "x-name": "addGroupChatCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddGroupChat"
+              }
+            }
           },
-          {
-            "name": "name",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 2
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 3
-          }
-        ],
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": ""
@@ -327,48 +287,18 @@
           "Chat"
         ],
         "operationId": "Chat_AddPersonalChat",
-        "parameters": [
-          {
-            "name": "firstUserId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
+        "requestBody": {
+          "x-name": "addPersonalChatCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddPersonalChat"
+              }
+            }
           },
-          {
-            "name": "secondUserId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 2
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 3
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 4
-          }
-        ],
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": ""
@@ -382,38 +312,18 @@
           "Chat"
         ],
         "operationId": "Chat_AddSavedMessages",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
+        "requestBody": {
+          "x-name": "addSavedMessagesCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddSavedMessages"
+              }
+            }
           },
-          {
-            "name": "name",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 2
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 3
-          }
-        ],
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": ""
@@ -427,28 +337,18 @@
           "Chat"
         ],
         "operationId": "Chat_AddUserToChat",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
+        "requestBody": {
+          "x-name": "addUserToChatCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddUserToChat"
+              }
+            }
           },
-          {
-            "name": "chatId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 2
-          }
-        ],
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": ""
@@ -462,28 +362,18 @@
           "Chat"
         ],
         "operationId": "Chat_DeleteUserFromChat",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
+        "requestBody": {
+          "x-name": "deleteUserFromChatCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteUserFromChat"
+              }
+            }
           },
-          {
-            "name": "chatId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 2
-          }
-        ],
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": ""
@@ -497,24 +387,12 @@
           "Roles"
         ],
         "operationId": "Roles_CreateRoleForChat",
-        "parameters": [
-          {
-            "name": "chatId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 2
-          }
-        ],
         "requestBody": {
-          "x-name": "role",
+          "x-name": "createRoleForChat",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RoleDto"
+                "$ref": "#/components/schemas/CreateRoleForChat"
               }
             }
           },
@@ -534,39 +412,17 @@
           "Roles"
         ],
         "operationId": "Roles_ChangeRoleForUserById",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          },
-          {
-            "name": "chatId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 2
-          }
-        ],
         "requestBody": {
-          "x-name": "role",
+          "x-name": "changeRoleForUserById",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RoleDto"
+                "$ref": "#/components/schemas/ChangeRoleForUserById"
               }
             }
           },
           "required": true,
-          "x-position": 3
+          "x-position": 1
         },
         "responses": {
           "200": {
@@ -583,7 +439,7 @@
         "operationId": "Roles_GetRoleByUserId",
         "parameters": [
           {
-            "name": "userId",
+            "name": "UserId",
             "in": "query",
             "required": true,
             "schema": {
@@ -593,7 +449,7 @@
             "x-position": 1
           },
           {
-            "name": "chatId",
+            "name": "ChatId",
             "in": "query",
             "required": true,
             "schema": {
@@ -648,7 +504,7 @@
         "operationId": "User_GetUser",
         "parameters": [
           {
-            "name": "userId",
+            "name": "UserId",
             "in": "query",
             "required": true,
             "schema": {
@@ -680,7 +536,7 @@
         "operationId": "User_GetAllChatsByUserId",
         "parameters": [
           {
-            "name": "userId",
+            "name": "UserId",
             "in": "query",
             "required": true,
             "schema": {
@@ -707,15 +563,15 @@
         }
       }
     },
-    "/api/User/GetAllChatsIdByUserId": {
+    "/api/User/GetAllChatsIdsByUserId": {
       "get": {
         "tags": [
           "User"
         ],
-        "operationId": "User_GetAllChatsIdByUserId",
+        "operationId": "User_GetAllChatsIdsByUserId",
         "parameters": [
           {
-            "name": "userId",
+            "name": "UserId",
             "in": "query",
             "required": true,
             "schema": {
@@ -751,7 +607,7 @@
         "operationId": "User_GetUserRoleByChatId",
         "parameters": [
           {
-            "name": "userId",
+            "name": "UserId",
             "in": "query",
             "required": true,
             "schema": {
@@ -761,7 +617,7 @@
             "x-position": 1
           },
           {
-            "name": "chatId",
+            "name": "ChatId",
             "in": "query",
             "required": true,
             "schema": {
@@ -791,28 +647,18 @@
           "User"
         ],
         "operationId": "User_SetNickNameById",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
+        "requestBody": {
+          "x-name": "setUserNickNameById",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetUserNickNameById"
+              }
+            }
           },
-          {
-            "name": "nickName",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 2
-          }
-        ],
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": ""
@@ -826,18 +672,18 @@
           "User"
         ],
         "operationId": "User_DeleteUser",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
+        "requestBody": {
+          "x-name": "deleteUser",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteUser"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": ""
@@ -851,38 +697,18 @@
           "User"
         ],
         "operationId": "User_AddUser",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
+        "requestBody": {
+          "x-name": "addUser",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddUser"
+              }
+            }
           },
-          {
-            "name": "nickName",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 2
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 3
-          }
-        ],
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": "",
@@ -904,28 +730,18 @@
           "User"
         ],
         "operationId": "User_ChangeDescription",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
+        "requestBody": {
+          "x-name": "changeUserDescriptionById",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeUserDescriptionById"
+              }
+            }
           },
-          {
-            "name": "description",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 2
-          }
-        ],
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": ""
@@ -939,28 +755,18 @@
           "User"
         ],
         "operationId": "User_ChangeName",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
+        "requestBody": {
+          "x-name": "changeUserNameById",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeUserNameById"
+              }
+            }
           },
-          {
-            "name": "name",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 2
-          }
-        ],
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": ""
@@ -971,6 +777,15 @@
   },
   "components": {
     "schemas": {
+      "Login": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "model": {
+            "$ref": "#/components/schemas/LoginModel"
+          }
+        }
+      },
       "LoginModel": {
         "type": "object",
         "additionalProperties": false,
@@ -990,6 +805,15 @@
           "password": {
             "type": "string",
             "minLength": 1
+          }
+        }
+      },
+      "Register": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "model": {
+            "$ref": "#/components/schemas/RegisterModel"
           }
         }
       },
@@ -1018,6 +842,15 @@
           "password": {
             "type": "string",
             "minLength": 1
+          }
+        }
+      },
+      "RegisterAdmin": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "model": {
+            "$ref": "#/components/schemas/RegisterModel"
           }
         }
       },
@@ -1231,6 +1064,115 @@
           2
         ]
       },
+      "AddChannel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "adminId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AddGroupChat": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "adminId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AddPersonalChat": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "firstUserId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "secondUserId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AddSavedMessages": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AddUserToChat": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "chatId": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
+      "DeleteUserFromChat": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "chatId": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
+      "CreateRoleForChat": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/RoleDto"
+          },
+          "chatId": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
       "RoleDto": {
         "type": "object",
         "additionalProperties": false,
@@ -1270,6 +1212,87 @@
           },
           "canDeleteChat": {
             "$ref": "#/components/schemas/ActionOption"
+          }
+        }
+      },
+      "ChangeRoleForUserById": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "chatId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleDto"
+          }
+        }
+      },
+      "SetUserNickNameById": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "nickName": {
+            "type": "string"
+          }
+        }
+      },
+      "DeleteUser": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
+      "AddUser": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "nickName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "ChangeUserDescriptionById": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "ChangeUserNameById": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
           }
         }
       }

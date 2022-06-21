@@ -14,9 +14,9 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } fr
 import * as moment from 'moment';
 
 export interface IAuthenticateClient {
-    login(model: LoginModel): Promise<FileResponse>;
-    register(model: RegisterModel): Promise<FileResponse>;
-    registerAdmin(model: RegisterModel): Promise<FileResponse>;
+    login(model: Login): Promise<FileResponse>;
+    register(model: Register): Promise<FileResponse>;
+    registerAdmin(model: RegisterAdmin): Promise<FileResponse>;
 }
 
 export class AuthenticateClient implements IAuthenticateClient {
@@ -32,7 +32,7 @@ export class AuthenticateClient implements IAuthenticateClient {
 
     }
 
-    login(model: LoginModel , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+    login(model: Login , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
         let url_ = this.baseUrl + "/api/Authenticate/login";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -83,7 +83,7 @@ export class AuthenticateClient implements IAuthenticateClient {
         return Promise.resolve<FileResponse>(null as any);
     }
 
-    register(model: RegisterModel , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+    register(model: Register , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
         let url_ = this.baseUrl + "/api/Authenticate/register";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -134,7 +134,7 @@ export class AuthenticateClient implements IAuthenticateClient {
         return Promise.resolve<FileResponse>(null as any);
     }
 
-    registerAdmin(model: RegisterModel , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+    registerAdmin(model: RegisterAdmin , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
         let url_ = this.baseUrl + "/api/Authenticate/register-admin";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -191,12 +191,12 @@ export interface IChatClient {
     getChatById(chatId: string): Promise<MessengerChatDto>;
     getUserIdsByChatId(chatId: string): Promise<string[]>;
     getUsersByChatId(chatId: string): Promise<ChatUser[]>;
-    addChannel(userId: string, name: string | null, description: string | null): Promise<void>;
-    addGroupChat(userId: string, name: string | null, description: string | null): Promise<void>;
-    addPersonalChat(firstUserId: string, secondUserId: string, name: string | null, description: string | null): Promise<void>;
-    addSavedMessages(userId: string, name: string | null, description: string | null): Promise<void>;
-    addUserToChat(userId: string, chatId: string): Promise<void>;
-    deleteUserFromChat(userId: string, chatId: string): Promise<void>;
+    addChannel(addChannelCommand: AddChannel): Promise<void>;
+    addGroupChat(addGroupChatCommand: AddGroupChat): Promise<void>;
+    addPersonalChat(addPersonalChatCommand: AddPersonalChat): Promise<void>;
+    addSavedMessages(addSavedMessagesCommand: AddSavedMessages): Promise<void>;
+    addUserToChat(addUserToChatCommand: AddUserToChat): Promise<void>;
+    deleteUserFromChat(deleteUserFromChatCommand: DeleteUserFromChat): Promise<void>;
 }
 
 export class ChatClient implements IChatClient {
@@ -273,7 +273,7 @@ export class ChatClient implements IChatClient {
         if (chatId === undefined || chatId === null)
             throw new Error("The parameter 'chatId' must be defined and cannot be null.");
         else
-            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+            url_ += "ChatId=" + encodeURIComponent("" + chatId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -326,7 +326,7 @@ export class ChatClient implements IChatClient {
         if (chatId === undefined || chatId === null)
             throw new Error("The parameter 'chatId' must be defined and cannot be null.");
         else
-            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+            url_ += "ChatId=" + encodeURIComponent("" + chatId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -385,7 +385,7 @@ export class ChatClient implements IChatClient {
         if (chatId === undefined || chatId === null)
             throw new Error("The parameter 'chatId' must be defined and cannot be null.");
         else
-            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+            url_ += "ChatId=" + encodeURIComponent("" + chatId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -440,26 +440,18 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<ChatUser[]>(null as any);
     }
 
-    addChannel(userId: string, name: string | null, description: string | null , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/Chat/AddChannel?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
-        if (name === undefined)
-            throw new Error("The parameter 'name' must be defined.");
-        else if(name !== null)
-            url_ += "name=" + encodeURIComponent("" + name) + "&";
-        if (description === undefined)
-            throw new Error("The parameter 'description' must be defined.");
-        else if(description !== null)
-            url_ += "description=" + encodeURIComponent("" + description) + "&";
+    addChannel(addChannelCommand: AddChannel , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Chat/AddChannel";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(addChannelCommand);
+
         let options_: AxiosRequestConfig = {
+            data: content_,
             method: "POST",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
             },
             cancelToken
         };
@@ -496,26 +488,18 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<void>(null as any);
     }
 
-    addGroupChat(userId: string, name: string | null, description: string | null , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/Chat/AddGroupChat?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
-        if (name === undefined)
-            throw new Error("The parameter 'name' must be defined.");
-        else if(name !== null)
-            url_ += "name=" + encodeURIComponent("" + name) + "&";
-        if (description === undefined)
-            throw new Error("The parameter 'description' must be defined.");
-        else if(description !== null)
-            url_ += "description=" + encodeURIComponent("" + description) + "&";
+    addGroupChat(addGroupChatCommand: AddGroupChat , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Chat/AddGroupChat";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(addGroupChatCommand);
+
         let options_: AxiosRequestConfig = {
+            data: content_,
             method: "POST",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
             },
             cancelToken
         };
@@ -552,30 +536,18 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<void>(null as any);
     }
 
-    addPersonalChat(firstUserId: string, secondUserId: string, name: string | null, description: string | null , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/Chat/AddPersonalChat?";
-        if (firstUserId === undefined || firstUserId === null)
-            throw new Error("The parameter 'firstUserId' must be defined and cannot be null.");
-        else
-            url_ += "firstUserId=" + encodeURIComponent("" + firstUserId) + "&";
-        if (secondUserId === undefined || secondUserId === null)
-            throw new Error("The parameter 'secondUserId' must be defined and cannot be null.");
-        else
-            url_ += "secondUserId=" + encodeURIComponent("" + secondUserId) + "&";
-        if (name === undefined)
-            throw new Error("The parameter 'name' must be defined.");
-        else if(name !== null)
-            url_ += "name=" + encodeURIComponent("" + name) + "&";
-        if (description === undefined)
-            throw new Error("The parameter 'description' must be defined.");
-        else if(description !== null)
-            url_ += "description=" + encodeURIComponent("" + description) + "&";
+    addPersonalChat(addPersonalChatCommand: AddPersonalChat , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Chat/AddPersonalChat";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(addPersonalChatCommand);
+
         let options_: AxiosRequestConfig = {
+            data: content_,
             method: "POST",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
             },
             cancelToken
         };
@@ -612,26 +584,18 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<void>(null as any);
     }
 
-    addSavedMessages(userId: string, name: string | null, description: string | null , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/Chat/AddSavedMessages?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
-        if (name === undefined)
-            throw new Error("The parameter 'name' must be defined.");
-        else if(name !== null)
-            url_ += "name=" + encodeURIComponent("" + name) + "&";
-        if (description === undefined)
-            throw new Error("The parameter 'description' must be defined.");
-        else if(description !== null)
-            url_ += "description=" + encodeURIComponent("" + description) + "&";
+    addSavedMessages(addSavedMessagesCommand: AddSavedMessages , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Chat/AddSavedMessages";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(addSavedMessagesCommand);
+
         let options_: AxiosRequestConfig = {
+            data: content_,
             method: "POST",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
             },
             cancelToken
         };
@@ -668,22 +632,18 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<void>(null as any);
     }
 
-    addUserToChat(userId: string, chatId: string , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/Chat/AddUserToChat?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
-        if (chatId === undefined || chatId === null)
-            throw new Error("The parameter 'chatId' must be defined and cannot be null.");
-        else
-            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+    addUserToChat(addUserToChatCommand: AddUserToChat , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Chat/AddUserToChat";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(addUserToChatCommand);
+
         let options_: AxiosRequestConfig = {
+            data: content_,
             method: "POST",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
             },
             cancelToken
         };
@@ -720,22 +680,18 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<void>(null as any);
     }
 
-    deleteUserFromChat(userId: string, chatId: string , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/Chat/DeleteUserFromChat?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
-        if (chatId === undefined || chatId === null)
-            throw new Error("The parameter 'chatId' must be defined and cannot be null.");
-        else
-            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+    deleteUserFromChat(deleteUserFromChatCommand: DeleteUserFromChat , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Chat/DeleteUserFromChat";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(deleteUserFromChatCommand);
+
         let options_: AxiosRequestConfig = {
+            data: content_,
             method: "DELETE",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
             },
             cancelToken
         };
@@ -774,8 +730,8 @@ export class ChatClient implements IChatClient {
 }
 
 export interface IRolesClient {
-    createRoleForChat(role: RoleDto, chatId: string): Promise<void>;
-    changeRoleForUserById(userId: string, chatId: string, role: RoleDto): Promise<void>;
+    createRoleForChat(createRoleForChat: CreateRoleForChat): Promise<void>;
+    changeRoleForUserById(changeRoleForUserById: ChangeRoleForUserById): Promise<void>;
     getRoleByUserId(userId: string, chatId: string): Promise<Role>;
 }
 
@@ -792,15 +748,11 @@ export class RolesClient implements IRolesClient {
 
     }
 
-    createRoleForChat(role: RoleDto, chatId: string , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/Roles/CreateRoleForChat?";
-        if (chatId === undefined || chatId === null)
-            throw new Error("The parameter 'chatId' must be defined and cannot be null.");
-        else
-            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+    createRoleForChat(createRoleForChat: CreateRoleForChat , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Roles/CreateRoleForChat";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(role);
+        const content_ = JSON.stringify(createRoleForChat);
 
         let options_: AxiosRequestConfig = {
             data: content_,
@@ -844,19 +796,11 @@ export class RolesClient implements IRolesClient {
         return Promise.resolve<void>(null as any);
     }
 
-    changeRoleForUserById(userId: string, chatId: string, role: RoleDto , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/Roles/ChangeRoleForUserById?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
-        if (chatId === undefined || chatId === null)
-            throw new Error("The parameter 'chatId' must be defined and cannot be null.");
-        else
-            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+    changeRoleForUserById(changeRoleForUserById: ChangeRoleForUserById , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Roles/ChangeRoleForUserById";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(role);
+        const content_ = JSON.stringify(changeRoleForUserById);
 
         let options_: AxiosRequestConfig = {
             data: content_,
@@ -905,11 +849,11 @@ export class RolesClient implements IRolesClient {
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined and cannot be null.");
         else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+            url_ += "UserId=" + encodeURIComponent("" + userId) + "&";
         if (chatId === undefined || chatId === null)
             throw new Error("The parameter 'chatId' must be defined and cannot be null.");
         else
-            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+            url_ += "ChatId=" + encodeURIComponent("" + chatId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -962,13 +906,13 @@ export interface IUserClient {
     getAll(): Promise<MessengerUserDto[]>;
     getUser(userId: string): Promise<MessengerUser>;
     getAllChatsByUserId(userId: string): Promise<MessengerChatDto[]>;
-    getAllChatsIdByUserId(userId: string): Promise<string[]>;
+    getAllChatsIdsByUserId(userId: string): Promise<string[]>;
     getUserRoleByChatId(userId: string, chatId: string): Promise<Role>;
-    setNickNameById(userId: string, nickName: string | null): Promise<void>;
-    deleteUser(userId: string): Promise<void>;
-    addUser(name: string | null, nickName: string | null, description: string | null): Promise<string>;
-    changeDescription(userId: string, description: string | null): Promise<void>;
-    changeName(userId: string, name: string | null): Promise<void>;
+    setNickNameById(setUserNickNameById: SetUserNickNameById): Promise<void>;
+    deleteUser(deleteUser: DeleteUser): Promise<void>;
+    addUser(addUser: AddUser): Promise<string>;
+    changeDescription(changeUserDescriptionById: ChangeUserDescriptionById): Promise<void>;
+    changeName(changeUserNameById: ChangeUserNameById): Promise<void>;
 }
 
 export class UserClient implements IUserClient {
@@ -1045,7 +989,7 @@ export class UserClient implements IUserClient {
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined and cannot be null.");
         else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+            url_ += "UserId=" + encodeURIComponent("" + userId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -1098,7 +1042,7 @@ export class UserClient implements IUserClient {
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined and cannot be null.");
         else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+            url_ += "UserId=" + encodeURIComponent("" + userId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -1153,12 +1097,12 @@ export class UserClient implements IUserClient {
         return Promise.resolve<MessengerChatDto[]>(null as any);
     }
 
-    getAllChatsIdByUserId(userId: string , cancelToken?: CancelToken | undefined): Promise<string[]> {
-        let url_ = this.baseUrl + "/api/User/GetAllChatsIdByUserId?";
+    getAllChatsIdsByUserId(userId: string , cancelToken?: CancelToken | undefined): Promise<string[]> {
+        let url_ = this.baseUrl + "/api/User/GetAllChatsIdsByUserId?";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined and cannot be null.");
         else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+            url_ += "UserId=" + encodeURIComponent("" + userId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -1177,11 +1121,11 @@ export class UserClient implements IUserClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processGetAllChatsIdByUserId(_response);
+            return this.processGetAllChatsIdsByUserId(_response);
         });
     }
 
-    protected processGetAllChatsIdByUserId(response: AxiosResponse): Promise<string[]> {
+    protected processGetAllChatsIdsByUserId(response: AxiosResponse): Promise<string[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1217,11 +1161,11 @@ export class UserClient implements IUserClient {
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined and cannot be null.");
         else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+            url_ += "UserId=" + encodeURIComponent("" + userId) + "&";
         if (chatId === undefined || chatId === null)
             throw new Error("The parameter 'chatId' must be defined and cannot be null.");
         else
-            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+            url_ += "ChatId=" + encodeURIComponent("" + chatId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -1269,22 +1213,18 @@ export class UserClient implements IUserClient {
         return Promise.resolve<Role>(null as any);
     }
 
-    setNickNameById(userId: string, nickName: string | null , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/User/SetNickNameById?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
-        if (nickName === undefined)
-            throw new Error("The parameter 'nickName' must be defined.");
-        else if(nickName !== null)
-            url_ += "nickName=" + encodeURIComponent("" + nickName) + "&";
+    setNickNameById(setUserNickNameById: SetUserNickNameById , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/User/SetNickNameById";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(setUserNickNameById);
+
         let options_: AxiosRequestConfig = {
+            data: content_,
             method: "POST",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
             },
             cancelToken
         };
@@ -1321,18 +1261,18 @@ export class UserClient implements IUserClient {
         return Promise.resolve<void>(null as any);
     }
 
-    deleteUser(userId: string , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/User/DeleteUser?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+    deleteUser(deleteUser: DeleteUser , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/User/DeleteUser";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(deleteUser);
+
         let options_: AxiosRequestConfig = {
+            data: content_,
             method: "POST",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
             },
             cancelToken
         };
@@ -1369,26 +1309,18 @@ export class UserClient implements IUserClient {
         return Promise.resolve<void>(null as any);
     }
 
-    addUser(name: string | null, nickName: string | null, description: string | null , cancelToken?: CancelToken | undefined): Promise<string> {
-        let url_ = this.baseUrl + "/api/User/AddUser?";
-        if (name === undefined)
-            throw new Error("The parameter 'name' must be defined.");
-        else if(name !== null)
-            url_ += "name=" + encodeURIComponent("" + name) + "&";
-        if (nickName === undefined)
-            throw new Error("The parameter 'nickName' must be defined.");
-        else if(nickName !== null)
-            url_ += "nickName=" + encodeURIComponent("" + nickName) + "&";
-        if (description === undefined)
-            throw new Error("The parameter 'description' must be defined.");
-        else if(description !== null)
-            url_ += "description=" + encodeURIComponent("" + description) + "&";
+    addUser(addUser: AddUser , cancelToken?: CancelToken | undefined): Promise<string> {
+        let url_ = this.baseUrl + "/api/User/AddUser";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(addUser);
+
         let options_: AxiosRequestConfig = {
+            data: content_,
             method: "POST",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             },
             cancelToken
@@ -1430,22 +1362,18 @@ export class UserClient implements IUserClient {
         return Promise.resolve<string>(null as any);
     }
 
-    changeDescription(userId: string, description: string | null , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/User/ChangeDescription?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
-        if (description === undefined)
-            throw new Error("The parameter 'description' must be defined.");
-        else if(description !== null)
-            url_ += "description=" + encodeURIComponent("" + description) + "&";
+    changeDescription(changeUserDescriptionById: ChangeUserDescriptionById , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/User/ChangeDescription";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(changeUserDescriptionById);
+
         let options_: AxiosRequestConfig = {
+            data: content_,
             method: "POST",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
             },
             cancelToken
         };
@@ -1482,22 +1410,18 @@ export class UserClient implements IUserClient {
         return Promise.resolve<void>(null as any);
     }
 
-    changeName(userId: string, name: string | null , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/User/ChangeName?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
-        if (name === undefined)
-            throw new Error("The parameter 'name' must be defined.");
-        else if(name !== null)
-            url_ += "name=" + encodeURIComponent("" + name) + "&";
+    changeName(changeUserNameById: ChangeUserNameById , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/User/ChangeName";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(changeUserNameById);
+
         let options_: AxiosRequestConfig = {
+            data: content_,
             method: "POST",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
             },
             cancelToken
         };
@@ -1533,6 +1457,40 @@ export class UserClient implements IUserClient {
         }
         return Promise.resolve<void>(null as any);
     }
+}
+
+export class Login implements ILogin {
+    model!: LoginModel;
+
+    constructor(data?: ILogin) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.model = _data["model"] ? LoginModel.fromJS(_data["model"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): Login | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<Login>(data, _mappings, Login);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["model"] = this.model ? this.model.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ILogin {
+    model: LoginModel;
 }
 
 export class LoginModel implements ILoginModel {
@@ -1575,6 +1533,40 @@ export interface ILoginModel {
     id: string;
     nickName: string;
     password: string;
+}
+
+export class Register implements IRegister {
+    model!: RegisterModel;
+
+    constructor(data?: IRegister) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.model = _data["model"] ? RegisterModel.fromJS(_data["model"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): Register | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<Register>(data, _mappings, Register);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["model"] = this.model ? this.model.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IRegister {
+    model: RegisterModel;
 }
 
 export class RegisterModel implements IRegisterModel {
@@ -1621,6 +1613,40 @@ export interface IRegisterModel {
     nickName: string;
     email: string;
     password: string;
+}
+
+export class RegisterAdmin implements IRegisterAdmin {
+    model!: RegisterModel;
+
+    constructor(data?: IRegisterAdmin) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.model = _data["model"] ? RegisterModel.fromJS(_data["model"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): RegisterAdmin | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<RegisterAdmin>(data, _mappings, RegisterAdmin);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["model"] = this.model ? this.model.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IRegisterAdmin {
+    model: RegisterModel;
 }
 
 export class MessengerChatDto implements IMessengerChatDto {
@@ -2009,6 +2035,292 @@ export enum ActionOption {
     Disabled = 2,
 }
 
+export class AddChannel implements IAddChannel {
+    adminId!: string;
+    name!: string;
+    description!: string;
+
+    constructor(data?: IAddChannel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.adminId = _data["adminId"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): AddChannel | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<AddChannel>(data, _mappings, AddChannel);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["adminId"] = this.adminId;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IAddChannel {
+    adminId: string;
+    name: string;
+    description: string;
+}
+
+export class AddGroupChat implements IAddGroupChat {
+    adminId!: string;
+    name!: string;
+    description!: string;
+
+    constructor(data?: IAddGroupChat) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.adminId = _data["adminId"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): AddGroupChat | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<AddGroupChat>(data, _mappings, AddGroupChat);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["adminId"] = this.adminId;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IAddGroupChat {
+    adminId: string;
+    name: string;
+    description: string;
+}
+
+export class AddPersonalChat implements IAddPersonalChat {
+    firstUserId!: string;
+    secondUserId!: string;
+    name!: string;
+    description!: string;
+
+    constructor(data?: IAddPersonalChat) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.firstUserId = _data["firstUserId"];
+            this.secondUserId = _data["secondUserId"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): AddPersonalChat | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<AddPersonalChat>(data, _mappings, AddPersonalChat);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstUserId"] = this.firstUserId;
+        data["secondUserId"] = this.secondUserId;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IAddPersonalChat {
+    firstUserId: string;
+    secondUserId: string;
+    name: string;
+    description: string;
+}
+
+export class AddSavedMessages implements IAddSavedMessages {
+    userId!: string;
+    name!: string;
+    description!: string;
+
+    constructor(data?: IAddSavedMessages) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): AddSavedMessages | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<AddSavedMessages>(data, _mappings, AddSavedMessages);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IAddSavedMessages {
+    userId: string;
+    name: string;
+    description: string;
+}
+
+export class AddUserToChat implements IAddUserToChat {
+    userId!: string;
+    chatId!: string;
+
+    constructor(data?: IAddUserToChat) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.chatId = _data["chatId"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): AddUserToChat | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<AddUserToChat>(data, _mappings, AddUserToChat);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["chatId"] = this.chatId;
+        return data;
+    }
+}
+
+export interface IAddUserToChat {
+    userId: string;
+    chatId: string;
+}
+
+export class DeleteUserFromChat implements IDeleteUserFromChat {
+    userId!: string;
+    chatId!: string;
+
+    constructor(data?: IDeleteUserFromChat) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.chatId = _data["chatId"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): DeleteUserFromChat | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<DeleteUserFromChat>(data, _mappings, DeleteUserFromChat);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["chatId"] = this.chatId;
+        return data;
+    }
+}
+
+export interface IDeleteUserFromChat {
+    userId: string;
+    chatId: string;
+}
+
+export class CreateRoleForChat implements ICreateRoleForChat {
+    role!: RoleDto;
+    chatId!: string;
+
+    constructor(data?: ICreateRoleForChat) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.role = _data["role"] ? RoleDto.fromJS(_data["role"], _mappings) : <any>undefined;
+            this.chatId = _data["chatId"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): CreateRoleForChat | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<CreateRoleForChat>(data, _mappings, CreateRoleForChat);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["role"] = this.role ? this.role.toJSON() : <any>undefined;
+        data["chatId"] = this.chatId;
+        return data;
+    }
+}
+
+export interface ICreateRoleForChat {
+    role: RoleDto;
+    chatId: string;
+}
+
 export class RoleDto implements IRoleDto {
     name!: string;
     canEditMessages!: ActionOption;
@@ -2085,6 +2397,238 @@ export interface IRoleDto {
     canInviteOtherUsers: ActionOption;
     canEditChannelDescription: ActionOption;
     canDeleteChat: ActionOption;
+}
+
+export class ChangeRoleForUserById implements IChangeRoleForUserById {
+    userId!: string;
+    chatId!: string;
+    role!: RoleDto;
+
+    constructor(data?: IChangeRoleForUserById) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.chatId = _data["chatId"];
+            this.role = _data["role"] ? RoleDto.fromJS(_data["role"], _mappings) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): ChangeRoleForUserById | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<ChangeRoleForUserById>(data, _mappings, ChangeRoleForUserById);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["chatId"] = this.chatId;
+        data["role"] = this.role ? this.role.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IChangeRoleForUserById {
+    userId: string;
+    chatId: string;
+    role: RoleDto;
+}
+
+export class SetUserNickNameById implements ISetUserNickNameById {
+    userId!: string;
+    nickName!: string;
+
+    constructor(data?: ISetUserNickNameById) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.nickName = _data["nickName"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): SetUserNickNameById | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<SetUserNickNameById>(data, _mappings, SetUserNickNameById);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["nickName"] = this.nickName;
+        return data;
+    }
+}
+
+export interface ISetUserNickNameById {
+    userId: string;
+    nickName: string;
+}
+
+export class DeleteUser implements IDeleteUser {
+    userId!: string;
+
+    constructor(data?: IDeleteUser) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): DeleteUser | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<DeleteUser>(data, _mappings, DeleteUser);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        return data;
+    }
+}
+
+export interface IDeleteUser {
+    userId: string;
+}
+
+export class AddUser implements IAddUser {
+    name!: string;
+    nickName!: string;
+    description!: string;
+
+    constructor(data?: IAddUser) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.nickName = _data["nickName"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): AddUser | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<AddUser>(data, _mappings, AddUser);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["nickName"] = this.nickName;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IAddUser {
+    name: string;
+    nickName: string;
+    description: string;
+}
+
+export class ChangeUserDescriptionById implements IChangeUserDescriptionById {
+    userId!: string;
+    description!: string;
+
+    constructor(data?: IChangeUserDescriptionById) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): ChangeUserDescriptionById | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<ChangeUserDescriptionById>(data, _mappings, ChangeUserDescriptionById);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IChangeUserDescriptionById {
+    userId: string;
+    description: string;
+}
+
+export class ChangeUserNameById implements IChangeUserNameById {
+    userId!: string;
+    name!: string;
+
+    constructor(data?: IChangeUserNameById) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): ChangeUserNameById | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<ChangeUserNameById>(data, _mappings, ChangeUserNameById);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IChangeUserNameById {
+    userId: string;
+    name: string;
 }
 
 function jsonParse(json: any, reviver?: any) {

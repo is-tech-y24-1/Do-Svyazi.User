@@ -55,14 +55,14 @@ namespace Do_Svyazi.User.Web.ApiClient
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> LoginAsync(LoginModel model)
+        public virtual System.Threading.Tasks.Task<FileResponse> LoginAsync(Login model)
         {
             return LoginAsync(model, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> LoginAsync(LoginModel model, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<FileResponse> LoginAsync(Login model, System.Threading.CancellationToken cancellationToken)
         {
             if (model == null)
                 throw new System.ArgumentNullException("model");
@@ -131,14 +131,14 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> RegisterAsync(RegisterModel model)
+        public virtual System.Threading.Tasks.Task<FileResponse> RegisterAsync(Register model)
         {
             return RegisterAsync(model, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> RegisterAsync(RegisterModel model, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<FileResponse> RegisterAsync(Register model, System.Threading.CancellationToken cancellationToken)
         {
             if (model == null)
                 throw new System.ArgumentNullException("model");
@@ -207,14 +207,14 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> RegisterAdminAsync(RegisterModel model)
+        public virtual System.Threading.Tasks.Task<FileResponse> RegisterAdminAsync(RegisterAdmin model)
         {
             return RegisterAdminAsync(model, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> RegisterAdminAsync(RegisterModel model, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<FileResponse> RegisterAdminAsync(RegisterAdmin model, System.Threading.CancellationToken cancellationToken)
         {
             if (model == null)
                 throw new System.ArgumentNullException("model");
@@ -507,7 +507,7 @@ namespace Do_Svyazi.User.Web.ApiClient
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/GetChatById?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("chatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            urlBuilder_.Append(System.Uri.EscapeDataString("ChatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             urlBuilder_.Length--;
 
             var client_ = _httpClient;
@@ -584,7 +584,7 @@ namespace Do_Svyazi.User.Web.ApiClient
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/GetUserIdsByChatId?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("chatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            urlBuilder_.Append(System.Uri.EscapeDataString("ChatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             urlBuilder_.Length--;
 
             var client_ = _httpClient;
@@ -661,7 +661,7 @@ namespace Do_Svyazi.User.Web.ApiClient
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/GetUsersByChatId?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("chatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            urlBuilder_.Append(System.Uri.EscapeDataString("ChatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             urlBuilder_.Length--;
 
             var client_ = _httpClient;
@@ -724,24 +724,20 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddChannelAsync(System.Guid userId, string name, string description)
+        public virtual System.Threading.Tasks.Task AddChannelAsync(AddChannel addChannelCommand)
         {
-            return AddChannelAsync(userId, name, description, System.Threading.CancellationToken.None);
+            return AddChannelAsync(addChannelCommand, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddChannelAsync(System.Guid userId, string name, string description, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task AddChannelAsync(AddChannel addChannelCommand, System.Threading.CancellationToken cancellationToken)
         {
-            if (userId == null)
-                throw new System.ArgumentNullException("userId");
+            if (addChannelCommand == null)
+                throw new System.ArgumentNullException("addChannelCommand");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/AddChannel?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("name") + "=").Append(System.Uri.EscapeDataString(name != null ? ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("description") + "=").Append(System.Uri.EscapeDataString(description != null ? ConvertToString(description, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/AddChannel");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -749,7 +745,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(addChannelCommand, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -798,24 +796,20 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddGroupChatAsync(System.Guid userId, string name, string description)
+        public virtual System.Threading.Tasks.Task AddGroupChatAsync(AddGroupChat addGroupChatCommand)
         {
-            return AddGroupChatAsync(userId, name, description, System.Threading.CancellationToken.None);
+            return AddGroupChatAsync(addGroupChatCommand, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddGroupChatAsync(System.Guid userId, string name, string description, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task AddGroupChatAsync(AddGroupChat addGroupChatCommand, System.Threading.CancellationToken cancellationToken)
         {
-            if (userId == null)
-                throw new System.ArgumentNullException("userId");
+            if (addGroupChatCommand == null)
+                throw new System.ArgumentNullException("addGroupChatCommand");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/AddGroupChat?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("name") + "=").Append(System.Uri.EscapeDataString(name != null ? ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("description") + "=").Append(System.Uri.EscapeDataString(description != null ? ConvertToString(description, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/AddGroupChat");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -823,7 +817,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(addGroupChatCommand, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -872,28 +868,20 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddPersonalChatAsync(System.Guid firstUserId, System.Guid secondUserId, string name, string description)
+        public virtual System.Threading.Tasks.Task AddPersonalChatAsync(AddPersonalChat addPersonalChatCommand)
         {
-            return AddPersonalChatAsync(firstUserId, secondUserId, name, description, System.Threading.CancellationToken.None);
+            return AddPersonalChatAsync(addPersonalChatCommand, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddPersonalChatAsync(System.Guid firstUserId, System.Guid secondUserId, string name, string description, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task AddPersonalChatAsync(AddPersonalChat addPersonalChatCommand, System.Threading.CancellationToken cancellationToken)
         {
-            if (firstUserId == null)
-                throw new System.ArgumentNullException("firstUserId");
-
-            if (secondUserId == null)
-                throw new System.ArgumentNullException("secondUserId");
+            if (addPersonalChatCommand == null)
+                throw new System.ArgumentNullException("addPersonalChatCommand");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/AddPersonalChat?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("firstUserId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(firstUserId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("secondUserId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(secondUserId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("name") + "=").Append(System.Uri.EscapeDataString(name != null ? ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("description") + "=").Append(System.Uri.EscapeDataString(description != null ? ConvertToString(description, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/AddPersonalChat");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -901,7 +889,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(addPersonalChatCommand, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -950,24 +940,20 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddSavedMessagesAsync(System.Guid userId, string name, string description)
+        public virtual System.Threading.Tasks.Task AddSavedMessagesAsync(AddSavedMessages addSavedMessagesCommand)
         {
-            return AddSavedMessagesAsync(userId, name, description, System.Threading.CancellationToken.None);
+            return AddSavedMessagesAsync(addSavedMessagesCommand, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddSavedMessagesAsync(System.Guid userId, string name, string description, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task AddSavedMessagesAsync(AddSavedMessages addSavedMessagesCommand, System.Threading.CancellationToken cancellationToken)
         {
-            if (userId == null)
-                throw new System.ArgumentNullException("userId");
+            if (addSavedMessagesCommand == null)
+                throw new System.ArgumentNullException("addSavedMessagesCommand");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/AddSavedMessages?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("name") + "=").Append(System.Uri.EscapeDataString(name != null ? ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("description") + "=").Append(System.Uri.EscapeDataString(description != null ? ConvertToString(description, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/AddSavedMessages");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -975,7 +961,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(addSavedMessagesCommand, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -1024,26 +1012,20 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddUserToChatAsync(System.Guid userId, System.Guid chatId)
+        public virtual System.Threading.Tasks.Task AddUserToChatAsync(AddUserToChat addUserToChatCommand)
         {
-            return AddUserToChatAsync(userId, chatId, System.Threading.CancellationToken.None);
+            return AddUserToChatAsync(addUserToChatCommand, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddUserToChatAsync(System.Guid userId, System.Guid chatId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task AddUserToChatAsync(AddUserToChat addUserToChatCommand, System.Threading.CancellationToken cancellationToken)
         {
-            if (userId == null)
-                throw new System.ArgumentNullException("userId");
-
-            if (chatId == null)
-                throw new System.ArgumentNullException("chatId");
+            if (addUserToChatCommand == null)
+                throw new System.ArgumentNullException("addUserToChatCommand");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/AddUserToChat?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("chatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/AddUserToChat");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1051,7 +1033,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(addUserToChatCommand, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -1100,26 +1084,20 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task DeleteUserFromChatAsync(System.Guid userId, System.Guid chatId)
+        public virtual System.Threading.Tasks.Task DeleteUserFromChatAsync(DeleteUserFromChat deleteUserFromChatCommand)
         {
-            return DeleteUserFromChatAsync(userId, chatId, System.Threading.CancellationToken.None);
+            return DeleteUserFromChatAsync(deleteUserFromChatCommand, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task DeleteUserFromChatAsync(System.Guid userId, System.Guid chatId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteUserFromChatAsync(DeleteUserFromChat deleteUserFromChatCommand, System.Threading.CancellationToken cancellationToken)
         {
-            if (userId == null)
-                throw new System.ArgumentNullException("userId");
-
-            if (chatId == null)
-                throw new System.ArgumentNullException("chatId");
+            if (deleteUserFromChatCommand == null)
+                throw new System.ArgumentNullException("deleteUserFromChatCommand");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/DeleteUserFromChat?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("chatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/DeleteUserFromChat");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1127,6 +1105,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(deleteUserFromChatCommand, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -1313,25 +1294,20 @@ namespace Do_Svyazi.User.Web.ApiClient
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task CreateRoleForChatAsync(System.Guid chatId, RoleDto role)
+        public virtual System.Threading.Tasks.Task CreateRoleForChatAsync(CreateRoleForChat createRoleForChat)
         {
-            return CreateRoleForChatAsync(chatId, role, System.Threading.CancellationToken.None);
+            return CreateRoleForChatAsync(createRoleForChat, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CreateRoleForChatAsync(System.Guid chatId, RoleDto role, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task CreateRoleForChatAsync(CreateRoleForChat createRoleForChat, System.Threading.CancellationToken cancellationToken)
         {
-            if (chatId == null)
-                throw new System.ArgumentNullException("chatId");
-
-            if (role == null)
-                throw new System.ArgumentNullException("role");
+            if (createRoleForChat == null)
+                throw new System.ArgumentNullException("createRoleForChat");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Roles/CreateRoleForChat?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("chatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Roles/CreateRoleForChat");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1339,7 +1315,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(role, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(createRoleForChat, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -1390,29 +1366,20 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ChangeRoleForUserByIdAsync(System.Guid userId, System.Guid chatId, RoleDto role)
+        public virtual System.Threading.Tasks.Task ChangeRoleForUserByIdAsync(ChangeRoleForUserById changeRoleForUserById)
         {
-            return ChangeRoleForUserByIdAsync(userId, chatId, role, System.Threading.CancellationToken.None);
+            return ChangeRoleForUserByIdAsync(changeRoleForUserById, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ChangeRoleForUserByIdAsync(System.Guid userId, System.Guid chatId, RoleDto role, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ChangeRoleForUserByIdAsync(ChangeRoleForUserById changeRoleForUserById, System.Threading.CancellationToken cancellationToken)
         {
-            if (userId == null)
-                throw new System.ArgumentNullException("userId");
-
-            if (chatId == null)
-                throw new System.ArgumentNullException("chatId");
-
-            if (role == null)
-                throw new System.ArgumentNullException("role");
+            if (changeRoleForUserById == null)
+                throw new System.ArgumentNullException("changeRoleForUserById");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Roles/ChangeRoleForUserById?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("chatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Roles/ChangeRoleForUserById");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1420,7 +1387,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(role, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(changeRoleForUserById, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -1488,8 +1455,8 @@ namespace Do_Svyazi.User.Web.ApiClient
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Roles/GetRoleByUserId?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("chatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            urlBuilder_.Append(System.Uri.EscapeDataString("UserId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            urlBuilder_.Append(System.Uri.EscapeDataString("ChatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             urlBuilder_.Length--;
 
             var client_ = _httpClient;
@@ -1776,7 +1743,7 @@ namespace Do_Svyazi.User.Web.ApiClient
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/GetUser?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            urlBuilder_.Append(System.Uri.EscapeDataString("UserId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             urlBuilder_.Length--;
 
             var client_ = _httpClient;
@@ -1853,7 +1820,7 @@ namespace Do_Svyazi.User.Web.ApiClient
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/GetAllChatsByUserId?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            urlBuilder_.Append(System.Uri.EscapeDataString("UserId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             urlBuilder_.Length--;
 
             var client_ = _httpClient;
@@ -1916,21 +1883,21 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<System.Guid>> GetAllChatsIdByUserIdAsync(System.Guid userId)
+        public virtual System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<System.Guid>> GetAllChatsIdsByUserIdAsync(System.Guid userId)
         {
-            return GetAllChatsIdByUserIdAsync(userId, System.Threading.CancellationToken.None);
+            return GetAllChatsIdsByUserIdAsync(userId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<System.Guid>> GetAllChatsIdByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<System.Guid>> GetAllChatsIdsByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken)
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/GetAllChatsIdByUserId?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/GetAllChatsIdsByUserId?");
+            urlBuilder_.Append(System.Uri.EscapeDataString("UserId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             urlBuilder_.Length--;
 
             var client_ = _httpClient;
@@ -2010,8 +1977,8 @@ namespace Do_Svyazi.User.Web.ApiClient
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/GetUserRoleByChatId?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("chatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            urlBuilder_.Append(System.Uri.EscapeDataString("UserId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            urlBuilder_.Append(System.Uri.EscapeDataString("ChatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(chatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             urlBuilder_.Length--;
 
             var client_ = _httpClient;
@@ -2074,23 +2041,20 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task SetNickNameByIdAsync(System.Guid userId, string nickName)
+        public virtual System.Threading.Tasks.Task SetNickNameByIdAsync(SetUserNickNameById setUserNickNameById)
         {
-            return SetNickNameByIdAsync(userId, nickName, System.Threading.CancellationToken.None);
+            return SetNickNameByIdAsync(setUserNickNameById, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task SetNickNameByIdAsync(System.Guid userId, string nickName, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task SetNickNameByIdAsync(SetUserNickNameById setUserNickNameById, System.Threading.CancellationToken cancellationToken)
         {
-            if (userId == null)
-                throw new System.ArgumentNullException("userId");
+            if (setUserNickNameById == null)
+                throw new System.ArgumentNullException("setUserNickNameById");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/SetNickNameById?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("nickName") + "=").Append(System.Uri.EscapeDataString(nickName != null ? ConvertToString(nickName, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/SetNickNameById");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -2098,7 +2062,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(setUserNickNameById, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -2147,22 +2113,20 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task DeleteUserAsync(System.Guid userId)
+        public virtual System.Threading.Tasks.Task DeleteUserAsync(DeleteUser deleteUser)
         {
-            return DeleteUserAsync(userId, System.Threading.CancellationToken.None);
+            return DeleteUserAsync(deleteUser, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task DeleteUserAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteUserAsync(DeleteUser deleteUser, System.Threading.CancellationToken cancellationToken)
         {
-            if (userId == null)
-                throw new System.ArgumentNullException("userId");
+            if (deleteUser == null)
+                throw new System.ArgumentNullException("deleteUser");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/DeleteUser?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/DeleteUser");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -2170,7 +2134,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(deleteUser, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -2219,21 +2185,20 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Guid> AddUserAsync(string name, string nickName, string description)
+        public virtual System.Threading.Tasks.Task<System.Guid> AddUserAsync(AddUser addUser)
         {
-            return AddUserAsync(name, nickName, description, System.Threading.CancellationToken.None);
+            return AddUserAsync(addUser, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Guid> AddUserAsync(string name, string nickName, string description, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Guid> AddUserAsync(AddUser addUser, System.Threading.CancellationToken cancellationToken)
         {
+            if (addUser == null)
+                throw new System.ArgumentNullException("addUser");
+
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/AddUser?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("name") + "=").Append(System.Uri.EscapeDataString(name != null ? ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("nickName") + "=").Append(System.Uri.EscapeDataString(nickName != null ? ConvertToString(nickName, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("description") + "=").Append(System.Uri.EscapeDataString(description != null ? ConvertToString(description, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/AddUser");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -2241,7 +2206,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(addUser, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
@@ -2296,23 +2263,20 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ChangeDescriptionAsync(System.Guid userId, string description)
+        public virtual System.Threading.Tasks.Task ChangeDescriptionAsync(ChangeUserDescriptionById changeUserDescriptionById)
         {
-            return ChangeDescriptionAsync(userId, description, System.Threading.CancellationToken.None);
+            return ChangeDescriptionAsync(changeUserDescriptionById, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ChangeDescriptionAsync(System.Guid userId, string description, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ChangeDescriptionAsync(ChangeUserDescriptionById changeUserDescriptionById, System.Threading.CancellationToken cancellationToken)
         {
-            if (userId == null)
-                throw new System.ArgumentNullException("userId");
+            if (changeUserDescriptionById == null)
+                throw new System.ArgumentNullException("changeUserDescriptionById");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/ChangeDescription?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("description") + "=").Append(System.Uri.EscapeDataString(description != null ? ConvertToString(description, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/ChangeDescription");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -2320,7 +2284,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(changeUserDescriptionById, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -2369,23 +2335,20 @@ namespace Do_Svyazi.User.Web.ApiClient
         }
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ChangeNameAsync(System.Guid userId, string name)
+        public virtual System.Threading.Tasks.Task ChangeNameAsync(ChangeUserNameById changeUserNameById)
         {
-            return ChangeNameAsync(userId, name, System.Threading.CancellationToken.None);
+            return ChangeNameAsync(changeUserNameById, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ChangeNameAsync(System.Guid userId, string name, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ChangeNameAsync(ChangeUserNameById changeUserNameById, System.Threading.CancellationToken cancellationToken)
         {
-            if (userId == null)
-                throw new System.ArgumentNullException("userId");
+            if (changeUserNameById == null)
+                throw new System.ArgumentNullException("changeUserNameById");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/ChangeName?");
-            urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            urlBuilder_.Append(System.Uri.EscapeDataString("name") + "=").Append(System.Uri.EscapeDataString(name != null ? ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture) : "")).Append("&");
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/ChangeName");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -2393,7 +2356,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(changeUserNameById, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
                     PrepareRequest(client_, request_, urlBuilder_);
