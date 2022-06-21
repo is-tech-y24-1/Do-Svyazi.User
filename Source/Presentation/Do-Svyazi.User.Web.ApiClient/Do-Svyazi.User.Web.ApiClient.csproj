@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>2.0.2</PackageVersion>
+        <PackageVersion>2.1.0</PackageVersion>
         <PackageId>Do-Svyazi.User.Web.ApiClient.Backend</PackageId>
         <Authors>Do-Svyazi.User team</Authors>
         <Title>Do-Svyazi.User module</Title>
