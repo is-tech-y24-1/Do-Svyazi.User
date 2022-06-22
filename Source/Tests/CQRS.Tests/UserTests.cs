@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using Do_Svyazi.User.Application.CQRS.Users.Commands;
+using Do_Svyazi.User.Application.CQRS.Users.Handlers;
 using Do_Svyazi.User.DataAccess;
 using Do_Svyazi.User.Domain.Users;
 using EntityFrameworkCoreMock;
@@ -20,9 +21,10 @@ public class UserTests
         var dbContextMock = new DbContextMock<DoSvaziDbContext>(); 
         dbContextMock.CreateDbSetMock(x => x.Users, Array.Empty<MessengerUser>());
 
-        var addUserHandler = new AddUser.Handler(dbContextMock.Object);
-        var addUserCommand = new AddUser.Command(user.Name, user.NickName, user.Description);
-        await addUserHandler.Handle(addUserCommand, CancellationToken.None);
+        var usersCommandHandler = new UsersCommandHandler(dbContextMock.Object);
+
+        var addUserCommand = new AddUser(user.Name, user.NickName, user.Description);
+        await usersCommandHandler.Handle(addUserCommand, CancellationToken.None);
 
         MessengerUser gainMessengerUser = dbContextMock.Object.Users.Single();
         
@@ -37,12 +39,12 @@ public class UserTests
         string newName)
     {
         var dbContextMock = new DbContextMock<DoSvaziDbContext>();
-
         dbContextMock.CreateDbSetMock(x => x.Users, new[] {user});
 
-        var changeUserNameHandler = new ChangeUserNameById.Handler(dbContextMock.Object);
-        var changeUserNameCommand = new ChangeUserNameById.Command(user.Id, newName);
-        await changeUserNameHandler.Handle(changeUserNameCommand, CancellationToken.None);
+        var usersCommandHandler = new UsersCommandHandler(dbContextMock.Object);
+
+        var changeUserNameCommand = new ChangeUserNameById(user.Id, newName);
+        await usersCommandHandler.Handle(changeUserNameCommand, CancellationToken.None);
 
         MessengerUser gainMessengerUser = dbContextMock.Object.Users.Single();
 

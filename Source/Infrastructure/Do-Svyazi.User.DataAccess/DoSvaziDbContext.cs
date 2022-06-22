@@ -1,5 +1,4 @@
 using Do_Svyazi.User.Application.DbContexts;
-using Do_Svyazi.User.Domain.Authenticate;
 using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Domain.Users;
@@ -12,7 +11,6 @@ public class DoSvaziDbContext : DbContext, IDbContext
     public DoSvaziDbContext(DbContextOptions<DoSvaziDbContext> options)
         : base(options)
     {
-        // Database.EnsureCreated();
     }
 
     protected DoSvaziDbContext() { }

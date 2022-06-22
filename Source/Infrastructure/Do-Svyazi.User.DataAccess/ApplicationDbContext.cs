@@ -1,5 +1,4 @@
 using Do_Svyazi.User.Domain.Authenticate;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

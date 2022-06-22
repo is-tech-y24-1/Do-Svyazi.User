@@ -1,7 +1,5 @@
-using Do_Svyazi.User.Application.CQRS.Roles;
 using Do_Svyazi.User.Application.CQRS.Roles.Commands;
 using Do_Svyazi.User.Application.CQRS.Roles.Queries;
-using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Dtos.Roles;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -17,27 +15,30 @@ public class RolesController : ControllerBase
 
     public RolesController(IMediator mediator) => _mediator = mediator;
 
+    [HttpGet(nameof(GetRoleByUserId))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<RoleDto>> GetRoleByUserId(
+        [FromQuery] GetRoleByUserId getRoleByUserId, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(getRoleByUserId, cancellationToken);
+        return Ok(response);
+    }
+
     [HttpPost(nameof(CreateRoleForChat))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> CreateRoleForChat(RoleDto role, Guid chatId)
+    public async Task<ActionResult> CreateRoleForChat(
+        CreateRoleForChat createRoleForChat, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new CreateRoleForChat.Command(role, chatId));
+        await _mediator.Send(createRoleForChat, cancellationToken);
         return Ok();
     }
 
     [HttpPost(nameof(ChangeRoleForUserById))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> ChangeRoleForUserById(Guid userId, Guid chatId, RoleDto role)
+    public async Task<ActionResult> ChangeRoleForUserById(
+        ChangeRoleForUserById changeRoleForUserById, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new ChangeRoleForUserById.Command(userId, chatId, role));
+        await _mediator.Send(changeRoleForUserById, cancellationToken);
         return Ok();
-    }
-
-    [HttpGet(nameof(GetRoleByUserId))]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<Role>> GetRoleByUserId(Guid userId, Guid chatId)
-    {
-        var response = await _mediator.Send(new GetRoleByUserId.Query(userId, chatId));
-        return Ok(response.userRole);
     }
 }

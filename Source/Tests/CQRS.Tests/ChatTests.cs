@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.Xunit2;
 using Do_Svyazi.User.Application.CQRS.Chats.Commands;
+using Do_Svyazi.User.Application.CQRS.Chats.Handlers;
 using Do_Svyazi.User.DataAccess;
 using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Users;
@@ -27,8 +28,8 @@ public class ChatTests
         dbContextMock.CreateDbSetMock(x => x.Users, new[] {user});
         dbContextMock.CreateDbSetMock(x => x.ChatUsers);
 
-        var addUserToChatHandler = new AddUserToChat.Handler(dbContextMock.Object);
-        var addUserToChatCommand = new AddUserToChat.Command(user.Id, chat.Id);
+        var addUserToChatHandler = new ChatsCommandHandler(dbContextMock.Object);
+        var addUserToChatCommand = new AddUserToChat(user.Id, chat.Id);
 
         chat.Users.Should().HaveCount(0);
 
@@ -57,15 +58,15 @@ public class ChatTests
         dbContextMock.CreateDbSetMock(x => x.Users, new[] {user});
         dbContextMock.CreateDbSetMock(x => x.ChatUsers);
 
-        var addUserToChatHandler = new AddUserToChat.Handler(dbContextMock.Object);
-        var addUserToChatCommand = new AddUserToChat.Command(user.Id, chat.Id);
-        await addUserToChatHandler.Handle(addUserToChatCommand, CancellationToken.None);
+        var chatsCommandHandler = new ChatsCommandHandler(dbContextMock.Object);
+
+        var addUserToChatCommand = new AddUserToChat(user.Id, chat.Id);
+        await chatsCommandHandler.Handle(addUserToChatCommand, CancellationToken.None);
 
         chat.Users.Should().HaveCount(1);
 
-        var deleteUserToChatHandler = new DeleteUserFromChat.Handler(dbContextMock.Object);
-        var deleteUserToChatCommand = new DeleteUserFromChat.Command(user.Id, chat.Id);
-        await deleteUserToChatHandler.Handle(deleteUserToChatCommand, CancellationToken.None);
+        var deleteUserToChatCommand = new DeleteUserFromChat(user.Id, chat.Id);
+        await chatsCommandHandler.Handle(deleteUserToChatCommand, CancellationToken.None);
 
         chat.Users.Should().HaveCount(0);
     }
