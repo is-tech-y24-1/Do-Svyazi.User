@@ -5,16 +5,15 @@ using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Chats.Handlers;
 
 public class ChatsQueryHandler :
-    IRequestHandler<GetChatById, MessengerChatDto>,
-    IRequestHandler<GetChats, IReadOnlyCollection<MessengerChatDto>>,
-    IRequestHandler<GetUserIdsByChatId, IReadOnlyCollection<Guid>>,
-    IRequestHandler<GetUsersByChatId, IReadOnlyCollection<ChatUser>>
+    IQueryHandler<GetChatById, MessengerChatDto>,
+    IQueryHandler<GetChats, IReadOnlyCollection<MessengerChatDto>>,
+    IQueryHandler<GetUserIdsByChatId, IReadOnlyCollection<Guid>>,
+    IQueryHandler<GetUsersByChatId, IReadOnlyCollection<ChatUser>>
 {
     private readonly IDbContext _context;
     private readonly IMapper _mapper;

@@ -9,12 +9,12 @@ using Microsoft.EntityFrameworkCore;
 namespace Do_Svyazi.User.Application.CQRS.Chats.Handlers;
 
 public class ChatsCommandHandler :
-    IRequestHandler<AddChannel, Guid>,
-    IRequestHandler<AddGroupChat, Guid>,
-    IRequestHandler<AddPersonalChat, Guid>,
-    IRequestHandler<AddSavedMessages, Guid>,
-    IRequestHandler<AddUserToChat, Unit>,
-    IRequestHandler<DeleteUserFromChat, Unit>
+    ICommandHandler<AddChannel, Guid>,
+    ICommandHandler<AddGroupChat, Guid>,
+    ICommandHandler<AddPersonalChat, Guid>,
+    ICommandHandler<AddSavedMessages, Guid>,
+    ICommandHandler<AddUserToChat, Unit>,
+    ICommandHandler<DeleteUserFromChat, Unit>
 {
     private readonly IDbContext _context;
 
