@@ -7,12 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Queries;
 
-public class GetUsers
+public record GetUsers : IRequest<IReadOnlyCollection<MessengerUserDto>>
 {
-    public record Query : IRequest<Response>;
-    public record Response(IReadOnlyCollection<MessengerUserDto> users);
-
-    public class Handler : IRequestHandler<Query, Response>
+    public class Handler : IRequestHandler<GetUsers, IReadOnlyCollection<MessengerUserDto>>
     {
         private readonly IDbContext _context;
         private readonly IMapper _mapper;
@@ -23,12 +20,12 @@ public class GetUsers
             _mapper = mapper;
         }
 
-        public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<MessengerUserDto>> Handle(GetUsers request, CancellationToken cancellationToken)
         {
             List<MessengerUser> users = await _context.Users
                 .ToListAsync(cancellationToken: cancellationToken);
 
-            return new Response(_mapper.Map<IReadOnlyCollection<MessengerUserDto>>(users));
+            return _mapper.Map<IReadOnlyCollection<MessengerUserDto>>(users);
         }
     }
 }
