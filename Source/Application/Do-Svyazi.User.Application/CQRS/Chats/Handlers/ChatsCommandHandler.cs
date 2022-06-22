@@ -1,4 +1,5 @@
 using Do_Svyazi.User.Application.CQRS.Chats.Commands;
+using Do_Svyazi.User.Application.CQRS.Handlers;
 using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Exceptions;
@@ -89,9 +90,9 @@ public class ChatsCommandHandler :
     {
         Chat chat = await _context.Chats
                         .Include(chat => chat.Users)
-                            .ThenInclude(user => user.User)
+                        .ThenInclude(user => user.User)
                         .Include(chat => chat.Users)
-                            .ThenInclude(user => user.Role)
+                        .ThenInclude(user => user.Role)
                         .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                     throw new Do_Svyazi_User_NotFoundException(
                         $"Chat with id = {request.chatId} to add user {request.userId} was not found");
@@ -113,9 +114,9 @@ public class ChatsCommandHandler :
     {
         Chat chat = await _context.Chats
                         .Include(chat => chat.Users)
-                            .ThenInclude(user => user.User)
+                        .ThenInclude(user => user.User)
                         .Include(chat => chat.Users)
-                            .ThenInclude(user => user.Role)
+                        .ThenInclude(user => user.Role)
                         .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                     throw new Do_Svyazi_User_NotFoundException($"Chat with id {request.chatId} not found");
 

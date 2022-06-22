@@ -1,5 +1,6 @@
 using AutoMapper;
 using Do_Svyazi.User.Application.CQRS.Chats.Queries;
+using Do_Svyazi.User.Application.CQRS.Handlers;
 using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Exceptions;
@@ -29,6 +30,7 @@ public class ChatsQueryHandler :
         Chat chat = await _context.Chats
                         .Include(chat => chat.Creator)
                         .Include(chat => chat.Users)
+                        .Include(chat => chat.Roles)
                         .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                     throw new Do_Svyazi_User_NotFoundException($"Chat with id = {request.chatId} was not found");
 
@@ -62,9 +64,9 @@ public class ChatsQueryHandler :
     {
         Chat chat = await _context.Chats
                         .Include(chat => chat.Users)
-                            .ThenInclude(user => user.User)
+                        .ThenInclude(user => user.User)
                         .Include(chat => chat.Users)
-                            .ThenInclude(user => user.Role)
+                        .ThenInclude(user => user.Role)
                         .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                     throw new Do_Svyazi_User_NotFoundException($"Chat with id = {request.chatId} to get users was not found");
 

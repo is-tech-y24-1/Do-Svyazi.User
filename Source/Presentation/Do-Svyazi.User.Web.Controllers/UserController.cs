@@ -1,6 +1,5 @@
 using Do_Svyazi.User.Application.CQRS.Users.Commands;
 using Do_Svyazi.User.Application.CQRS.Users.Queries;
-using Do_Svyazi.User.Domain.Roles;
 using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
 using Do_Svyazi.User.Dtos.Users;
@@ -50,15 +49,6 @@ public class UserController : ControllerBase
         [FromQuery] GetAllChatsIdsByUserId getAllChatsIdsByUserId, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(getAllChatsIdsByUserId, cancellationToken);
-        return Ok(response);
-    }
-
-    [HttpGet(nameof(GetUserRoleByChatId))]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<Role>> GetUserRoleByChatId(
-        [FromQuery] GetUserRoleByChatId getUserRoleByChatId, CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(getUserRoleByChatId, cancellationToken);
         return Ok(response);
     }
 

@@ -1,6 +1,6 @@
 using Do_Svyazi.User.Application.CQRS.Roles.Commands;
 using Do_Svyazi.User.Application.CQRS.Roles.Queries;
-using Do_Svyazi.User.Domain.Roles;
+using Do_Svyazi.User.Dtos.Roles;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +17,7 @@ public class RolesController : ControllerBase
 
     [HttpGet(nameof(GetRoleByUserId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<Role>> GetRoleByUserId(
+    public async Task<ActionResult<RoleDto>> GetRoleByUserId(
         [FromQuery] GetRoleByUserId getRoleByUserId, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(getRoleByUserId, cancellationToken);
