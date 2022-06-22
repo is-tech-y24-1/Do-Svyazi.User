@@ -273,7 +273,7 @@ export class ChatClient implements IChatClient {
         if (chatId === undefined || chatId === null)
             throw new Error("The parameter 'chatId' must be defined and cannot be null.");
         else
-            url_ += "ChatId=" + encodeURIComponent("" + chatId) + "&";
+            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -326,7 +326,7 @@ export class ChatClient implements IChatClient {
         if (chatId === undefined || chatId === null)
             throw new Error("The parameter 'chatId' must be defined and cannot be null.");
         else
-            url_ += "ChatId=" + encodeURIComponent("" + chatId) + "&";
+            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -385,7 +385,7 @@ export class ChatClient implements IChatClient {
         if (chatId === undefined || chatId === null)
             throw new Error("The parameter 'chatId' must be defined and cannot be null.");
         else
-            url_ += "ChatId=" + encodeURIComponent("" + chatId) + "&";
+            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -730,9 +730,9 @@ export class ChatClient implements IChatClient {
 }
 
 export interface IRolesClient {
+    getRoleByUserId(userId: string, chatId: string): Promise<RoleDto>;
     createRoleForChat(createRoleForChat: CreateRoleForChat): Promise<void>;
     changeRoleForUserById(changeRoleForUserById: ChangeRoleForUserById): Promise<void>;
-    getRoleByUserId(userId: string, chatId: string): Promise<Role>;
 }
 
 export class RolesClient implements IRolesClient {
@@ -746,6 +746,63 @@ export class RolesClient implements IRolesClient {
 
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
 
+    }
+
+    getRoleByUserId(userId: string, chatId: string , cancelToken?: CancelToken | undefined): Promise<RoleDto> {
+        let url_ = this.baseUrl + "/api/Roles/GetRoleByUserId?";
+        if (userId === undefined || userId === null)
+            throw new Error("The parameter 'userId' must be defined and cannot be null.");
+        else
+            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+        if (chatId === undefined || chatId === null)
+            throw new Error("The parameter 'chatId' must be defined and cannot be null.");
+        else
+            url_ += "chatId=" + encodeURIComponent("" + chatId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetRoleByUserId(_response);
+        });
+    }
+
+    protected processGetRoleByUserId(response: AxiosResponse): Promise<RoleDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        let _mappings: { source: any, target: any }[] = [];
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = RoleDto.fromJS(resultData200, _mappings);
+            return Promise.resolve<RoleDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<RoleDto>(null as any);
     }
 
     createRoleForChat(createRoleForChat: CreateRoleForChat , cancelToken?: CancelToken | undefined): Promise<void> {
@@ -843,63 +900,6 @@ export class RolesClient implements IRolesClient {
         }
         return Promise.resolve<void>(null as any);
     }
-
-    getRoleByUserId(userId: string, chatId: string , cancelToken?: CancelToken | undefined): Promise<Role> {
-        let url_ = this.baseUrl + "/api/Roles/GetRoleByUserId?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "UserId=" + encodeURIComponent("" + userId) + "&";
-        if (chatId === undefined || chatId === null)
-            throw new Error("The parameter 'chatId' must be defined and cannot be null.");
-        else
-            url_ += "ChatId=" + encodeURIComponent("" + chatId) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetRoleByUserId(_response);
-        });
-    }
-
-    protected processGetRoleByUserId(response: AxiosResponse): Promise<Role> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        let _mappings: { source: any, target: any }[] = [];
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200  = _responseText;
-            result200 = Role.fromJS(resultData200, _mappings);
-            return Promise.resolve<Role>(result200);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<Role>(null as any);
-    }
 }
 
 export interface IUserClient {
@@ -907,7 +907,6 @@ export interface IUserClient {
     getUser(userId: string): Promise<MessengerUser>;
     getAllChatsByUserId(userId: string): Promise<MessengerChatDto[]>;
     getAllChatsIdsByUserId(userId: string): Promise<string[]>;
-    getUserRoleByChatId(userId: string, chatId: string): Promise<Role>;
     setNickNameById(setUserNickNameById: SetUserNickNameById): Promise<void>;
     deleteUser(deleteUser: DeleteUser): Promise<void>;
     addUser(addUser: AddUser): Promise<string>;
@@ -989,7 +988,7 @@ export class UserClient implements IUserClient {
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined and cannot be null.");
         else
-            url_ += "UserId=" + encodeURIComponent("" + userId) + "&";
+            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -1042,7 +1041,7 @@ export class UserClient implements IUserClient {
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined and cannot be null.");
         else
-            url_ += "UserId=" + encodeURIComponent("" + userId) + "&";
+            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -1102,7 +1101,7 @@ export class UserClient implements IUserClient {
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined and cannot be null.");
         else
-            url_ += "UserId=" + encodeURIComponent("" + userId) + "&";
+            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -1154,63 +1153,6 @@ export class UserClient implements IUserClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<string[]>(null as any);
-    }
-
-    getUserRoleByChatId(userId: string, chatId: string , cancelToken?: CancelToken | undefined): Promise<Role> {
-        let url_ = this.baseUrl + "/api/User/GetUserRoleByChatId?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "UserId=" + encodeURIComponent("" + userId) + "&";
-        if (chatId === undefined || chatId === null)
-            throw new Error("The parameter 'chatId' must be defined and cannot be null.");
-        else
-            url_ += "ChatId=" + encodeURIComponent("" + chatId) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "application/json"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetUserRoleByChatId(_response);
-        });
-    }
-
-    protected processGetUserRoleByChatId(response: AxiosResponse): Promise<Role> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        let _mappings: { source: any, target: any }[] = [];
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200  = _responseText;
-            result200 = Role.fromJS(resultData200, _mappings);
-            return Promise.resolve<Role>(result200);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<Role>(null as any);
     }
 
     setNickNameById(setUserNickNameById: SetUserNickNameById , cancelToken?: CancelToken | undefined): Promise<void> {
@@ -1655,6 +1597,7 @@ export class MessengerChatDto implements IMessengerChatDto {
     description!: string | undefined;
     creator!: MessengerUserDto | undefined;
     users!: string[];
+    roles!: RoleDto[];
 
     constructor(data?: IMessengerChatDto) {
         if (data) {
@@ -1676,6 +1619,11 @@ export class MessengerChatDto implements IMessengerChatDto {
                 for (let item of _data["users"])
                     this.users!.push(item);
             }
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(RoleDto.fromJS(item, _mappings));
+            }
         }
     }
 
@@ -1695,6 +1643,11 @@ export class MessengerChatDto implements IMessengerChatDto {
             for (let item of this.users)
                 data["users"].push(item);
         }
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item.toJSON());
+        }
         return data;
     }
 }
@@ -1705,6 +1658,7 @@ export interface IMessengerChatDto {
     description: string | undefined;
     creator: MessengerUserDto | undefined;
     users: string[];
+    roles: RoleDto[];
 }
 
 export class MessengerUserDto implements IMessengerUserDto {
@@ -1751,6 +1705,90 @@ export interface IMessengerUserDto {
     name: string | undefined;
     nickName: string | undefined;
     description: string | undefined;
+}
+
+export class RoleDto implements IRoleDto {
+    name!: string;
+    canEditMessages!: ActionOption;
+    canDeleteMessages!: ActionOption;
+    canWriteMessages!: ActionOption;
+    canReadMessages!: ActionOption;
+    canAddUsers!: ActionOption;
+    canDeleteUsers!: ActionOption;
+    canPinMessages!: ActionOption;
+    canSeeChannelMembers!: ActionOption;
+    canInviteOtherUsers!: ActionOption;
+    canEditChannelDescription!: ActionOption;
+    canDeleteChat!: ActionOption;
+
+    constructor(data?: IRoleDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.canEditMessages = _data["canEditMessages"];
+            this.canDeleteMessages = _data["canDeleteMessages"];
+            this.canWriteMessages = _data["canWriteMessages"];
+            this.canReadMessages = _data["canReadMessages"];
+            this.canAddUsers = _data["canAddUsers"];
+            this.canDeleteUsers = _data["canDeleteUsers"];
+            this.canPinMessages = _data["canPinMessages"];
+            this.canSeeChannelMembers = _data["canSeeChannelMembers"];
+            this.canInviteOtherUsers = _data["canInviteOtherUsers"];
+            this.canEditChannelDescription = _data["canEditChannelDescription"];
+            this.canDeleteChat = _data["canDeleteChat"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): RoleDto | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<RoleDto>(data, _mappings, RoleDto);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["canEditMessages"] = this.canEditMessages;
+        data["canDeleteMessages"] = this.canDeleteMessages;
+        data["canWriteMessages"] = this.canWriteMessages;
+        data["canReadMessages"] = this.canReadMessages;
+        data["canAddUsers"] = this.canAddUsers;
+        data["canDeleteUsers"] = this.canDeleteUsers;
+        data["canPinMessages"] = this.canPinMessages;
+        data["canSeeChannelMembers"] = this.canSeeChannelMembers;
+        data["canInviteOtherUsers"] = this.canInviteOtherUsers;
+        data["canEditChannelDescription"] = this.canEditChannelDescription;
+        data["canDeleteChat"] = this.canDeleteChat;
+        return data;
+    }
+}
+
+export interface IRoleDto {
+    name: string;
+    canEditMessages: ActionOption;
+    canDeleteMessages: ActionOption;
+    canWriteMessages: ActionOption;
+    canReadMessages: ActionOption;
+    canAddUsers: ActionOption;
+    canDeleteUsers: ActionOption;
+    canPinMessages: ActionOption;
+    canSeeChannelMembers: ActionOption;
+    canInviteOtherUsers: ActionOption;
+    canEditChannelDescription: ActionOption;
+    canDeleteChat: ActionOption;
+}
+
+export enum ActionOption {
+    Unavailable = 0,
+    Enabled = 1,
+    Disabled = 2,
 }
 
 export class ChatUser implements IChatUser {
@@ -2027,12 +2065,6 @@ export interface IRole {
     canInviteOtherUsers: ActionOption;
     canEditChannelDescription: ActionOption;
     canDeleteChat: ActionOption;
-}
-
-export enum ActionOption {
-    Unavailable = 0,
-    Enabled = 1,
-    Disabled = 2,
 }
 
 export class AddChannel implements IAddChannel {
@@ -2319,84 +2351,6 @@ export class CreateRoleForChat implements ICreateRoleForChat {
 export interface ICreateRoleForChat {
     role: RoleDto;
     chatId: string;
-}
-
-export class RoleDto implements IRoleDto {
-    name!: string;
-    canEditMessages!: ActionOption;
-    canDeleteMessages!: ActionOption;
-    canWriteMessages!: ActionOption;
-    canReadMessages!: ActionOption;
-    canAddUsers!: ActionOption;
-    canDeleteUsers!: ActionOption;
-    canPinMessages!: ActionOption;
-    canSeeChannelMembers!: ActionOption;
-    canInviteOtherUsers!: ActionOption;
-    canEditChannelDescription!: ActionOption;
-    canDeleteChat!: ActionOption;
-
-    constructor(data?: IRoleDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any, _mappings?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.canEditMessages = _data["canEditMessages"];
-            this.canDeleteMessages = _data["canDeleteMessages"];
-            this.canWriteMessages = _data["canWriteMessages"];
-            this.canReadMessages = _data["canReadMessages"];
-            this.canAddUsers = _data["canAddUsers"];
-            this.canDeleteUsers = _data["canDeleteUsers"];
-            this.canPinMessages = _data["canPinMessages"];
-            this.canSeeChannelMembers = _data["canSeeChannelMembers"];
-            this.canInviteOtherUsers = _data["canInviteOtherUsers"];
-            this.canEditChannelDescription = _data["canEditChannelDescription"];
-            this.canDeleteChat = _data["canDeleteChat"];
-        }
-    }
-
-    static fromJS(data: any, _mappings?: any): RoleDto | null {
-        data = typeof data === 'object' ? data : {};
-        return createInstance<RoleDto>(data, _mappings, RoleDto);
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["canEditMessages"] = this.canEditMessages;
-        data["canDeleteMessages"] = this.canDeleteMessages;
-        data["canWriteMessages"] = this.canWriteMessages;
-        data["canReadMessages"] = this.canReadMessages;
-        data["canAddUsers"] = this.canAddUsers;
-        data["canDeleteUsers"] = this.canDeleteUsers;
-        data["canPinMessages"] = this.canPinMessages;
-        data["canSeeChannelMembers"] = this.canSeeChannelMembers;
-        data["canInviteOtherUsers"] = this.canInviteOtherUsers;
-        data["canEditChannelDescription"] = this.canEditChannelDescription;
-        data["canDeleteChat"] = this.canDeleteChat;
-        return data;
-    }
-}
-
-export interface IRoleDto {
-    name: string;
-    canEditMessages: ActionOption;
-    canDeleteMessages: ActionOption;
-    canWriteMessages: ActionOption;
-    canReadMessages: ActionOption;
-    canAddUsers: ActionOption;
-    canDeleteUsers: ActionOption;
-    canPinMessages: ActionOption;
-    canSeeChannelMembers: ActionOption;
-    canInviteOtherUsers: ActionOption;
-    canEditChannelDescription: ActionOption;
-    canDeleteChat: ActionOption;
 }
 
 export class ChangeRoleForUserById implements IChangeRoleForUserById {

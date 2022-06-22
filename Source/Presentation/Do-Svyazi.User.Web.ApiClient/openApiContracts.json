@@ -136,7 +136,7 @@
         "operationId": "Chat_GetChatById",
         "parameters": [
           {
-            "name": "ChatId",
+            "name": "chatId",
             "in": "query",
             "required": true,
             "schema": {
@@ -168,7 +168,7 @@
         "operationId": "Chat_GetUserIdsByChatId",
         "parameters": [
           {
-            "name": "ChatId",
+            "name": "chatId",
             "in": "query",
             "required": true,
             "schema": {
@@ -204,7 +204,7 @@
         "operationId": "Chat_GetUsersByChatId",
         "parameters": [
           {
-            "name": "ChatId",
+            "name": "chatId",
             "in": "query",
             "required": true,
             "schema": {
@@ -381,6 +381,48 @@
         }
       }
     },
+    "/api/Roles/GetRoleByUserId": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "operationId": "Roles_GetRoleByUserId",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "chatId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Roles/CreateRoleForChat": {
       "post": {
         "tags": [
@@ -431,48 +473,6 @@
         }
       }
     },
-    "/api/Roles/GetRoleByUserId": {
-      "get": {
-        "tags": [
-          "Roles"
-        ],
-        "operationId": "Roles_GetRoleByUserId",
-        "parameters": [
-          {
-            "name": "UserId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          },
-          {
-            "name": "ChatId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 2
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Role"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/User/GetAll": {
       "get": {
         "tags": [
@@ -504,7 +504,7 @@
         "operationId": "User_GetUser",
         "parameters": [
           {
-            "name": "UserId",
+            "name": "userId",
             "in": "query",
             "required": true,
             "schema": {
@@ -536,7 +536,7 @@
         "operationId": "User_GetAllChatsByUserId",
         "parameters": [
           {
-            "name": "UserId",
+            "name": "userId",
             "in": "query",
             "required": true,
             "schema": {
@@ -571,7 +571,7 @@
         "operationId": "User_GetAllChatsIdsByUserId",
         "parameters": [
           {
-            "name": "UserId",
+            "name": "userId",
             "in": "query",
             "required": true,
             "schema": {
@@ -592,48 +592,6 @@
                     "type": "string",
                     "format": "guid"
                   }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/User/GetUserRoleByChatId": {
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "operationId": "User_GetUserRoleByChatId",
-        "parameters": [
-          {
-            "name": "UserId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          },
-          {
-            "name": "ChatId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 2
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Role"
                 }
               }
             }
@@ -884,6 +842,12 @@
               "type": "string",
               "format": "guid"
             }
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleDto"
+            }
           }
         }
       },
@@ -908,6 +872,62 @@
             "nullable": true
           }
         }
+      },
+      "RoleDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "canEditMessages": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canDeleteMessages": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canWriteMessages": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canReadMessages": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canAddUsers": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canDeleteUsers": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canPinMessages": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canSeeChannelMembers": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canInviteOtherUsers": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canEditChannelDescription": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canDeleteChat": {
+            "$ref": "#/components/schemas/ActionOption"
+          }
+        }
+      },
+      "ActionOption": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Unavailable",
+          "Enabled",
+          "Disabled"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
       },
       "ChatUser": {
         "type": "object",
@@ -1050,20 +1070,6 @@
           }
         }
       },
-      "ActionOption": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "Unavailable",
-          "Enabled",
-          "Disabled"
-        ],
-        "enum": [
-          0,
-          1,
-          2
-        ]
-      },
       "AddChannel": {
         "type": "object",
         "additionalProperties": false,
@@ -1170,48 +1176,6 @@
           "chatId": {
             "type": "string",
             "format": "guid"
-          }
-        }
-      },
-      "RoleDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "canEditMessages": {
-            "$ref": "#/components/schemas/ActionOption"
-          },
-          "canDeleteMessages": {
-            "$ref": "#/components/schemas/ActionOption"
-          },
-          "canWriteMessages": {
-            "$ref": "#/components/schemas/ActionOption"
-          },
-          "canReadMessages": {
-            "$ref": "#/components/schemas/ActionOption"
-          },
-          "canAddUsers": {
-            "$ref": "#/components/schemas/ActionOption"
-          },
-          "canDeleteUsers": {
-            "$ref": "#/components/schemas/ActionOption"
-          },
-          "canPinMessages": {
-            "$ref": "#/components/schemas/ActionOption"
-          },
-          "canSeeChannelMembers": {
-            "$ref": "#/components/schemas/ActionOption"
-          },
-          "canInviteOtherUsers": {
-            "$ref": "#/components/schemas/ActionOption"
-          },
-          "canEditChannelDescription": {
-            "$ref": "#/components/schemas/ActionOption"
-          },
-          "canDeleteChat": {
-            "$ref": "#/components/schemas/ActionOption"
           }
         }
       },

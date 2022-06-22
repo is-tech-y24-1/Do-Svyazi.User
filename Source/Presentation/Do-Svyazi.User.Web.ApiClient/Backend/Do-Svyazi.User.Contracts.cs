@@ -122,6 +122,13 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     public partial interface IRolesClient
     {
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<RoleDto> GetRoleByUserIdAsync(System.Guid userId, System.Guid chatId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<RoleDto> GetRoleByUserIdAsync(System.Guid userId, System.Guid chatId, System.Threading.CancellationToken cancellationToken);
+
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task CreateRoleForChatAsync(CreateRoleForChat createRoleForChat);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -134,13 +141,6 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task ChangeRoleForUserByIdAsync(ChangeRoleForUserById changeRoleForUserById, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Role> GetRoleByUserIdAsync(System.Guid userId, System.Guid chatId);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Role> GetRoleByUserIdAsync(System.Guid userId, System.Guid chatId, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -174,13 +174,6 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<System.Guid>> GetAllChatsIdsByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Role> GetUserRoleByChatIdAsync(System.Guid userId, System.Guid chatId);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Role> GetUserRoleByChatIdAsync(System.Guid userId, System.Guid chatId, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
         System.Threading.Tasks.Task SetNickNameByIdAsync(SetUserNickNameById setUserNickNameById);
@@ -357,6 +350,9 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
         [Newtonsoft.Json.JsonProperty("users", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.ObjectModel.ObservableCollection<System.Guid> Users { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("roles", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.ObjectModel.ObservableCollection<RoleDto> Roles { get; set; }
+
         public string ToJson()
         {
 
@@ -399,6 +395,72 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.DeserializeObject<MessengerUserDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class RoleDto
+    {
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Name { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("canEditMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ActionOption CanEditMessages { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("canDeleteMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ActionOption CanDeleteMessages { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("canWriteMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ActionOption CanWriteMessages { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("canReadMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ActionOption CanReadMessages { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("canAddUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ActionOption CanAddUsers { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("canDeleteUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ActionOption CanDeleteUsers { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("canPinMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ActionOption CanPinMessages { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("canSeeChannelMembers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ActionOption CanSeeChannelMembers { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("canInviteOtherUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ActionOption CanInviteOtherUsers { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("canEditChannelDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ActionOption CanEditChannelDescription { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("canDeleteChat", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ActionOption CanDeleteChat { get; set; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static RoleDto FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<RoleDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum ActionOption
+    {
+
+        Unavailable = 0,
+
+        Enabled = 1,
+
+        Disabled = 2,
 
     }
 
@@ -570,18 +632,6 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Role>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum ActionOption
-    {
-
-        Unavailable = 0,
-
-        Enabled = 1,
-
-        Disabled = 2,
 
     }
 
@@ -763,60 +813,6 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
         {
 
             return Newtonsoft.Json.JsonConvert.DeserializeObject<CreateRoleForChat>(data, new Newtonsoft.Json.JsonSerializerSettings());
-
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class RoleDto
-    {
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canEditMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanEditMessages { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canDeleteMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanDeleteMessages { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canWriteMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanWriteMessages { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canReadMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanReadMessages { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canAddUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanAddUsers { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canDeleteUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanDeleteUsers { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canPinMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanPinMessages { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canSeeChannelMembers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanSeeChannelMembers { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canInviteOtherUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanInviteOtherUsers { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canEditChannelDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanEditChannelDescription { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canDeleteChat", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanDeleteChat { get; set; }
-
-        public string ToJson()
-        {
-
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
-
-        }
-        public static RoleDto FromJson(string data)
-        {
-
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<RoleDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
