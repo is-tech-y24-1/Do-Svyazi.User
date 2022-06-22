@@ -53,6 +53,7 @@ public class PersonalChat : Chat
         BaseUserRole = _baseUserRole;
 
         Creator = firstMessengerUser;
+        CreatorId = firstMessengerUser.Id;
         ChatUser secondUser = CreateChatUser(secondMessengerUser, _baseAdminRole);
 
         Users.AddRange(new[] { secondUser });
