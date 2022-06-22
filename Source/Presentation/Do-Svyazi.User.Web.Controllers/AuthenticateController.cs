@@ -15,9 +15,9 @@ namespace Do_Svyazi.User.Web.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<ActionResult> Login([FromBody] Login model)
+        public async Task<ActionResult> Login([FromBody] Login model, CancellationToken cancellationToken)
         {
-            JwtSecurityToken token = await _mediator.Send(model);
+            JwtSecurityToken token = await _mediator.Send(model, cancellationToken);
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -27,17 +27,17 @@ namespace Do_Svyazi.User.Web.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult> Register([FromBody] Register model)
+        public async Task<ActionResult> Register([FromBody] Register model, CancellationToken cancellationToken)
         {
-            await _mediator.Send(model);
+            await _mediator.Send(model, cancellationToken);
             return Ok();
         }
 
         [HttpPost]
         [Route("register-admin")]
-        public async Task<ActionResult> RegisterAdmin([FromBody] RegisterAdmin model)
+        public async Task<ActionResult> RegisterAdmin([FromBody] RegisterAdmin model, CancellationToken cancellationToken)
         {
-            await _mediator.Send(model);
+            await _mediator.Send(model, cancellationToken);
             return Ok();
         }
     }

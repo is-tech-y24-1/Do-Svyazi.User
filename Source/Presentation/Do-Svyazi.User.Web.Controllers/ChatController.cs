@@ -80,7 +80,8 @@ public class ChatController : ControllerBase
 
     [HttpPost(nameof(AddSavedMessages))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> AddSavedMessages(AddSavedMessages addSavedMessagesCommand, CancellationToken cancellationToken)
+    public async Task<ActionResult> AddSavedMessages(
+        AddSavedMessages addSavedMessagesCommand, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(addSavedMessagesCommand, cancellationToken);
         return Ok(response);

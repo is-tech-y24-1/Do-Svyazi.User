@@ -15,27 +15,30 @@ public class RolesController : ControllerBase
 
     public RolesController(IMediator mediator) => _mediator = mediator;
 
+    [HttpGet(nameof(GetRoleByUserId))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Role>> GetRoleByUserId(
+        [FromQuery] GetRoleByUserId getRoleByUserId, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(getRoleByUserId, cancellationToken);
+        return Ok(response);
+    }
+
     [HttpPost(nameof(CreateRoleForChat))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> CreateRoleForChat(CreateRoleForChat createRoleForChat)
+    public async Task<ActionResult> CreateRoleForChat(
+        CreateRoleForChat createRoleForChat, CancellationToken cancellationToken)
     {
-        await _mediator.Send(createRoleForChat);
+        await _mediator.Send(createRoleForChat, cancellationToken);
         return Ok();
     }
 
     [HttpPost(nameof(ChangeRoleForUserById))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> ChangeRoleForUserById(ChangeRoleForUserById changeRoleForUserById)
+    public async Task<ActionResult> ChangeRoleForUserById(
+        ChangeRoleForUserById changeRoleForUserById, CancellationToken cancellationToken)
     {
-        await _mediator.Send(changeRoleForUserById);
+        await _mediator.Send(changeRoleForUserById, cancellationToken);
         return Ok();
-    }
-
-    [HttpGet(nameof(GetRoleByUserId))]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<Role>> GetRoleByUserId([FromQuery] GetRoleByUserId getRoleByUserId)
-    {
-        var response = await _mediator.Send(getRoleByUserId);
-        return Ok(response);
     }
 }
