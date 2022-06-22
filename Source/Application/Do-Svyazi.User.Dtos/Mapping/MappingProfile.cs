@@ -15,7 +15,7 @@ public class MappingProfile : Profile
                 chatDto => chatDto.Users,
                 conf => conf
                     .MapFrom(chat => chat.Users
-                    .Select(user => user.Id)));
+                    .Select(user => user.MessengerUserId)));
 
         CreateMap<MessengerUser, MessengerUserDto>();
     }
