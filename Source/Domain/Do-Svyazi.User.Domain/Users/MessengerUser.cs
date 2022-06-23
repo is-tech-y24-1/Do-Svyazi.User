@@ -25,7 +25,7 @@ public class MessengerUser
     public string NickName { get; private set; }
     public string Description { get; private set; }
 
-    public IReadOnlyCollection<Chat> Chats { get; } = new List<Chat>();
+    public List<Chat> Chats { get; } = new ();
 
     public virtual void ChangeNickName(string nickName)
     {
@@ -49,6 +49,24 @@ public class MessengerUser
             throw new ArgumentNullException(nameof(description), "User description to change is null");
 
         Description = description;
+    }
+
+    public MessengerUser AddChat(Chat chat)
+    {
+        if (chat is null)
+            throw new ArgumentNullException(nameof(chat), $"Chat to add in user {Name} is null");
+
+        Chats.Add(chat);
+
+        return this;
+    }
+
+    public void RemoveChat(Chat chat)
+    {
+        if (chat is null)
+            throw new ArgumentNullException(nameof(chat), $"Chat to remove in user {Name} is null");
+
+        Chats.Remove(chat);
     }
 
     public override bool Equals(object? obj) => Equals(obj as MessengerUser);
