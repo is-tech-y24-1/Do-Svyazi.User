@@ -19,43 +19,31 @@ public class RolesCommandHandler :
 
     public async Task<Unit> Handle(ChangeRoleForUserById request, CancellationToken cancellationToken)
     {
-        ChatUser chatUser =
-            await _context.ChatUsers
-                .Include(chatUser => chatUser.Role)
-                .FirstOrDefaultAsync(
-                    user => user.MessengerUserId == request.userId && user.ChatId == request.chatId,
-                    cancellationToken: cancellationToken) ??
-            throw new Do_Svyazi_User_NotFoundException(
-                $"Chat user with userId = {request.userId} and chatId = {request.chatId} to change user role in chat was not found");
-
         Chat chat = await _context.Chats.FindAsync(request.chatId) ??
                     throw new Do_Svyazi_User_NotFoundException(
                         $"Can't find chat with id = {request.chatId} to change user role in chat");
 
-        var newRole = new Role
-        {
-            Chat = chat,
-            Name = request.role.Name,
-            CanAddUsers = request.role.CanAddUsers,
-            CanDeleteChat = request.role.CanDeleteChat,
-            CanDeleteMessages = request.role.CanDeleteMessages,
-            CanDeleteUsers = request.role.CanDeleteUsers,
-            CanEditMessages = request.role.CanEditMessages,
-            CanPinMessages = request.role.CanPinMessages,
-            CanReadMessages = request.role.CanReadMessages,
-            CanWriteMessages = request.role.CanWriteMessages,
-            CanEditChannelDescription = request.role.CanEditChannelDescription,
-            CanInviteOtherUsers = request.role.CanInviteOtherUsers,
-            CanSeeChannelMembers = request.role.CanSeeChannelMembers,
-        };
+        Role role = await _context.Roles
+            .Include(role => role.Chat)
+            .SingleAsync(
+                role =>
+                (role.Name == request.role.Name)
+                && (role.Chat.Id == request.chatId),
+                cancellationToken: cancellationToken);
 
-        chatUser.ChangeRole(newRole);
-
-        // TODO: debug, if old role doesn't have PK equals to chatUser.MessengerUser
-        // maybe it will make sense to remove old role from DB... (not sure)
-        _context.ChatUsers.Update(chatUser);
-        _context.Roles.Remove(chatUser.Role);
-        await _context.Roles.AddAsync(newRole, cancellationToken);
+        role.Name = request.role.Name;
+        role.CanAddUsers = request.role.CanAddUsers;
+        role.CanDeleteChat = request.role.CanDeleteChat;
+        role.CanDeleteMessages = request.role.CanDeleteMessages;
+        role.CanDeleteUsers = request.role.CanDeleteUsers;
+        role.CanEditMessages = request.role.CanEditMessages;
+        role.CanPinMessages = request.role.CanPinMessages;
+        role.CanReadMessages = request.role.CanReadMessages;
+        role.CanWriteMessages = request.role.CanWriteMessages;
+        role.CanEditChannelDescription = request.role.CanEditChannelDescription;
+        role.CanInviteOtherUsers = request.role.CanInviteOtherUsers;
+        role.CanSeeChannelMembers = request.role.CanSeeChannelMembers;
+        _context.Roles.Update(role);
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
