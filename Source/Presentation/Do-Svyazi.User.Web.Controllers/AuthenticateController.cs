@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Do_Svyazi.User.Application.CQRS.Authenticate.Commands;
 using Do_Svyazi.User.Application.CQRS.Authenticate.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Do_Svyazi.User.Web.Controllers;
@@ -14,8 +15,7 @@ public class AuthenticateController : ControllerBase
 
     public AuthenticateController(IMediator mediator) => _mediator = mediator;
 
-    [HttpPost]
-    [Route("login")]
+    [HttpPost("login")]
     public async Task<ActionResult> Login([FromBody] Login model, CancellationToken cancellationToken)
     {
         JwtSecurityToken token = await _mediator.Send(model, cancellationToken);
@@ -26,16 +26,14 @@ public class AuthenticateController : ControllerBase
         });
     }
 
-    [HttpPost]
-    [Route("register")]
+    [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] Register model, CancellationToken cancellationToken)
     {
         await _mediator.Send(model, cancellationToken);
         return Ok();
     }
 
-    [HttpGet]
-    [Route("AuthenticateUserByJwt")]
+    [HttpGet("AuthenticateUserByJwt")]
     public async Task<ActionResult<Guid>> AuthenticateByJwt(
         [FromHeader] string jwtToken, CancellationToken cancellationToken)
     {
@@ -43,8 +41,8 @@ public class AuthenticateController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost]
-    [Route("register-admin")]
+    [HttpPost("register-admin")]
+    [Authorize]
     public async Task<ActionResult> RegisterAdmin([FromBody] RegisterAdmin model, CancellationToken cancellationToken)
     {
         await _mediator.Send(model, cancellationToken);

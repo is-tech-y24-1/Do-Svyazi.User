@@ -4,6 +4,7 @@ using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
 using Do_Svyazi.User.Dtos.Users;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace Do_Svyazi.User.Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class UserController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -71,6 +73,7 @@ public class UserController : ControllerBase
 
     [HttpPost(nameof(AddUser))]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [AllowAnonymous]
     public async Task<ActionResult<Guid>> AddUser(AddUser addUser, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(addUser, cancellationToken);

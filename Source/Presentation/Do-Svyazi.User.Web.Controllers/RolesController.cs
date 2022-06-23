@@ -1,5 +1,6 @@
 using Do_Svyazi.User.Application.CQRS.Roles.Commands;
 using Do_Svyazi.User.Application.CQRS.Roles.Queries;
+using Do_Svyazi.User.Application.Extensions;
 using Do_Svyazi.User.Dtos.Roles;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ namespace Do_Svyazi.User.Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class RolesController : ControllerBase
 {
     private readonly IMediator _mediator;

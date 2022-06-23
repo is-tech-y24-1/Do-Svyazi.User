@@ -3,6 +3,7 @@ using Do_Svyazi.User.Application.CQRS.Chats.Queries;
 using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace Do_Svyazi.User.Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ChatController : ControllerBase
 {
     private readonly IMediator _mediator;
