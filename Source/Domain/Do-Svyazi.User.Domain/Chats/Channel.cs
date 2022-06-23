@@ -92,7 +92,7 @@ public class Channel : Chat
         if (user is null)
             throw new ArgumentNullException(nameof(user), $"User to add in chat {Name} is null");
 
-        ChatUser newUser = CreateChatUser(user, _baseAdminRole);
+        ChatUser newUser = CreateChatUser(user, _baseUserRole);
 
         if (IsUserExist(user))
             throw new Do_Svyazi_User_InnerLogicException($"User {user.Name} to add already exists in chat {Name}");
