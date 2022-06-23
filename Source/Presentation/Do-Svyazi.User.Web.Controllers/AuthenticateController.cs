@@ -1,9 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using Do_Svyazi.User.Application.CQRS.Authenticate.Commands;
 using Do_Svyazi.User.Application.CQRS.Authenticate.Queries;
-using Do_Svyazi.User.Domain.Authenticate;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Do_Svyazi.User.Web.Controllers;

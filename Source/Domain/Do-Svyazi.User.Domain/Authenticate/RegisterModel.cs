@@ -6,6 +6,7 @@ public record RegisterModel
 {
     [Required(ErrorMessage = "Name is required")]
     public string Name { get; init; }
+
     [Required(ErrorMessage = "NickName is required")]
     public string NickName { get; init; }
 
