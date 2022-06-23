@@ -10,8 +10,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Do_Svyazi.User.Application.CQRS.Authenticate.Handlers;
 
-public class AuthenticateQueryHandler
-    : IQueryHandler<Login, JwtSecurityToken>
+public class AuthenticateQueryHandler :
+    IQueryHandler<Login, JwtSecurityToken>,
+    IQueryHandler<AuthenticateByJwt, Guid>
 {
     private readonly UserManager<MessageIdentityUser> _userManager;
     private readonly IConfiguration _configuration;
@@ -43,6 +44,16 @@ public class AuthenticateQueryHandler
         }
 
         return token;
+    }
+
+    public async Task<Guid> Handle(AuthenticateByJwt request, CancellationToken cancellationToken)
+    {
+        var token = new JwtSecurityToken(request.jwtToken);
+        string userNickName = token.Claims.First(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
+        var identityUser = await _userManager.FindByNameAsync(userNickName);
+
+        return identityUser.Id;
     }
 
     private JwtSecurityToken GetToken(List<Claim> authClaims)

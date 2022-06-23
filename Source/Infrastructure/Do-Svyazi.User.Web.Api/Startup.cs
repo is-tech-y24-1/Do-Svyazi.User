@@ -1,10 +1,10 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Do_Svyazi.User.Application.CQRS.Users.Queries;
 using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.DataAccess;
 using Do_Svyazi.User.Domain.Authenticate;
 using Do_Svyazi.User.Dtos.Mapping;
-using Do_Svyazi.User.Web.Controllers;
 using Do_Svyazi.User.Web.Controllers.Tools;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -43,6 +43,8 @@ public class Startup
             options.EnableSensitiveDataLogging();
             options.UseSqlite(Configuration.GetConnectionString("Identity"));
         });
+
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
         services.AddIdentity<MessageIdentityUser, MessageIdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
