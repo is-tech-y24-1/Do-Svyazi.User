@@ -3,8 +3,10 @@ using System.Security.Claims;
 using System.Text;
 using Do_Svyazi.User.Application.CQRS.Authenticate.Queries;
 using Do_Svyazi.User.Application.CQRS.Handlers;
+using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Authenticate;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,17 +18,21 @@ public class AuthenticateQueryHandler :
 {
     private readonly UserManager<MessageIdentityUser> _userManager;
     private readonly IConfiguration _configuration;
+    private readonly IDbContext _context;
 
-    public AuthenticateQueryHandler(UserManager<MessageIdentityUser> userManager, IConfiguration configuration)
+    public AuthenticateQueryHandler(UserManager<MessageIdentityUser> userManager, IConfiguration configuration, IDbContext context)
     {
         _userManager = userManager;
         _configuration = configuration;
+        _context = context;
     }
 
     public async Task<JwtSecurityToken> Handle(Login request, CancellationToken cancellationToken)
     {
         var token = new JwtSecurityToken();
         MessageIdentityUser user = await _userManager.FindByNameAsync(request.model.NickName);
+        var userId = await GetMessengerUserIdByNickName(request.model.NickName, cancellationToken);
+
         if (user != null && await _userManager.CheckPasswordAsync(user, request.model.Password))
         {
             IList<string>? userRoles = await _userManager.GetRolesAsync(user);
@@ -34,7 +40,7 @@ public class AuthenticateQueryHandler :
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, $"{userId}"),
             };
             authClaims
                 .AddRange(userRoles
@@ -69,4 +75,7 @@ public class AuthenticateQueryHandler :
 
         return token;
     }
+
+    private async Task<Guid> GetMessengerUserIdByNickName(string nickName, CancellationToken cancellationToken) =>
+        (await _context.Users.SingleAsync(user => user.NickName == nickName, cancellationToken: cancellationToken)).Id;
 }

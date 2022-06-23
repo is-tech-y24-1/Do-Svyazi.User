@@ -29,19 +29,21 @@ public class AuthenticateCommandHandler :
 
     public async Task<Unit> Handle(Register request, CancellationToken cancellationToken)
     {
-        if (await _userManager.FindByNameAsync(request.model.NickName) is not null)
+        var userModel = request.model;
+
+        if (await _userManager.FindByNameAsync(userModel.NickName) is not null)
             throw new Do_Svyazi_User_BusinessLogicException("User already exists");
 
-        var userId = await GetMessengerUserIdByNickName(request.model.NickName, cancellationToken);
+        var userId = await GetMessengerUserIdByNickName(userModel.NickName, cancellationToken);
 
         MessageIdentityUser user = new ()
         {
-            SecurityStamp = userId.ToString(),
-            UserName = request.model.NickName,
-            Email = request.model.Email,
+            SecurityStamp = $"{userId}",
+            UserName = userModel.NickName,
+            Email = userModel.Email,
         };
 
-        if (!(await _userManager.CreateAsync(user, request.model.Password)).Succeeded)
+        if (!(await _userManager.CreateAsync(user, userModel.Password)).Succeeded)
             throw new Do_Svyazi_User_BusinessLogicException("User creation failed! Please check user details and try again.");
 
         return Unit.Value;
@@ -49,18 +51,20 @@ public class AuthenticateCommandHandler :
 
     public async Task<Unit> Handle(RegisterAdmin request, CancellationToken cancellationToken)
     {
-        if (await _userManager.FindByNameAsync(request.model.NickName) is not null)
+        var userModel = request.model;
+
+        if (await _userManager.FindByNameAsync(userModel.NickName) is not null)
             throw new Do_Svyazi_User_BusinessLogicException("User already exists");
 
-        var userId = await GetMessengerUserIdByNickName(request.model.NickName, cancellationToken);
+        var userId = await GetMessengerUserIdByNickName(userModel.NickName, cancellationToken);
 
         MessageIdentityUser user = new ()
         {
-            SecurityStamp = userId.ToString(),
-            UserName = request.model.NickName,
+            SecurityStamp = $"{userId}",
+            UserName = userModel.NickName,
         };
 
-        if (!(await _userManager.CreateAsync(user, request.model.Password)).Succeeded)
+        if (!(await _userManager.CreateAsync(user, userModel.Password)).Succeeded)
             throw new Do_Svyazi_User_BusinessLogicException("User creation failed! Please check user details and try again.");
 
         if (await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
