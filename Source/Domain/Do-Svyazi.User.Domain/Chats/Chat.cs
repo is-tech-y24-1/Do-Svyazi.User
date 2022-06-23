@@ -23,8 +23,6 @@ public abstract class Chat
     public Guid Id { get; protected init; } = Guid.NewGuid();
     public string Name { get; protected set; }
     public string Description { get; protected set; }
-    public MessengerUser Creator { get; init; }
-    public Guid CreatorId { get; init; }
     public int MaxUsersAmount { get; init; }
     public List<ChatUser> Users { get; init; } = new ();
     public List<Role> Roles { get; init; } = new ();

@@ -25,9 +25,6 @@ public class DoSvaziDbContext : DbContext, IDbContext
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
 
-        modelBuilder.Entity<Chat>()
-            .HasOne(chatUser => chatUser.Creator);
-
         modelBuilder.Entity<ChatUser>()
             .HasOne(chatUser => chatUser.Chat)
             .WithMany(chat => chat.Users)

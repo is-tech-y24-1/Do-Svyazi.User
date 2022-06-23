@@ -28,7 +28,6 @@ public class ChatsQueryHandler :
     public async Task<MessengerChatDto> Handle(GetChatById request, CancellationToken cancellationToken)
     {
         Chat chat = await _context.Chats
-                        .Include(chat => chat.Creator)
                         .Include(chat => chat.Users)
                         .Include(chat => chat.Roles)
                         .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
@@ -40,7 +39,6 @@ public class ChatsQueryHandler :
     public async Task<IReadOnlyCollection<MessengerChatDto>> Handle(GetChats request, CancellationToken cancellationToken)
     {
         List<Chat> chats = await _context.Chats
-            .Include(chat => chat.Creator)
             .Include(chat => chat.Users)
             .Include(chat => chat.Roles)
             .ToListAsync(cancellationToken: cancellationToken);

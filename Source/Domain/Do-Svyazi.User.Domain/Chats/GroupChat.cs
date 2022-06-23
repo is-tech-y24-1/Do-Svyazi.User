@@ -51,8 +51,8 @@ public class GroupChat : Chat
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
 
-        Creator = creator;
-        CreatorId = creator.Id;
+        ChatUser user = CreateChatUser(creator, _baseAdminRole);
+        Users.Add(user);
     }
 
     protected GroupChat()

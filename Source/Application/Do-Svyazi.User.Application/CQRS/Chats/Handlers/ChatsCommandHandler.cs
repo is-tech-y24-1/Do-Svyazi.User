@@ -89,7 +89,6 @@ public class ChatsCommandHandler :
     public async Task<Unit> Handle(AddUserToChat request, CancellationToken cancellationToken)
     {
         Chat chat = await _context.Chats
-                        .Include(chat => chat.Creator)
                         .Include(chat => chat.Users)
                         .ThenInclude(user => user.User)
                         .Include(chat => chat.Users)
@@ -102,11 +101,6 @@ public class ChatsCommandHandler :
                                           .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
                                       throw new Do_Svyazi_User_NotFoundException(
                                           $"User with id = {request.userId} to be added into chat with id = {request.chatId} not found");
-
-        /*
-        if (chat.CreatorId == messengerUser.Id)
-            throw new Do_Svyazi_User_BusinessLogicException($"User {messengerUser.Name} is the creator");
-            */
 
         ChatUser newChatUser = chat.AddUser(messengerUser);
         MessengerUser m = messengerUser.AddChat(chat);
@@ -121,7 +115,6 @@ public class ChatsCommandHandler :
     public async Task<Unit> Handle(DeleteUserFromChat request, CancellationToken cancellationToken)
     {
         Chat chat = await _context.Chats
-                        .Include(chat => chat.Creator)
                         .Include(chat => chat.Users)
                         .ThenInclude(user => user.User)
                         .Include(chat => chat.Users)
@@ -134,16 +127,12 @@ public class ChatsCommandHandler :
                                       throw new Do_Svyazi_User_NotFoundException(
                                           $"User with id {request.userId} not found");
 
-        /*
-        if (chat.CreatorId == messengerUser.Id)
-            throw new Do_Svyazi_User_BusinessLogicException($"User {messengerUser.Name} is the creator");
-            */
-
         chat.RemoveUser(messengerUser);
-        messengerUser.RemoveChat(chat);
+        MessengerUser m = messengerUser.RemoveChat(chat);
 
         // TODO: debug, if chat removes from user's List<Chat> property
         _context.Chats.Update(chat);
+        _context.Users.Update(m);
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

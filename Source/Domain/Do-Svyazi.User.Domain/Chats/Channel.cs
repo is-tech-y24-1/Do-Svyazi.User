@@ -48,8 +48,8 @@ public class Channel : Chat
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
 
-        Creator = creator;
-        CreatorId = Creator.Id;
+        ChatUser user = CreateChatUser(creator, _baseAdminRole);
+        Users.Add(user);
     }
 
     protected Channel()

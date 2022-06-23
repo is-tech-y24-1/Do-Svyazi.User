@@ -61,12 +61,14 @@ public class MessengerUser
         return this;
     }
 
-    public void RemoveChat(Chat chat)
+    public MessengerUser RemoveChat(Chat chat)
     {
         if (chat is null)
             throw new ArgumentNullException(nameof(chat), $"Chat to remove in user {Name} is null");
 
         Chats.Remove(chat);
+
+        return this;
     }
 
     public override bool Equals(object? obj) => Equals(obj as MessengerUser);
