@@ -54,6 +54,7 @@ public class RolesCommandHandler :
         // TODO: debug, if old role doesn't have PK equals to chatUser.MessengerUser
         // maybe it will make sense to remove old role from DB... (not sure)
         _context.ChatUsers.Update(chatUser);
+        _context.Roles.Remove(chatUser.Role);
         await _context.Roles.AddAsync(newRole, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
