@@ -4,6 +4,7 @@ using Do_Svyazi.User.Application.CQRS.Authenticate.Queries;
 using Do_Svyazi.User.Domain.Authenticate;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Do_Svyazi.User.Web.Controllers;
@@ -16,15 +17,17 @@ public class AuthenticateController : ControllerBase
 
     public AuthenticateController(IMediator mediator) => _mediator = mediator;
 
-    [HttpGet(nameof(GetAll))]
     [Authorize]
-    public async Task<IReadOnlyCollection<MessageIdentityUser>> GetAll(CancellationToken cancellationToken)
+    [HttpGet(nameof(GetAll))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyCollection<MessageIdentityUser>>> GetAll(CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetUsersRequest(), cancellationToken);
-        return response;
+        return Ok(response);
     }
 
     [HttpPost(nameof(Login))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> Login([FromBody] LoginRequest model, CancellationToken cancellationToken)
     {
         JwtSecurityToken token = await _mediator.Send(model, cancellationToken);
@@ -36,6 +39,7 @@ public class AuthenticateController : ControllerBase
     }
 
     [HttpPost(nameof(Register))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> Register([FromBody] RegisterCommand model, CancellationToken cancellationToken)
     {
         await _mediator.Send(model, cancellationToken);
@@ -43,6 +47,7 @@ public class AuthenticateController : ControllerBase
     }
 
     [HttpGet(nameof(AuthenticateByJwt))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Guid>> AuthenticateByJwt(
         [FromHeader] string jwtToken, CancellationToken cancellationToken)
     {
@@ -50,8 +55,9 @@ public class AuthenticateController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost(nameof(RegisterAdmin))]
     [Authorize]
+    [HttpPost(nameof(RegisterAdmin))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> RegisterAdmin([FromBody] RegisterAdminCommand model, CancellationToken cancellationToken)
     {
         await _mediator.Send(model, cancellationToken);

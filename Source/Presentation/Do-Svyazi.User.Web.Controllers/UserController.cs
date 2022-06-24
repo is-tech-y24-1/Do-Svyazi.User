@@ -71,9 +71,9 @@ public class UserController : ControllerBase
         return Ok();
     }
 
+    [AllowAnonymous]
     [HttpPost(nameof(AddUser))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [AllowAnonymous]
     public async Task<ActionResult<Guid>> AddUser(AddUserCommand addUserCommand, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(addUserCommand, cancellationToken);
