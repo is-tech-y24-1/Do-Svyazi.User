@@ -53,7 +53,6 @@ public class SavedMessages : Chat
 
         ChatUser user = CreateChatUser(messengerUser, _baseAdminRole);
         Users.Add(user);
-        messengerUser.AddChat(this);
     }
 
     protected SavedMessages()

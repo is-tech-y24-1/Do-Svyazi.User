@@ -50,7 +50,6 @@ public class Channel : Chat
 
         ChatUser user = CreateChatUser(creator, _baseAdminRole);
         Users.Add(user);
-        creator.AddChat(this);
     }
 
     protected Channel()
@@ -99,7 +98,6 @@ public class Channel : Chat
             throw new Do_Svyazi_User_InnerLogicException($"User {user.Name} to add already exists in chat {Name}");
 
         Users.Add(newUser);
-        user.AddChat(this);
 
         return newUser;
     }
@@ -115,7 +113,6 @@ public class Channel : Chat
             throw new Do_Svyazi_User_InnerLogicException($"User {user.Name} to remove doesn't exist in chat {Name}");
 
         Users.Remove(userToRemove);
-        user.RemoveChat(this);
     }
 
     public override void AddRole(Role role)
