@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Queries;
 
-public record GetUsers
+public record GetUsersQuery
     : IRequest<IReadOnlyCollection<MessengerUserDto>>;

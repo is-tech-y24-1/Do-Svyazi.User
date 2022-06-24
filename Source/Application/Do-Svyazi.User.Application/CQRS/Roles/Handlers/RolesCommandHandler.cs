@@ -11,13 +11,13 @@ using Microsoft.EntityFrameworkCore;
 namespace Do_Svyazi.User.Application.CQRS.Roles.Handlers;
 
 public class RolesCommandHandler :
-    ICommandHandler<ChangeRoleForUserById, Unit>,
-    IRequestHandler<CreateRoleForChat, Unit>
+    ICommandHandler<ChangeRoleForUserByIdCommand, Unit>,
+    IRequestHandler<CreateRoleForChatCommand, Unit>
 {
     private readonly IDbContext _context;
     public RolesCommandHandler(IDbContext context) => _context = context;
 
-    public async Task<Unit> Handle(ChangeRoleForUserById request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(ChangeRoleForUserByIdCommand request, CancellationToken cancellationToken)
     {
         ChatUser chatUser =
             await _context.ChatUsers
@@ -60,7 +60,7 @@ public class RolesCommandHandler :
         return Unit.Value;
     }
 
-    public async Task<Unit> Handle(CreateRoleForChat request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(CreateRoleForChatCommand request, CancellationToken cancellationToken)
     {
         Chat chat = await _context.Chats.FindAsync(request.chatId)
                     ?? throw new Do_Svyazi_User_NotFoundException(

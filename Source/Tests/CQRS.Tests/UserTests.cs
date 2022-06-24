@@ -23,7 +23,7 @@ public class UserTests
 
         var usersCommandHandler = new UsersCommandHandler(dbContextMock.Object);
 
-        var addUserCommand = new AddUser(user.Name, user.NickName, user.Description);
+        var addUserCommand = new AddUserCommand(user.Name, user.NickName, user.Description);
         await usersCommandHandler.Handle(addUserCommand, CancellationToken.None);
 
         MessengerUser gainMessengerUser = dbContextMock.Object.Users.Single();
@@ -43,7 +43,7 @@ public class UserTests
 
         var usersCommandHandler = new UsersCommandHandler(dbContextMock.Object);
 
-        var changeUserNameCommand = new ChangeUserNameById(user.Id, newName);
+        var changeUserNameCommand = new ChangeUserNameByIdCommand(user.Id, newName);
         await usersCommandHandler.Handle(changeUserNameCommand, CancellationToken.None);
 
         MessengerUser gainMessengerUser = dbContextMock.Object.Users.Single();

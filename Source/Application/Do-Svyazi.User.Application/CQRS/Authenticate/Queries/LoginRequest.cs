@@ -4,5 +4,5 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Authenticate.Queries;
 
-public record Login(LoginModel model)
+public record LoginRequest(LoginModel model)
     : IRequest<JwtSecurityToken>;

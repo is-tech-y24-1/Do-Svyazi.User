@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Roles.Queries;
 
-public record GetRoleByUserId(Guid userId, Guid chatId)
+public record GetRoleByUserIdQuery(Guid userId, Guid chatId)
     : IRequest<RoleDto>;

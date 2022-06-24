@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Roles.Commands;
 
-public record CreateRoleForChat(RoleDto role, Guid chatId)
+public record CreateRoleForChatCommand(RoleDto role, Guid chatId)
     : IRequest;

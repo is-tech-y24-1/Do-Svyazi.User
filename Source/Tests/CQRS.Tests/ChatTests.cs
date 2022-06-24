@@ -29,7 +29,7 @@ public class ChatTests
         dbContextMock.CreateDbSetMock(x => x.ChatUsers);
 
         var addUserToChatHandler = new ChatsCommandHandler(dbContextMock.Object);
-        var addUserToChatCommand = new AddUserToChat(user.Id, chat.Id);
+        var addUserToChatCommand = new AddUserToChatCommand(user.Id, chat.Id);
 
         chat.Users.Should().HaveCount(0);
 
@@ -60,12 +60,12 @@ public class ChatTests
 
         var chatsCommandHandler = new ChatsCommandHandler(dbContextMock.Object);
 
-        var addUserToChatCommand = new AddUserToChat(user.Id, chat.Id);
+        var addUserToChatCommand = new AddUserToChatCommand(user.Id, chat.Id);
         await chatsCommandHandler.Handle(addUserToChatCommand, CancellationToken.None);
 
         chat.Users.Should().HaveCount(1);
 
-        var deleteUserToChatCommand = new DeleteUserFromChat(user.Id, chat.Id);
+        var deleteUserToChatCommand = new DeleteUserFromChatCommand(user.Id, chat.Id);
         await chatsCommandHandler.Handle(deleteUserToChatCommand, CancellationToken.None);
 
         chat.Users.Should().HaveCount(0);

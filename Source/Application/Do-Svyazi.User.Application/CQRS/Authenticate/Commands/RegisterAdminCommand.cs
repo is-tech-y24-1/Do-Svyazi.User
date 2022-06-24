@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Authenticate.Commands;
 
-public record Register(RegisterModel model)
+public record RegisterAdminCommand(RegisterModel model)
     : IRequest;

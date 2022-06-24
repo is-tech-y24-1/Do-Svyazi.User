@@ -10,18 +10,18 @@ using Microsoft.EntityFrameworkCore;
 namespace Do_Svyazi.User.Application.CQRS.Chats.Handlers;
 
 public class ChatsCommandHandler :
-    ICommandHandler<AddChannel, Guid>,
-    ICommandHandler<AddGroupChat, Guid>,
-    ICommandHandler<AddPersonalChat, Guid>,
-    ICommandHandler<AddSavedMessages, Guid>,
-    ICommandHandler<AddUserToChat, Unit>,
-    ICommandHandler<DeleteUserFromChat, Unit>
+    ICommandHandler<AddChannelCommand, Guid>,
+    ICommandHandler<AddGroupChatCommand, Guid>,
+    ICommandHandler<AddPersonalChatCommand, Guid>,
+    ICommandHandler<AddSavedMessagesCommand, Guid>,
+    ICommandHandler<AddUserToChatCommand, Unit>,
+    ICommandHandler<DeleteUserFromChatCommand, Unit>
 {
     private readonly IDbContext _context;
 
     public ChatsCommandHandler(IDbContext context) => _context = context;
 
-    public async Task<Guid> Handle(AddChannel request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(AddChannelCommand request, CancellationToken cancellationToken)
     {
         MessengerUser user = await _context.Users
                                  .SingleOrDefaultAsync(user => user.Id == request.adminId, cancellationToken) ??
@@ -36,7 +36,7 @@ public class ChatsCommandHandler :
         return chat.Id;
     }
 
-    public async Task<Guid> Handle(AddGroupChat request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(AddGroupChatCommand request, CancellationToken cancellationToken)
     {
         MessengerUser user = await _context.Users
                                  .SingleOrDefaultAsync(user => user.Id == request.adminId, cancellationToken) ??
@@ -51,7 +51,7 @@ public class ChatsCommandHandler :
         return chat.Id;
     }
 
-    public async Task<Guid> Handle(AddPersonalChat request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(AddPersonalChatCommand request, CancellationToken cancellationToken)
     {
         MessengerUser firstUser =
             await _context.Users.SingleOrDefaultAsync(user => user.Id == request.firstUserId, cancellationToken) ??
@@ -71,7 +71,7 @@ public class ChatsCommandHandler :
         return chat.Id;
     }
 
-    public async Task<Guid> Handle(AddSavedMessages request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(AddSavedMessagesCommand request, CancellationToken cancellationToken)
     {
         MessengerUser user =
             await _context.Users.SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
@@ -86,7 +86,7 @@ public class ChatsCommandHandler :
         return chat.Id;
     }
 
-    public async Task<Unit> Handle(AddUserToChat request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(AddUserToChatCommand request, CancellationToken cancellationToken)
     {
         Chat chat = await _context.Chats
                         .Include(chat => chat.Users)
@@ -112,7 +112,7 @@ public class ChatsCommandHandler :
         return Unit.Value;
     }
 
-    public async Task<Unit> Handle(DeleteUserFromChat request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteUserFromChatCommand request, CancellationToken cancellationToken)
     {
         Chat chat = await _context.Chats
                         .Include(chat => chat.Users)

@@ -2,5 +2,5 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Queries;
 
-public record GetAllChatsIdsByUserId(Guid userId)
+public record GetAllChatsIdsByUserIdQuery(Guid userId)
     : IRequest<IReadOnlyList<Guid>>;

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Do_Svyazi.User.Application.CQRS.Roles.Handlers;
 
 public class RolesQueryHandler
-    : IQueryHandler<GetRoleByUserId, RoleDto>
+    : IQueryHandler<GetRoleByUserIdQuery, RoleDto>
 {
     private readonly IDbContext _context;
     private readonly IMapper _mapper;
@@ -21,7 +21,7 @@ public class RolesQueryHandler
         _mapper = mapper;
     }
 
-    public async Task<RoleDto> Handle(GetRoleByUserId request, CancellationToken cancellationToken)
+    public async Task<RoleDto> Handle(GetRoleByUserIdQuery request, CancellationToken cancellationToken)
     {
         ChatUser chatUser =
             await _context.ChatUsers

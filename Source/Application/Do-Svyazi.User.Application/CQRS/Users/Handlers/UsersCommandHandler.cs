@@ -8,16 +8,16 @@ using MediatR;
 namespace Do_Svyazi.User.Application.CQRS.Users.Handlers;
 
 public class UsersCommandHandler :
-    IQueryHandler<AddUser, Guid>,
-    IQueryHandler<ChangeUserDescriptionById, Unit>,
-    IQueryHandler<ChangeUserNameById, Unit>,
-    IQueryHandler<SetUserNickNameById, Unit>,
-    IQueryHandler<DeleteUser, Unit>
+    IQueryHandler<AddUserCommand, Guid>,
+    IQueryHandler<ChangeUserDescriptionByIdCommand, Unit>,
+    IQueryHandler<ChangeUserNameByIdCommand, Unit>,
+    IQueryHandler<SetUserNickNameByIdCommand, Unit>,
+    IQueryHandler<DeleteUserCommand, Unit>
 {
     private readonly IDbContext _context;
     public UsersCommandHandler(IDbContext context) => _context = context;
 
-    public async Task<Guid> Handle(AddUser request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
         if (NickNameExists(request.nickName))
         {
@@ -33,7 +33,7 @@ public class UsersCommandHandler :
         return messengerUser.Id;
     }
 
-    public async Task<Unit> Handle(ChangeUserDescriptionById request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(ChangeUserDescriptionByIdCommand request, CancellationToken cancellationToken)
     {
         MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
                                       throw new Do_Svyazi_User_NotFoundException(
@@ -47,7 +47,7 @@ public class UsersCommandHandler :
         return Unit.Value;
     }
 
-    public async Task<Unit> Handle(ChangeUserNameById request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(ChangeUserNameByIdCommand request, CancellationToken cancellationToken)
     {
         MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
                                       throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} to change name was not found");
@@ -60,7 +60,7 @@ public class UsersCommandHandler :
         return Unit.Value;
     }
 
-    public async Task<Unit> Handle(SetUserNickNameById request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(SetUserNickNameByIdCommand request, CancellationToken cancellationToken)
     {
         MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
                                       throw new Do_Svyazi_User_NotFoundException(
@@ -77,7 +77,7 @@ public class UsersCommandHandler :
         return Unit.Value;
     }
 
-    public async Task<Unit> Handle(DeleteUser request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
                                       throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId} to delete");

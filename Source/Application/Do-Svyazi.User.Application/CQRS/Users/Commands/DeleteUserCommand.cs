@@ -2,5 +2,5 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
 
-public record ChangeUserDescriptionById(Guid userId, string description)
+public record DeleteUserCommand(Guid userId)
     : IRequest;

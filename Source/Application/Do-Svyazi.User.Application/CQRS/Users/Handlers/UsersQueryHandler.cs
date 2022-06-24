@@ -11,10 +11,10 @@ using Microsoft.EntityFrameworkCore;
 namespace Do_Svyazi.User.Application.CQRS.Users.Handlers;
 
 public class UsersQueryHandler :
-    IQueryHandler<GetAllChatsByUserId, IReadOnlyList<MessengerChatDto>>,
-    IQueryHandler<GetAllChatsIdsByUserId, IReadOnlyList<Guid>>,
-    IQueryHandler<GetUser, MessengerUser>,
-    IQueryHandler<GetUsers, IReadOnlyCollection<MessengerUserDto>>
+    IQueryHandler<GetAllChatsByUserIdQuery, IReadOnlyList<MessengerChatDto>>,
+    IQueryHandler<GetAllChatsIdsByUserIdQuery, IReadOnlyList<Guid>>,
+    IQueryHandler<GetUserQuery, MessengerUser>,
+    IQueryHandler<GetUsersQuery, IReadOnlyCollection<MessengerUserDto>>
 {
     private readonly IDbContext _context;
     private readonly IMapper _mapper;
@@ -25,7 +25,7 @@ public class UsersQueryHandler :
         _mapper = mapper;
     }
 
-    public async Task<IReadOnlyList<MessengerChatDto>> Handle(GetAllChatsByUserId request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<MessengerChatDto>> Handle(GetAllChatsByUserIdQuery request, CancellationToken cancellationToken)
     {
         MessengerUser messengerUser = await _context.Users
                                           .Include(user => user.Chats)
@@ -37,7 +37,7 @@ public class UsersQueryHandler :
         return chats;
     }
 
-    public async Task<IReadOnlyList<Guid>> Handle(GetAllChatsIdsByUserId request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<Guid>> Handle(GetAllChatsIdsByUserIdQuery request, CancellationToken cancellationToken)
     {
         MessengerUser messengerUser = await _context.Users
                                           .Include(user => user.Chats)
@@ -49,7 +49,7 @@ public class UsersQueryHandler :
         return chatIds;
     }
 
-    public async Task<MessengerUser> Handle(GetUser request, CancellationToken cancellationToken)
+    public async Task<MessengerUser> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
         MessengerUser user = await _context.Users
                                  .Include(user => user.Chats)
@@ -59,7 +59,7 @@ public class UsersQueryHandler :
         return user;
     }
 
-    public async Task<IReadOnlyCollection<MessengerUserDto>> Handle(GetUsers request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<MessengerUserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
         List<MessengerUser> users = await _context.Users
             .ToListAsync(cancellationToken: cancellationToken);
