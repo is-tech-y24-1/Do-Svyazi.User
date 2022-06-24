@@ -42,7 +42,7 @@ public class Startup
             app.UseDeveloperExceptionPage();
 
         app.UseSwagger(settings => { settings.RouteTemplate = "/swagger/{documentName}/swagger.json"; });
-        app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Do Svyazi API"));
+        app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v2.1.0/swagger.json", "Do-Svyazi User API"));
 
         app.UseHttpsRedirection();
 

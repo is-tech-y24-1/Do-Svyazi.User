@@ -82,11 +82,11 @@ public static class ServiceCollectionExtensions
         {
             opt.UseInlineDefinitionsForEnums();
 
-            opt.SwaggerDoc("v1", new OpenApiInfo
+            opt.SwaggerDoc("v2.1.0", new OpenApiInfo
             {
-                Title = "Do Svyazi",
-                Version = "v1",
-                Description = "Do Svyazi API",
+                Title = "Do-Svyazi User module",
+                Version = "v2.1.0",
+                Description = "Do Svyazi User API",
             });
 
             opt.AddSecurityDefinition("Bearer (value: SecretKey)", new OpenApiSecurityScheme
