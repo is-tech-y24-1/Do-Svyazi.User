@@ -1,6 +1,7 @@
 using Do_Svyazi.User.Application.CQRS.Roles.Commands;
 using Do_Svyazi.User.Application.CQRS.Roles.Queries;
 using Do_Svyazi.User.Dtos.Roles;
+using Do_Svyazi.User.Web.Controllers.Tools;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +11,7 @@ namespace Do_Svyazi.User.Web.Controllers;
 
 [Authorize]
 [ApiController]
+[ExceptionFilter]
 [Route("api/[controller]")]
 [ProducesResponseType(StatusCodes.Status200OK)]
 [ProducesResponseType(StatusCodes.Status401Unauthorized)]
