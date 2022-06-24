@@ -1,6 +1,7 @@
 using Do_Svyazi.User.Application.CQRS.Users.Queries;
 using Do_Svyazi.User.Dtos.Mapping;
 using Do_Svyazi.User.Web.Api.Extensions;
+using Do_Svyazi.User.Web.Controllers.Middlewares;
 using Do_Svyazi.User.Web.Controllers.Tools;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -31,7 +32,7 @@ public class Startup
             .AddSwaggerServices()
             .AddEndpointsApiExplorer();
 
-        services.AddMediatR(typeof(GetUsers).Assembly);
+        services.AddMediatR(typeof(GetUsersQuery).Assembly);
         services.AddAutoMapper(typeof(MappingProfile).Assembly);
     }
 
@@ -49,6 +50,10 @@ public class Startup
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseMiddleware<AuthorizationMiddleware>();
+        app.UseMiddleware<ErrorHandlingMiddleware>();
+
         app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
 }
