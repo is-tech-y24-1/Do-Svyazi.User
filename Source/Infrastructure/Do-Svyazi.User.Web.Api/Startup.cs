@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Do_Svyazi.User.Web.Api;
@@ -83,8 +84,10 @@ public class Startup
         services.AddAutoMapper(typeof(MappingProfile).Assembly);
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
+        loggerFactory.AddLog4Net("../../../log4net.config");
+
         if (env.IsDevelopment())
             app.UseDeveloperExceptionPage();
 
