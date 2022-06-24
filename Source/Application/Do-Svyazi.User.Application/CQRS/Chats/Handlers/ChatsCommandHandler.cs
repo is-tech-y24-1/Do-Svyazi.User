@@ -29,8 +29,10 @@ public class ChatsCommandHandler :
                                  $"User with id = {request.adminId} to create a channel was not found");
 
         Chat chat = new Channel(user, request.name, request.description);
+        user.AddChat(chat);
 
         await _context.Chats.AddAsync(chat, cancellationToken);
+        _context.Users.Update(user);
         await _context.SaveChangesAsync(cancellationToken);
 
         return chat.Id;
@@ -44,8 +46,10 @@ public class ChatsCommandHandler :
                                  $"User with id = {request.adminId} to create a group chat was not found");
 
         GroupChat chat = new GroupChat(user, request.name, request.description);
+        user.AddChat(chat);
 
         await _context.Chats.AddAsync(chat, cancellationToken);
+        _context.Users.Update(user);
         await _context.SaveChangesAsync(cancellationToken);
 
         return chat.Id;
@@ -64,7 +68,11 @@ public class ChatsCommandHandler :
                 $"User with id = {request.secondUserId} to create a personal chat was not found");
 
         Chat chat = new PersonalChat(firstUser, secondUser, request.name, request.description);
+        firstUser.AddChat(chat);
+        secondUser.AddChat(chat);
 
+        _context.Users.Update(firstUser);
+        _context.Users.Update(secondUser);
         await _context.Chats.AddAsync(chat, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -79,7 +87,9 @@ public class ChatsCommandHandler :
                 $"User with id = {request.userId} to create saved messages chat not found");
 
         Chat chat = new SavedMessages(user, request.name, request.description);
+        user.AddChat(chat);
 
+        _context.Users.Update(user);
         await _context.Chats.AddAsync(chat, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -103,8 +113,10 @@ public class ChatsCommandHandler :
                                           $"User with id = {request.userId} to be added into chat with id = {request.chatId} not found");
 
         ChatUser newChatUser = chat.AddUser(messengerUser);
+        messengerUser.AddChat(chat);
 
         await _context.ChatUsers.AddAsync(newChatUser, cancellationToken);
+        _context.Users.Update(messengerUser);
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
@@ -126,9 +138,11 @@ public class ChatsCommandHandler :
                                           $"User with id {request.userId} not found");
 
         chat.RemoveUser(messengerUser);
+        messengerUser.RemoveChat(chat);
 
         // TODO: debug, if chat removes from user's List<Chat> property
         _context.Chats.Update(chat);
+        _context.Users.Update(messengerUser);
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
