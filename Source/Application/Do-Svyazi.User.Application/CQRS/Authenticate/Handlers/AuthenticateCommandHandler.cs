@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Do_Svyazi.User.Application.CQRS.Authenticate.Handlers;
 
 public class AuthenticateCommandHandler :
-    ICommandHandler<Register, Unit>,
-    ICommandHandler<RegisterAdmin, Unit>
+    ICommandHandler<RegisterCommand, Unit>,
+    ICommandHandler<RegisterAdminCommand, Unit>
 {
     private readonly UserManager<MessageIdentityUser> _userManager;
     private readonly RoleManager<MessageIdentityRole> _roleManager;
@@ -27,44 +27,35 @@ public class AuthenticateCommandHandler :
         _context = context;
     }
 
-    public async Task<Unit> Handle(Register request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        var userModel = request.model;
+        RegisterModel registerModel = request.model;
 
-        if (await _userManager.FindByNameAsync(userModel.NickName) is not null)
+        if (await _userManager.FindByNameAsync(registerModel.NickName) is not null)
             throw new Do_Svyazi_User_BusinessLogicException("User already exists");
 
-        var userId = await GetMessengerUserIdByNickName(userModel.NickName, cancellationToken);
+        Guid userId = await GetMessengerUserIdByNickName(registerModel.NickName, cancellationToken);
 
-        MessageIdentityUser user = new ()
-        {
-            SecurityStamp = $"{userId}",
-            UserName = userModel.NickName,
-            Email = userModel.Email,
-        };
+        MessageIdentityUser user = CreateIdentityUser(registerModel, userId);
 
-        if (!(await _userManager.CreateAsync(user, userModel.Password)).Succeeded)
+        if (!(await _userManager.CreateAsync(user, registerModel.Password)).Succeeded)
             throw new Do_Svyazi_User_BusinessLogicException("User creation failed! Please check user details and try again.");
 
         return Unit.Value;
     }
 
-    public async Task<Unit> Handle(RegisterAdmin request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(RegisterAdminCommand request, CancellationToken cancellationToken)
     {
-        var userModel = request.model;
+        RegisterModel registerModel = request.model;
 
-        if (await _userManager.FindByNameAsync(userModel.NickName) is not null)
+        if (await _userManager.FindByNameAsync(registerModel.NickName) is not null)
             throw new Do_Svyazi_User_BusinessLogicException("User already exists");
 
-        var userId = await GetMessengerUserIdByNickName(userModel.NickName, cancellationToken);
+        Guid userId = await GetMessengerUserIdByNickName(registerModel.NickName, cancellationToken);
 
-        MessageIdentityUser user = new ()
-        {
-            SecurityStamp = $"{userId}",
-            UserName = userModel.NickName,
-        };
+        MessageIdentityUser user = CreateIdentityUser(registerModel, userId);
 
-        if (!(await _userManager.CreateAsync(user, userModel.Password)).Succeeded)
+        if (!(await _userManager.CreateAsync(user, registerModel.Password)).Succeeded)
             throw new Do_Svyazi_User_BusinessLogicException("User creation failed! Please check user details and try again.");
 
         if (await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
@@ -84,4 +75,12 @@ public class AuthenticateCommandHandler :
 
     private async Task<Guid> GetMessengerUserIdByNickName(string nickName, CancellationToken cancellationToken) =>
         (await _context.Users.SingleAsync(user => user.NickName == nickName, cancellationToken: cancellationToken)).Id;
+
+    private MessageIdentityUser CreateIdentityUser(RegisterModel userModel, Guid userId) => new ()
+    {
+        Id = userId,
+        UserName = userModel.NickName,
+        Email = userModel.Email,
+        PhoneNumber = userModel.PhoneNumber,
+    };
 }

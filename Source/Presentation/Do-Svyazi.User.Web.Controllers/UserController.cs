@@ -23,77 +23,77 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyCollection<MessengerUserDto>>> GetUsers(CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetUsers(), cancellationToken);
+        var response = await _mediator.Send(new GetUsersQuery(), cancellationToken);
         return Ok(response);
     }
 
     [HttpGet(nameof(GetUser))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<MessengerUser>> GetUser(
-        [FromQuery] GetUser getUser, CancellationToken cancellationToken)
+        [FromQuery] GetUserQuery getUserQuery, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(getUser, cancellationToken);
+        var response = await _mediator.Send(getUserQuery, cancellationToken);
         return Ok(response);
     }
 
     [HttpGet(nameof(GetAllChatsByUserId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<MessengerChatDto>>> GetAllChatsByUserId(
-        [FromQuery] GetAllChatsByUserId getAllChatsByUserId, CancellationToken cancellationToken)
+        [FromQuery] GetAllChatsByUserIdQuery getAllChatsByUserIdQuery, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(getAllChatsByUserId, cancellationToken);
+        var response = await _mediator.Send(getAllChatsByUserIdQuery, cancellationToken);
         return Ok(response);
     }
 
     [HttpGet(nameof(GetAllChatsIdsByUserId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<Guid>>> GetAllChatsIdsByUserId(
-        [FromQuery] GetAllChatsIdsByUserId getAllChatsIdsByUserId, CancellationToken cancellationToken)
+        [FromQuery] GetAllChatsIdsByUserIdQuery getAllChatsIdsByUserIdQuery, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(getAllChatsIdsByUserId, cancellationToken);
+        var response = await _mediator.Send(getAllChatsIdsByUserIdQuery, cancellationToken);
         return Ok(response);
     }
 
     [HttpPost(nameof(SetNickNameById))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> SetNickNameById(
-        SetUserNickNameById setUserNickNameById, CancellationToken cancellationToken)
+        SetUserNickNameByIdCommand setUserNickNameByIdCommand, CancellationToken cancellationToken)
     {
-        await _mediator.Send(setUserNickNameById, cancellationToken);
+        await _mediator.Send(setUserNickNameByIdCommand, cancellationToken);
         return Ok();
     }
 
     [HttpPost(nameof(DeleteUser))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> DeleteUser(DeleteUser deleteUser, CancellationToken cancellationToken)
+    public async Task<ActionResult> DeleteUser(DeleteUserCommand deleteUserCommand, CancellationToken cancellationToken)
     {
-        await _mediator.Send(deleteUser, cancellationToken);
+        await _mediator.Send(deleteUserCommand, cancellationToken);
         return Ok();
     }
 
     [HttpPost(nameof(AddUser))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [AllowAnonymous]
-    public async Task<ActionResult<Guid>> AddUser(AddUser addUser, CancellationToken cancellationToken)
+    public async Task<ActionResult<Guid>> AddUser(AddUserCommand addUserCommand, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(addUser, cancellationToken);
+        var response = await _mediator.Send(addUserCommand, cancellationToken);
         return Ok(response);
     }
 
     [HttpPost(nameof(ChangeDescription))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> ChangeDescription(
-        ChangeUserDescriptionById changeUserDescriptionById, CancellationToken cancellationToken)
+        ChangeUserDescriptionByIdCommand changeUserDescriptionByIdCommand, CancellationToken cancellationToken)
     {
-        await _mediator.Send(changeUserDescriptionById, cancellationToken);
+        await _mediator.Send(changeUserDescriptionByIdCommand, cancellationToken);
         return Ok();
     }
 
     [HttpPost(nameof(ChangeName))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> ChangeName(ChangeUserNameById changeUserNameById, CancellationToken cancellationToken)
+    public async Task<ActionResult> ChangeName(ChangeUserNameByIdCommand changeUserNameByIdCommand, CancellationToken cancellationToken)
     {
-        await _mediator.Send(changeUserNameById, cancellationToken);
+        await _mediator.Send(changeUserNameByIdCommand, cancellationToken);
         return Ok();
     }
 }

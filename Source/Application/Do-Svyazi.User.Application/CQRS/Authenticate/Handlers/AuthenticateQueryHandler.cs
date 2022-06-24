@@ -3,8 +3,8 @@ using System.Security.Claims;
 using System.Text;
 using Do_Svyazi.User.Application.CQRS.Authenticate.Queries;
 using Do_Svyazi.User.Application.CQRS.Handlers;
-using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Authenticate;
+using Do_Svyazi.User.Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,54 +13,55 @@ using Microsoft.IdentityModel.Tokens;
 namespace Do_Svyazi.User.Application.CQRS.Authenticate.Handlers;
 
 public class AuthenticateQueryHandler :
-    IQueryHandler<Login, JwtSecurityToken>,
-    IQueryHandler<AuthenticateByJwt, Guid>
+    IQueryHandler<LoginRequest, JwtSecurityToken>,
+    IQueryHandler<AuthenticateByJwtRequest, Guid>,
+    IQueryHandler<GetUsersRequest, IReadOnlyCollection<MessageIdentityUser>>
 {
+    private const string NameType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
+
     private readonly UserManager<MessageIdentityUser> _userManager;
     private readonly IConfiguration _configuration;
-    private readonly IDbContext _context;
 
-    public AuthenticateQueryHandler(UserManager<MessageIdentityUser> userManager, IConfiguration configuration, IDbContext context)
+    public AuthenticateQueryHandler(UserManager<MessageIdentityUser> userManager, IConfiguration configuration)
     {
         _userManager = userManager;
         _configuration = configuration;
-        _context = context;
     }
 
-    public async Task<JwtSecurityToken> Handle(Login request, CancellationToken cancellationToken)
+    public async Task<JwtSecurityToken> Handle(LoginRequest request, CancellationToken cancellationToken)
     {
         var token = new JwtSecurityToken();
-        MessageIdentityUser user = await _userManager.FindByNameAsync(request.model.NickName);
-        var userId = await GetMessengerUserIdByNickName(request.model.NickName, cancellationToken);
+        LoginModel loginModel = request.model;
+        MessageIdentityUser user = await GetUserByUsernameOrEmail(loginModel);
 
-        if (user != null && await _userManager.CheckPasswordAsync(user, request.model.Password))
+        if (!await _userManager.CheckPasswordAsync(user, loginModel.Password)) return token;
+
+        IList<string>? userRoles = await _userManager.GetRolesAsync(user);
+
+        var authClaims = new List<Claim>
         {
-            IList<string>? userRoles = await _userManager.GetRolesAsync(user);
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(JwtRegisteredClaimNames.Jti, $"{user.Id}"),
+        };
 
-            var authClaims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, $"{userId}"),
-            };
-            authClaims
-                .AddRange(userRoles
-                    .Select(userRole => new Claim(ClaimTypes.Role, userRole)));
+        authClaims
+            .AddRange(userRoles
+                .Select(userRole => new Claim(ClaimTypes.Role, userRole)));
 
-            token = GetToken(authClaims);
-        }
-
-        return token;
+        return GetToken(authClaims);
     }
 
-    public async Task<Guid> Handle(AuthenticateByJwt request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(AuthenticateByJwtRequest request, CancellationToken cancellationToken)
     {
         var token = new JwtSecurityToken(request.jwtToken);
-        string userNickName = token.Claims.First(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+        string userNickName = token.Claims.First(x => x.Type == NameType).Value;
 
         var identityUser = await _userManager.FindByNameAsync(userNickName);
-
         return identityUser.Id;
     }
+
+    public async Task<IReadOnlyCollection<MessageIdentityUser>> Handle(GetUsersRequest request, CancellationToken cancellationToken)
+        => await _userManager.Users.ToListAsync(cancellationToken: cancellationToken);
 
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
@@ -76,6 +77,14 @@ public class AuthenticateQueryHandler :
         return token;
     }
 
-    private async Task<Guid> GetMessengerUserIdByNickName(string nickName, CancellationToken cancellationToken) =>
-        (await _context.Users.SingleAsync(user => user.NickName == nickName, cancellationToken: cancellationToken)).Id;
+    private async Task<MessageIdentityUser> GetUserByUsernameOrEmail(LoginModel loginModel)
+    {
+        if (loginModel.NickName is not null)
+            return await _userManager.FindByNameAsync(loginModel.NickName);
+
+        if (loginModel.Email is not null)
+            return await _userManager.FindByEmailAsync(loginModel.Email);
+
+        throw new Do_Svyazi_User_NotFoundException("User to login was not found");
+    }
 }

@@ -1,8 +1,8 @@
 using Do_Svyazi.User.Application.CQRS.Roles.Commands;
 using Do_Svyazi.User.Application.CQRS.Roles.Queries;
-using Do_Svyazi.User.Application.Extensions;
 using Do_Svyazi.User.Dtos.Roles;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,27 +20,27 @@ public class RolesController : ControllerBase
     [HttpGet(nameof(GetRoleByUserId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<RoleDto>> GetRoleByUserId(
-        [FromQuery] GetRoleByUserId getRoleByUserId, CancellationToken cancellationToken)
+        [FromQuery] GetRoleByUserIdQuery getRoleByUserIdQuery, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(getRoleByUserId, cancellationToken);
+        var response = await _mediator.Send(getRoleByUserIdQuery, cancellationToken);
         return Ok(response);
     }
 
     [HttpPost(nameof(CreateRoleForChat))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> CreateRoleForChat(
-        CreateRoleForChat createRoleForChat, CancellationToken cancellationToken)
+        CreateRoleForChatCommand createRoleForChatCommand, CancellationToken cancellationToken)
     {
-        await _mediator.Send(createRoleForChat, cancellationToken);
+        await _mediator.Send(createRoleForChatCommand, cancellationToken);
         return Ok();
     }
 
     [HttpPost(nameof(ChangeRoleForUserById))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> ChangeRoleForUserById(
-        ChangeRoleForUserById changeRoleForUserById, CancellationToken cancellationToken)
+        ChangeRoleForUserByIdCommand changeRoleForUserByIdCommand, CancellationToken cancellationToken)
     {
-        await _mediator.Send(changeRoleForUserById, cancellationToken);
+        await _mediator.Send(changeRoleForUserByIdCommand, cancellationToken);
         return Ok();
     }
 }
