@@ -14,6 +14,10 @@ public class ExceptionFilterAttribute : Attribute, IExceptionFilter
         {
             context.HttpContext.Response.StatusCode = 400;
         }
+        else if (exception.GetType() == typeof(UnauthorizedAccessException))
+        {
+            context.HttpContext.Response.StatusCode = 401;
+        }
         else if (exception.GetType() == typeof(Do_Svyazi_User_NotFoundException))
         {
             context.HttpContext.Response.StatusCode = 404;

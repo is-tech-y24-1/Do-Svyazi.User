@@ -52,14 +52,12 @@ public class AuthorizationMiddleware
             var jwtToken = validatedToken as JwtSecurityToken;
             string? userId = jwtToken?.Claims.First(x => x.Type == "jti").Value;
 
-            // attach user to context on successful jwt validation
             var user = await _userManager.FindByIdAsync(userId);
             context.Items["User"] = user;
         }
         catch
         {
-            context.Response.StatusCode = 401;
-            await context.Response.WriteAsync("Wrong auth credentials");
+            throw new UnauthorizedAccessException();
         }
     }
 }
