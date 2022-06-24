@@ -57,14 +57,14 @@ public class IntegrationTests : IDisposable
         var addUserToChatCommand = new AddUserToChat(userId2, chatGroupId);
         await chatsCommandHandler.Handle(addUserToChatCommand, CancellationToken.None);
 
-        var getUser = new GetUser(userId1);
-        MessengerUser user1 = await usersQueryHandler.Handle(getUser, CancellationToken.None);
+        var getUser = new GetAllChatsIdsByUserId(userId1);
+        var userChats1 = await usersQueryHandler.Handle(getUser, CancellationToken.None);
 
-        getUser = new GetUser(userId2);
-        MessengerUser user2 = await usersQueryHandler.Handle(getUser, CancellationToken.None);
+        getUser = new GetAllChatsIdsByUserId(userId2);
+        var userChats2 = await usersQueryHandler.Handle(getUser, CancellationToken.None);
 
-        user1.Chats.Should().HaveCount(1);
-        user2.Chats.Should().HaveCount(1);
+        userChats1.Should().Contain(chatGroupId).And.HaveCount(1);
+        userChats2.Should().Contain(chatGroupId).And.HaveCount(1);
     }
     
     public static IMapper GenerateMapper()
