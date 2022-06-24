@@ -103,10 +103,8 @@ public class ChatsCommandHandler :
                                           $"User with id = {request.userId} to be added into chat with id = {request.chatId} not found");
 
         ChatUser newChatUser = chat.AddUser(messengerUser);
-        MessengerUser m = messengerUser.AddChat(chat);
 
         await _context.ChatUsers.AddAsync(newChatUser, cancellationToken);
-        _context.Users.Update(m);
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
@@ -128,11 +126,9 @@ public class ChatsCommandHandler :
                                           $"User with id {request.userId} not found");
 
         chat.RemoveUser(messengerUser);
-        MessengerUser m = messengerUser.RemoveChat(chat);
 
         // TODO: debug, if chat removes from user's List<Chat> property
         _context.Chats.Update(chat);
-        _context.Users.Update(m);
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

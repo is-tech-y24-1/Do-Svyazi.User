@@ -5,6 +5,7 @@ namespace Do_Svyazi.User.Domain.Users;
 public class MessengerUser
 {
     private const string DefaultDescription = "No description";
+    private List<Chat> _chats = new ();
 
     public MessengerUser(string name, string nickName, string? description = null)
     {
@@ -24,8 +25,7 @@ public class MessengerUser
     public string Name { get; private set; }
     public string NickName { get; private set; }
     public string Description { get; private set; }
-
-    public List<Chat> Chats { get; } = new ();
+    public IReadOnlyList<Chat> Chats => _chats;
 
     public virtual void ChangeNickName(string nickName)
     {
@@ -51,24 +51,20 @@ public class MessengerUser
         Description = description;
     }
 
-    public MessengerUser AddChat(Chat chat)
+    public void AddChat(Chat chat)
     {
         if (chat is null)
             throw new ArgumentNullException(nameof(chat), $"Chat to add in user {Name} is null");
 
-        Chats.Add(chat);
-
-        return this;
+        _chats.Add(chat);
     }
 
-    public MessengerUser RemoveChat(Chat chat)
+    public void RemoveChat(Chat chat)
     {
         if (chat is null)
             throw new ArgumentNullException(nameof(chat), $"Chat to remove in user {Name} is null");
 
-        Chats.Remove(chat);
-
-        return this;
+        _chats.Remove(chat);
     }
 
     public override bool Equals(object? obj) => Equals(obj as MessengerUser);
