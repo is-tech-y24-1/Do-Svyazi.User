@@ -1,4 +1,4 @@
-name: .NET
+name: SonarCloud
 
 on:
   pull_request:
