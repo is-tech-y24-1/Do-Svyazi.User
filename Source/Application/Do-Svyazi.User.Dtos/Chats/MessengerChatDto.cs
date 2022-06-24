@@ -1,5 +1,4 @@
 using Do_Svyazi.User.Dtos.Roles;
-using Do_Svyazi.User.Dtos.Users;
 
 namespace Do_Svyazi.User.Dtos.Chats;
 

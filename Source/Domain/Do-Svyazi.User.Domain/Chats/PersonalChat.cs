@@ -106,7 +106,7 @@ public class PersonalChat : Chat
         return newUser;
     }
 
-    public override void RemoveUser(MessengerUser user) =>
+    public override ChatUser RemoveUser(MessengerUser user) =>
         throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support removing users");
 
     public override void AddRole(Role role) =>

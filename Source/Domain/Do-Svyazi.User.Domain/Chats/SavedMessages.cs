@@ -94,7 +94,7 @@ public class SavedMessages : Chat
     public override ChatUser AddUser(MessengerUser user) =>
         throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support adding users");
 
-    public override void RemoveUser(MessengerUser user) =>
+    public override ChatUser RemoveUser(MessengerUser user) =>
         throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support removing users");
 
     public override void AddRole(Role role) =>
