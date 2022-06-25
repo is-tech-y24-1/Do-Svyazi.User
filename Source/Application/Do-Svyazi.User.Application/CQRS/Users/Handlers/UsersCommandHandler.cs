@@ -4,65 +4,49 @@ using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Users;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Handlers;
 
 public class UsersCommandHandler :
-    IQueryHandler<AddUserCommand, Guid>,
     IQueryHandler<ChangeUserDescriptionByIdCommand, Unit>,
     IQueryHandler<ChangeUserNameByIdCommand, Unit>,
     IQueryHandler<SetUserNickNameByIdCommand, Unit>,
     IQueryHandler<DeleteUserCommand, Unit>
 {
-    private readonly IDbContext _context;
-    public UsersCommandHandler(IDbContext context) => _context = context;
-
-    public async Task<Guid> Handle(AddUserCommand request, CancellationToken cancellationToken)
-    {
-        if (NickNameExists(request.nickName))
-        {
-            throw new Do_Svyazi_User_BusinessLogicException(
-                $"User with nickname = {request.nickName} already exists in messenger");
-        }
-
-        MessengerUser messengerUser = new (request.name, request.nickName, request.description);
-
-        await _context.Users.AddAsync(messengerUser, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
-
-        return messengerUser.Id;
-    }
+    private readonly UserManager<MessengerUser> _userManager;
+    public UsersCommandHandler(UserManager<MessengerUser> userManager) => _userManager = userManager;
 
     public async Task<Unit> Handle(ChangeUserDescriptionByIdCommand request, CancellationToken cancellationToken)
     {
-        MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
+        MessengerUser messengerUser = await _userManager.FindByIdAsync(request.userId) ??
                                       throw new Do_Svyazi_User_NotFoundException(
                                           $"User with id {request.userId} to change description was not found");
 
         messengerUser.ChangeDescription(request.description);
 
-        _context.Users.Update(messengerUser);
-        await _context.SaveChangesAsync(cancellationToken);
+        await _userManager.UpdateAsync(messengerUser);
 
         return Unit.Value;
     }
 
     public async Task<Unit> Handle(ChangeUserNameByIdCommand request, CancellationToken cancellationToken)
     {
-        MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
+        var users = _userManager.Users.ToList();
+
+        MessengerUser messengerUser = await _userManager.FindByIdAsync(request.userId) ??
                                       throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} to change name was not found");
 
         messengerUser.ChangeName(request.name);
 
-        _context.Users.Update(messengerUser);
-        await _context.SaveChangesAsync(cancellationToken);
+        await _userManager.UpdateAsync(messengerUser);
 
         return Unit.Value;
     }
 
     public async Task<Unit> Handle(SetUserNickNameByIdCommand request, CancellationToken cancellationToken)
     {
-        MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
+        MessengerUser messengerUser = await _userManager.FindByIdAsync(request.userId) ??
                                       throw new Do_Svyazi_User_NotFoundException(
                                           $"User with id {request.userId} to change nickName was not found");
 
@@ -71,22 +55,20 @@ public class UsersCommandHandler :
 
         messengerUser.ChangeNickName(request.nickName);
 
-        _context.Users.Update(messengerUser);
-        await _context.SaveChangesAsync(cancellationToken);
+        await _userManager.UpdateAsync(messengerUser);
 
         return Unit.Value;
     }
 
     public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        MessengerUser messengerUser = await _context.Users.FindAsync(request.userId) ??
+        MessengerUser messengerUser = await _userManager.FindByIdAsync(request.userId) ??
                                       throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId} to delete");
 
-        _context.Users.Remove(messengerUser);
-        await _context.SaveChangesAsync(cancellationToken);
+        await _userManager.DeleteAsync(messengerUser);
 
         return Unit.Value;
     }
 
-    private bool NickNameExists(string nickName) => _context.Users.Any(user => user.NickName == nickName);
+    private bool NickNameExists(string nickName) => _userManager.FindByNameAsync(nickName) is not null;
 }

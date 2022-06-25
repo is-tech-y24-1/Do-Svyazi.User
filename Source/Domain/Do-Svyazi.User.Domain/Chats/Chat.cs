@@ -49,8 +49,8 @@ public abstract class Chat
     public IReadOnlyCollection<ChatUser> GetUsersByRole(Role role) =>
         Users.Where(user => user.Role.Equals(role)).ToList();
 
-    public ChatUser GetUser(string nickName) =>
-        Users.SingleOrDefault(user => user.User.NickName == nickName)
+    public ChatUser GetUser(string userName) =>
+        Users.SingleOrDefault(user => user.User.UserName == userName)
         ?? throw new Do_Svyazi_User_NotFoundException($"User is not found in chat {Name}");
 
     public ChatUser GetUser(Guid id) =>

@@ -8,8 +8,8 @@ public class ChatUser
     public ChatUser(MessengerUser user, Chat chat, Role role)
     {
         User = user ?? throw new ArgumentNullException(nameof(user), $"User to create chatUser in chat {chat.Name} is null");
-        Chat = chat ?? throw new ArgumentNullException(nameof(chat), $"Chat to create chatUser to {user.NickName} is null");
-        Role = role ?? throw new ArgumentNullException(nameof(role), $"Role to create chatUser to {user.NickName} is null");
+        Chat = chat ?? throw new ArgumentNullException(nameof(chat), $"Chat to create chatUser with name {user.UserName} is null");
+        Role = role ?? throw new ArgumentNullException(nameof(role), $"Role to create chatUser with userName {user.UserName} and {role} is null");
         ChatId = chat.Id;
         MessengerUserId = user.Id;
     }
@@ -24,7 +24,7 @@ public class ChatUser
     public Role Role { get; private set; }
 
     public void ChangeRole(Role role) =>
-        Role = role ?? throw new ArgumentNullException(nameof(role), $"Role to set to {User.NickName} in chat {Chat.Name} is null");
+        Role = role ?? throw new ArgumentNullException(nameof(role), $"Role to set to {User.UserName} in chat {Chat.Name} is null");
 
     public override bool Equals(object? obj) => Equals(obj as ChatUser);
 

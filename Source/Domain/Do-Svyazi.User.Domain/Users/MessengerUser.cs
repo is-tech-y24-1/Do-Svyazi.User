@@ -1,28 +1,30 @@
 using Do_Svyazi.User.Domain.Chats;
+using Microsoft.AspNetCore.Identity;
 
 namespace Do_Svyazi.User.Domain.Users;
 
-public class MessengerUser
+public class MessengerUser : IdentityUser<Guid>
 {
     private const string DefaultDescription = "No description";
 
-    public MessengerUser(string name, string nickName, string? description = null)
+    public MessengerUser(string name, string nickName, string? email, string? phoneNumber, string? description = null)
+        : base(nickName)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException(nameof(name), "User name can't be null");
         if (string.IsNullOrWhiteSpace(nickName))
             throw new ArgumentNullException(nameof(nickName), "User nickName can't be null");
 
+        Email = email;
+        PhoneNumber = phoneNumber;
         Name = name;
-        NickName = nickName;
         Description = string.IsNullOrEmpty(description) ? DefaultDescription : description;
+        Id = Guid.NewGuid();
     }
 
     public MessengerUser() { }
 
-    public Guid Id { get; protected init; } = Guid.NewGuid();
     public string Name { get; private set; }
-    public string NickName { get; private set; }
     public string Description { get; private set; }
 
     public virtual void ChangeNickName(string nickName)
@@ -30,7 +32,7 @@ public class MessengerUser
         if (string.IsNullOrWhiteSpace(nickName))
             throw new ArgumentNullException(nameof(nickName), "User nickName to change is null");
 
-        NickName = nickName;
+        UserName = nickName;
     }
 
     public virtual void ChangeName(string name)

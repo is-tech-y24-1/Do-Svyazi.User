@@ -1,10 +1,11 @@
 using Do_Svyazi.User.Application.CQRS.Users.Commands;
 using Do_Svyazi.User.Application.CQRS.Users.Queries;
+using Do_Svyazi.User.Domain.Authenticate;
 using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
 using Do_Svyazi.User.Dtos.Users;
-using Do_Svyazi.User.Web.Controllers.Helpers;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,7 @@ public class UserController : ControllerBase
     public UserController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet("GetAll")]
+    [Authorize(Roles = MessageIdentityRole.Admin)]
     public async Task<ActionResult<IReadOnlyCollection<MessengerUserDto>>> GetUsers(CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetUsersQuery(), cancellationToken);
@@ -70,7 +72,7 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
-    [Authorize(false)]
+    [AllowAnonymous]
     [HttpPost(nameof(AddUser))]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<Guid>> AddUser(AddUserCommand addUserCommand, CancellationToken cancellationToken)

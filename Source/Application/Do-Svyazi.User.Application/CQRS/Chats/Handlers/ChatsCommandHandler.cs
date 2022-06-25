@@ -5,6 +5,7 @@ using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Users;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Chats.Handlers;
@@ -18,12 +19,17 @@ public class ChatsCommandHandler :
     ICommandHandler<DeleteUserFromChatCommand, Unit>
 {
     private readonly IDbContext _context;
+    private readonly UserManager<MessengerUser> _userManager;
 
-    public ChatsCommandHandler(IDbContext context) => _context = context;
+    public ChatsCommandHandler(UserManager<MessengerUser> userManager, IDbContext context)
+    {
+        _userManager = userManager;
+        _context = context;
+    }
 
     public async Task<Guid> Handle(AddChannelCommand request, CancellationToken cancellationToken)
     {
-        MessengerUser user = await _context.Users
+        MessengerUser user = await _userManager.Users
                                  .SingleOrDefaultAsync(user => user.Id == request.adminId, cancellationToken) ??
                              throw new Do_Svyazi_User_NotFoundException(
                                  $"User with id = {request.adminId} to create a channel was not found");
@@ -40,9 +46,8 @@ public class ChatsCommandHandler :
 
     public async Task<Guid> Handle(AddGroupChatCommand request, CancellationToken cancellationToken)
     {
-        MessengerUser user = await _context.Users
-                                 .SingleOrDefaultAsync(user => user.Id == request.adminId, cancellationToken) ??
-                             throw new Do_Svyazi_User_NotFoundException(
+        MessengerUser user = await _userManager.FindByIdAsync($"{request.adminId}")
+                             ?? throw new Do_Svyazi_User_NotFoundException(
                                  $"User with id = {request.adminId} to create a group chat was not found");
 
         GroupChat chat = new GroupChat(user, request.name, request.description);
@@ -58,19 +63,18 @@ public class ChatsCommandHandler :
     public async Task<Guid> Handle(AddPersonalChatCommand request, CancellationToken cancellationToken)
     {
         MessengerUser firstUser =
-            await _context.Users.SingleOrDefaultAsync(user => user.Id == request.firstUserId, cancellationToken) ??
+            await _userManager.Users.SingleOrDefaultAsync(user => user.Id == request.firstUserId, cancellationToken) ??
             throw new Do_Svyazi_User_NotFoundException(
                 $"User with id = {request.firstUserId} to create a personal chat was not found");
 
         MessengerUser secondUser =
-            await _context.Users.SingleOrDefaultAsync(user => user.Id == request.secondUserId, cancellationToken) ??
+            await _userManager.Users.SingleOrDefaultAsync(user => user.Id == request.secondUserId, cancellationToken) ??
             throw new Do_Svyazi_User_NotFoundException(
                 $"User with id = {request.secondUserId} to create a personal chat was not found");
 
         Chat chat = new PersonalChat(firstUser, secondUser, request.name, request.description);
 
-        _context.Users.Update(firstUser);
-        _context.Users.Update(secondUser);
+        _context.ChatUsers.AddRange(chat.Users);
         await _context.Chats.AddAsync(chat, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -80,7 +84,7 @@ public class ChatsCommandHandler :
     public async Task<Guid> Handle(AddSavedMessagesCommand request, CancellationToken cancellationToken)
     {
         MessengerUser user =
-            await _context.Users.SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
+            await _userManager.Users.SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
             throw new Do_Svyazi_User_NotFoundException(
                 $"User with id = {request.userId} to create saved messages chat not found");
 
@@ -105,7 +109,7 @@ public class ChatsCommandHandler :
                     throw new Do_Svyazi_User_NotFoundException(
                         $"Chat with id = {request.chatId} to add user {request.userId} was not found");
 
-        MessengerUser messengerUser = await _context.Users
+        MessengerUser messengerUser = await _userManager.Users
                                           .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
                                       throw new Do_Svyazi_User_NotFoundException(
                                           $"User with id = {request.userId} to be added into chat with id = {request.chatId} not found");
@@ -128,7 +132,7 @@ public class ChatsCommandHandler :
                         .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                     throw new Do_Svyazi_User_NotFoundException($"Chat with id {request.chatId} not found");
 
-        MessengerUser messengerUser = await _context.Users
+        MessengerUser messengerUser = await _userManager.Users
                                           .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
                                       throw new Do_Svyazi_User_NotFoundException(
                                           $"User with id {request.userId} not found");

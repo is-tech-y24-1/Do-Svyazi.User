@@ -4,8 +4,10 @@ namespace Do_Svyazi.User.Domain.Authenticate;
 
 public record RegisterModel
 {
-    [Required(ErrorMessage = "NickName is required")]
-    public string NickName { get; init; }
+    [Required(ErrorMessage = "UserName is required")]
+    public string UserName { get; init; }
+
+    public string Name { get; init; }
 
     [Required(ErrorMessage = "Email is required")]
     public string Email { get; init; }

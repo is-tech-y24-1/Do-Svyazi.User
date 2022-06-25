@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Do_Svyazi.User.Domain.Authenticate;
+using Do_Svyazi.User.Domain.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -12,10 +13,10 @@ public class AuthorizationMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly IConfiguration _configuration;
-    private readonly UserManager<MessageIdentityUser> _userManager;
+    private readonly UserManager<MessengerUser> _userManager;
 
     public AuthorizationMiddleware(
-        RequestDelegate next, IConfiguration configuration, UserManager<MessageIdentityUser> userManager)
+        RequestDelegate next, IConfiguration configuration, UserManager<MessengerUser> userManager)
     {
         _next = next;
         _configuration = configuration;

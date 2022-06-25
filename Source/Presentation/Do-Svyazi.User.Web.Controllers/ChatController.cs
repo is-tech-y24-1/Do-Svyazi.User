@@ -1,9 +1,10 @@
 using Do_Svyazi.User.Application.CQRS.Chats.Commands;
 using Do_Svyazi.User.Application.CQRS.Chats.Queries;
+using Do_Svyazi.User.Domain.Authenticate;
 using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
-using Do_Svyazi.User.Web.Controllers.Helpers;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,7 @@ public class ChatController : ControllerBase
     public ChatController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet(nameof(GetChats))]
+    [Authorize(Roles = MessageIdentityRole.Admin)]
     public async Task<ActionResult<IReadOnlyCollection<MessengerChatDto>>> GetChats(CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetChatsQuery(), cancellationToken);
@@ -98,6 +100,7 @@ public class ChatController : ControllerBase
     }
 
     [HttpDelete(nameof(DeleteUserFromChat))]
+    [Authorize(Roles = $"{MessageIdentityRole.ChatAdmin}, {MessageIdentityRole.ChatCreator}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> DeleteUserFromChat(
         DeleteUserFromChatCommand deleteUserFromChatCommand, CancellationToken cancellationToken)

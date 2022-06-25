@@ -7,6 +7,7 @@ using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
 using Do_Svyazi.User.Dtos.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Handlers;
@@ -17,11 +18,13 @@ public class UsersQueryHandler :
     IQueryHandler<GetUserQuery, MessengerUser>,
     IQueryHandler<GetUsersQuery, IReadOnlyCollection<MessengerUserDto>>
 {
+    private readonly UserManager<MessengerUser> _userManager;
     private readonly IDbContext _context;
     private readonly IMapper _mapper;
 
-    public UsersQueryHandler(IDbContext context, IMapper mapper)
+    public UsersQueryHandler(UserManager<MessengerUser> userManager, IDbContext context, IMapper mapper)
     {
+        _userManager = userManager;
         _context = context;
         _mapper = mapper;
     }
@@ -41,12 +44,12 @@ public class UsersQueryHandler :
             .ToListAsync(cancellationToken);
 
     public async Task<MessengerUser> Handle(GetUserQuery request, CancellationToken cancellationToken)
-        => await _context.Users
+        => await _userManager.Users
                .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken: cancellationToken) ??
            throw new Do_Svyazi_User_NotFoundException($"User with id = {request.userId} doesn't exist");
 
     public async Task<IReadOnlyCollection<MessengerUserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
-        => await _context.Users
+        => await _userManager.Users
             .ProjectTo<MessengerUserDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken: cancellationToken);
 }

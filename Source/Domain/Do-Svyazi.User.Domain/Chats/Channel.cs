@@ -143,9 +143,9 @@ public class Channel : Chat
             throw new ArgumentNullException(nameof(user), $"User to change role in chat {Name} is null");
 
         if (role is null)
-            throw new ArgumentNullException(nameof(role), $"Role to change in user {user.NickName} in chat {Name} is null");
+            throw new ArgumentNullException(nameof(role), $"Role to change in user {user.UserName} in chat {Name} is null");
 
-        ChatUser chatUser = GetUser(user.NickName);
+        ChatUser chatUser = GetUser(user.UserName);
 
         chatUser.ChangeRole(role);
     }

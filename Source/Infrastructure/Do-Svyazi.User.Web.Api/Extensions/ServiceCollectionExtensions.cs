@@ -2,6 +2,7 @@ using System.Text;
 using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.DataAccess;
 using Do_Svyazi.User.Domain.Authenticate;
+using Do_Svyazi.User.Domain.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddIdentity<MessageIdentityUser, MessageIdentityRole>(options =>
+        services.AddIdentity<MessengerUser, MessageIdentityRole>(options =>
             {
                 options.Password = new PasswordOptions
                 {

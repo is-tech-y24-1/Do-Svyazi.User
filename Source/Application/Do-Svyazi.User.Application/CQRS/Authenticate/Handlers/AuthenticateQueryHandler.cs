@@ -5,6 +5,7 @@ using Do_Svyazi.User.Application.CQRS.Authenticate.Queries;
 using Do_Svyazi.User.Application.CQRS.Handlers;
 using Do_Svyazi.User.Domain.Authenticate;
 using Do_Svyazi.User.Domain.Exceptions;
+using Do_Svyazi.User.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,14 +16,14 @@ namespace Do_Svyazi.User.Application.CQRS.Authenticate.Handlers;
 public class AuthenticateQueryHandler :
     IQueryHandler<LoginRequest, JwtSecurityToken>,
     IQueryHandler<AuthenticateByJwtRequest, Guid>,
-    IQueryHandler<GetUsersRequest, IReadOnlyCollection<MessageIdentityUser>>
+    IQueryHandler<GetUsersRequest, IReadOnlyCollection<MessengerUser>>
 {
     private const string NameType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
 
-    private readonly UserManager<MessageIdentityUser> _userManager;
+    private readonly UserManager<MessengerUser> _userManager;
     private readonly IConfiguration _configuration;
 
-    public AuthenticateQueryHandler(UserManager<MessageIdentityUser> userManager, IConfiguration configuration)
+    public AuthenticateQueryHandler(UserManager<MessengerUser> userManager, IConfiguration configuration)
     {
         _userManager = userManager;
         _configuration = configuration;
@@ -32,7 +33,7 @@ public class AuthenticateQueryHandler :
     {
         var token = new JwtSecurityToken();
         LoginModel loginModel = request.model;
-        MessageIdentityUser user = await GetUserByUsernameOrEmail(loginModel);
+        MessengerUser user = await GetUserByUsernameOrEmail(loginModel);
 
         if (!await _userManager.CheckPasswordAsync(user, loginModel.Password)) return token;
 
@@ -42,6 +43,7 @@ public class AuthenticateQueryHandler :
         {
             new Claim(ClaimTypes.Name, user.UserName),
             new Claim(JwtRegisteredClaimNames.Jti, $"{user.Id}"),
+            new Claim(JwtRegisteredClaimNames.Email, $"{user.Email}"),
         };
 
         authClaims
@@ -60,7 +62,7 @@ public class AuthenticateQueryHandler :
         return identityUser.Id;
     }
 
-    public async Task<IReadOnlyCollection<MessageIdentityUser>> Handle(GetUsersRequest request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<MessengerUser>> Handle(GetUsersRequest request, CancellationToken cancellationToken)
         => await _userManager.Users.ToListAsync(cancellationToken: cancellationToken);
 
     private JwtSecurityToken GetToken(List<Claim> authClaims)
@@ -77,7 +79,7 @@ public class AuthenticateQueryHandler :
         return token;
     }
 
-    private async Task<MessageIdentityUser> GetUserByUsernameOrEmail(LoginModel loginModel)
+    private async Task<MessengerUser> GetUserByUsernameOrEmail(LoginModel loginModel)
     {
         if (loginModel.NickName is not null)
             return await _userManager.FindByNameAsync(loginModel.NickName);

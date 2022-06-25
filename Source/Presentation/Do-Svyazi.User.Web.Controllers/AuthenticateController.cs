@@ -2,14 +2,14 @@ using System.IdentityModel.Tokens.Jwt;
 using Do_Svyazi.User.Application.CQRS.Authenticate.Commands;
 using Do_Svyazi.User.Application.CQRS.Authenticate.Queries;
 using Do_Svyazi.User.Domain.Authenticate;
-using Do_Svyazi.User.Web.Controllers.Helpers;
+using Do_Svyazi.User.Domain.Users;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Do_Svyazi.User.Web.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 [ProducesResponseType(StatusCodes.Status200OK)]
@@ -22,13 +22,13 @@ public class AuthenticateController : ControllerBase
     public AuthenticateController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet(nameof(GetAll))]
-    public async Task<ActionResult<IReadOnlyCollection<MessageIdentityUser>>> GetAll(CancellationToken cancellationToken)
+    [Authorize(Roles = MessageIdentityRole.Admin)]
+    public async Task<ActionResult<IReadOnlyCollection<MessengerUser>>> GetAll(CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetUsersRequest(), cancellationToken);
         return Ok(response);
     }
 
-    [Authorize(false)]
     [HttpPost(nameof(Login))]
     public async Task<ActionResult> Login([FromBody] LoginRequest model, CancellationToken cancellationToken)
     {
@@ -44,8 +44,8 @@ public class AuthenticateController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> Register([FromBody] RegisterCommand model, CancellationToken cancellationToken)
     {
-        await _mediator.Send(model, cancellationToken);
-        return NoContent();
+        var result = await _mediator.Send(model, cancellationToken);
+        return Ok(result);
     }
 
     [HttpGet(nameof(AuthenticateByJwt))]
@@ -56,7 +56,6 @@ public class AuthenticateController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize(false)]
     [HttpPost(nameof(RegisterAdmin))]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> RegisterAdmin([FromBody] RegisterAdminCommand model, CancellationToken cancellationToken)
