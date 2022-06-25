@@ -19,7 +19,7 @@ public class UsersCommandHandler :
 
     public async Task<Unit> Handle(ChangeUserDescriptionByIdCommand request, CancellationToken cancellationToken)
     {
-        MessengerUser messengerUser = await _userManager.FindByIdAsync(request.userId) ??
+        MessengerUser messengerUser = await _userManager.FindByIdAsync($"{request.userId}") ??
                                       throw new Do_Svyazi_User_NotFoundException(
                                           $"User with id {request.userId} to change description was not found");
 
@@ -32,9 +32,7 @@ public class UsersCommandHandler :
 
     public async Task<Unit> Handle(ChangeUserNameByIdCommand request, CancellationToken cancellationToken)
     {
-        var users = _userManager.Users.ToList();
-
-        MessengerUser messengerUser = await _userManager.FindByIdAsync(request.userId) ??
+        var messengerUser = await _userManager.FindByIdAsync($"{request.userId}") ??
                                       throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} to change name was not found");
 
         messengerUser.ChangeName(request.name);
@@ -46,23 +44,21 @@ public class UsersCommandHandler :
 
     public async Task<Unit> Handle(SetUserNickNameByIdCommand request, CancellationToken cancellationToken)
     {
-        MessengerUser messengerUser = await _userManager.FindByIdAsync(request.userId) ??
+        var messengerUser = await _userManager.FindByIdAsync($"{request.userId}") ??
                                       throw new Do_Svyazi_User_NotFoundException(
-                                          $"User with id {request.userId} to change nickName was not found");
+                                          $"User with id {request.userId} to change userName was not found");
 
-        if (NickNameExists(request.nickName))
-            throw new Do_Svyazi_User_BusinessLogicException($"Nickname = {request.nickName} already exists in messenger");
+        if (IsNickNameExist(request.userName))
+            throw new Do_Svyazi_User_BusinessLogicException($"Nickname = {request.userName} already exists in messenger");
 
-        messengerUser.ChangeNickName(request.nickName);
-
-        await _userManager.UpdateAsync(messengerUser);
+        await _userManager.SetUserNameAsync(messengerUser, request.userName);
 
         return Unit.Value;
     }
 
     public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        MessengerUser messengerUser = await _userManager.FindByIdAsync(request.userId) ??
+        var messengerUser = await _userManager.FindByIdAsync($"{request.userId}") ??
                                       throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId} to delete");
 
         await _userManager.DeleteAsync(messengerUser);
@@ -70,5 +66,5 @@ public class UsersCommandHandler :
         return Unit.Value;
     }
 
-    private bool NickNameExists(string nickName) => _userManager.FindByNameAsync(nickName) is not null;
+    private bool IsNickNameExist(string nickName) => _userManager.FindByNameAsync(nickName) is null;
 }

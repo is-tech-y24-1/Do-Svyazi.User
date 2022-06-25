@@ -13,27 +13,19 @@ public class MessengerUser : IdentityUser<Guid>
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException(nameof(name), "User name can't be null");
         if (string.IsNullOrWhiteSpace(nickName))
-            throw new ArgumentNullException(nameof(nickName), "User nickName can't be null");
+            throw new ArgumentNullException(nameof(nickName), "User userName can't be null");
 
+        Id = Guid.NewGuid();
         Email = email;
         PhoneNumber = phoneNumber;
         Name = name;
         Description = string.IsNullOrEmpty(description) ? DefaultDescription : description;
-        Id = Guid.NewGuid();
     }
 
     public MessengerUser() { }
 
     public string Name { get; private set; }
     public string Description { get; private set; }
-
-    public virtual void ChangeNickName(string nickName)
-    {
-        if (string.IsNullOrWhiteSpace(nickName))
-            throw new ArgumentNullException(nameof(nickName), "User nickName to change is null");
-
-        UserName = nickName;
-    }
 
     public virtual void ChangeName(string name)
     {

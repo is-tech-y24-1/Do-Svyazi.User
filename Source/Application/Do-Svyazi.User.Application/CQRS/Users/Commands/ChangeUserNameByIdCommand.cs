@@ -2,5 +2,5 @@ using MediatR;
 
 namespace Do_Svyazi.User.Application.CQRS.Users.Commands;
 
-public record ChangeUserNameByIdCommand(string userId, string name)
+public record ChangeUserNameByIdCommand(Guid userId, string name)
     : IRequest;

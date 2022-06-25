@@ -32,7 +32,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet(nameof(GetUser))]
-    public async Task<ActionResult<MessengerUser>> GetUser(
+    public async Task<ActionResult<MessengerUserDto>> GetUser(
         [FromQuery] GetUserQuery getUserQuery, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(getUserQuery, cancellationToken);

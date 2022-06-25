@@ -1,11 +1,14 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Do_Svyazi.User.Application.CQRS.Authenticate.Queries;
 using Do_Svyazi.User.Application.CQRS.Handlers;
 using Do_Svyazi.User.Domain.Authenticate;
 using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Users;
+using Do_Svyazi.User.Dtos.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,26 +19,28 @@ namespace Do_Svyazi.User.Application.CQRS.Authenticate.Handlers;
 public class AuthenticateQueryHandler :
     IQueryHandler<LoginRequest, JwtSecurityToken>,
     IQueryHandler<AuthenticateByJwtRequest, Guid>,
-    IQueryHandler<GetUsersRequest, IReadOnlyCollection<MessengerUser>>
+    IQueryHandler<GetUsersRequest, IReadOnlyCollection<MessengerUserDto>>
 {
     private const string NameType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
 
     private readonly UserManager<MessengerUser> _userManager;
     private readonly IConfiguration _configuration;
+    private readonly IMapper _mapper;
 
-    public AuthenticateQueryHandler(UserManager<MessengerUser> userManager, IConfiguration configuration)
+    public AuthenticateQueryHandler(UserManager<MessengerUser> userManager, IConfiguration configuration, IMapper mapper)
     {
         _userManager = userManager;
         _configuration = configuration;
+        _mapper = mapper;
     }
 
     public async Task<JwtSecurityToken> Handle(LoginRequest request, CancellationToken cancellationToken)
     {
-        var token = new JwtSecurityToken();
         LoginModel loginModel = request.model;
         MessengerUser user = await GetUserByUsernameOrEmail(loginModel);
 
-        if (!await _userManager.CheckPasswordAsync(user, loginModel.Password)) return token;
+        if (!await _userManager.CheckPasswordAsync(user, loginModel.Password))
+            throw new UnauthorizedAccessException("Can't login with this credentials");
 
         IList<string>? userRoles = await _userManager.GetRolesAsync(user);
 
@@ -62,8 +67,10 @@ public class AuthenticateQueryHandler :
         return identityUser.Id;
     }
 
-    public async Task<IReadOnlyCollection<MessengerUser>> Handle(GetUsersRequest request, CancellationToken cancellationToken)
-        => await _userManager.Users.ToListAsync(cancellationToken: cancellationToken);
+    public async Task<IReadOnlyCollection<MessengerUserDto>> Handle(GetUsersRequest request, CancellationToken cancellationToken)
+        => await _userManager.Users
+            .ProjectTo<MessengerUserDto>(_mapper.ConfigurationProvider)
+            .ToListAsync(cancellationToken: cancellationToken);
 
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
@@ -81,12 +88,17 @@ public class AuthenticateQueryHandler :
 
     private async Task<MessengerUser> GetUserByUsernameOrEmail(LoginModel loginModel)
     {
-        if (loginModel.NickName is not null)
-            return await _userManager.FindByNameAsync(loginModel.NickName);
+        MessengerUser? user = default;
 
-        if (loginModel.Email is not null)
-            return await _userManager.FindByEmailAsync(loginModel.Email);
+        if (loginModel.UserName is not null)
+            user = await _userManager.FindByNameAsync(loginModel.UserName);
 
-        throw new Do_Svyazi_User_NotFoundException("User to login was not found");
+        if (user is null && loginModel.Email is not null)
+            user = await _userManager.FindByEmailAsync(loginModel.Email);
+
+        if (user is null)
+            throw new Do_Svyazi_User_NotFoundException($"User {loginModel.UserName} to login was not found");
+
+        return user;
     }
 }

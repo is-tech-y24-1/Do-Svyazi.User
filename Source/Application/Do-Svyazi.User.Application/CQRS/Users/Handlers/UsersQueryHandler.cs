@@ -15,7 +15,7 @@ namespace Do_Svyazi.User.Application.CQRS.Users.Handlers;
 public class UsersQueryHandler :
     IQueryHandler<GetAllChatsByUserIdQuery, IReadOnlyList<MessengerChatDto>>,
     IQueryHandler<GetAllChatsIdsByUserIdQuery, IReadOnlyList<Guid>>,
-    IQueryHandler<GetUserQuery, MessengerUser>,
+    IQueryHandler<GetUserQuery, MessengerUserDto>,
     IQueryHandler<GetUsersQuery, IReadOnlyCollection<MessengerUserDto>>
 {
     private readonly UserManager<MessengerUser> _userManager;
@@ -43,10 +43,13 @@ public class UsersQueryHandler :
             .Select(chatUser => chatUser.ChatId)
             .ToListAsync(cancellationToken);
 
-    public async Task<MessengerUser> Handle(GetUserQuery request, CancellationToken cancellationToken)
-        => await _userManager.Users
-               .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken: cancellationToken) ??
-           throw new Do_Svyazi_User_NotFoundException($"User with id = {request.userId} doesn't exist");
+    public async Task<MessengerUserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.FindByIdAsync($"{request.userId}")
+                ?? throw new Do_Svyazi_User_NotFoundException($"User with id = {request.userId} doesn't exist");
+
+        return _mapper.Map<MessengerUserDto>(user);
+    }
 
     public async Task<IReadOnlyCollection<MessengerUserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         => await _userManager.Users

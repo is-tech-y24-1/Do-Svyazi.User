@@ -45,7 +45,7 @@ public class AuthenticateCommandHandler :
         RegisterModel registerModel = request.model;
 
         if (await _userManager.FindByNameAsync(registerModel.UserName) is not null)
-            throw new Do_Svyazi_User_BusinessLogicException($"User with nickName {registerModel.UserName} exists");
+            throw new Do_Svyazi_User_BusinessLogicException($"User with userName {registerModel.UserName} exists");
 
         MessengerUser user = CreateIdentityUser(registerModel);
 
