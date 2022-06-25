@@ -67,13 +67,13 @@ public class IntegrationTests : IDisposable
     [Test]
     public async Task AddUsersToChat_CheckUserHaveChat_CheckChatHaveUsers()
     {
-        RegisterModel userModel1 = CreateRegisterModel("name1", "nickname1", "email1", "phoneNumber1");
-        RegisterModel userModel2 = CreateRegisterModel("name2", "nickname2", "email2", "phoneNumber2");
-
         var chatsCommandHandler = new ChatsCommandHandler(_userManager, _context);
         var authCommandHandler = new AuthenticateCommandHandler(_userManager, _roleManager);
         var usersQueryHandler = new UsersQueryHandler(_userManager, _context, _mapper);
         var chatsQueryHandler = new ChatsQueryHandler(_context, _mapper);
+
+        RegisterModel userModel1 = CreateRegisterModel("name1", "nickname1", "email1", "phoneNumber1");
+        RegisterModel userModel2 = CreateRegisterModel("name2", "nickname2", "email2", "phoneNumber2");
 
         var userId1 = await authCommandHandler.Handle(new RegisterCommand(userModel1), CancellationToken.None);
         var userId2 = await authCommandHandler.Handle(new RegisterCommand(userModel2), CancellationToken.None);
@@ -100,14 +100,15 @@ public class IntegrationTests : IDisposable
     [Test]
     public async Task DeleteUserFromChat_CheckUserNotHaveChat()
     {
-        RegisterModel userModel1 = CreateRegisterModel("name1", "nickname1", "email1", "phoneNumber1");
-        RegisterModel userModel2 = CreateRegisterModel("name2", "nickname2", "email2", "phoneNumber2");
-        RegisterModel userModel3 = CreateRegisterModel("name3", "nickname3", "email3", "phoneNumber3");
-
         var chatsCommandHandler = new ChatsCommandHandler(_userManager, _context);
         var authCommandHandler = new AuthenticateCommandHandler(_userManager, _roleManager);
         var usersQueryHandler = new UsersQueryHandler(_userManager, _context, _mapper);
         var chatsQueryHandler = new ChatsQueryHandler(_context, _mapper);
+
+        RegisterModel userModel1 = CreateRegisterModel("name1", "nickname1", "email1", "phoneNumber1");
+        RegisterModel userModel2 = CreateRegisterModel("name2", "nickname2", "email2", "phoneNumber2");
+        RegisterModel userModel3 = CreateRegisterModel("name3", "nickname3", "email3", "phoneNumber3");
+
 
         Guid userId1 = await authCommandHandler.Handle(new RegisterCommand(userModel1), CancellationToken.None);
         Guid userId2 = await authCommandHandler.Handle(new RegisterCommand(userModel2), CancellationToken.None);
