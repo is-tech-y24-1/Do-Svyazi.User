@@ -2,17 +2,16 @@ using System.IdentityModel.Tokens.Jwt;
 using Do_Svyazi.User.Application.CQRS.Authenticate.Commands;
 using Do_Svyazi.User.Application.CQRS.Authenticate.Queries;
 using Do_Svyazi.User.Domain.Authenticate;
-using Do_Svyazi.User.Web.Controllers.Tools;
+using Do_Svyazi.User.Web.Controllers.Helpers;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Do_Svyazi.User.Web.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
-[ExceptionFilter]
 [ProducesResponseType(StatusCodes.Status200OK)]
 [ProducesResponseType(StatusCodes.Status401Unauthorized)]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -22,7 +21,6 @@ public class AuthenticateController : ControllerBase
 
     public AuthenticateController(IMediator mediator) => _mediator = mediator;
 
-    [Authorize]
     [HttpGet(nameof(GetAll))]
     public async Task<ActionResult<IReadOnlyCollection<MessageIdentityUser>>> GetAll(CancellationToken cancellationToken)
     {
@@ -30,6 +28,7 @@ public class AuthenticateController : ControllerBase
         return Ok(response);
     }
 
+    [Authorize(false)]
     [HttpPost(nameof(Login))]
     public async Task<ActionResult> Login([FromBody] LoginRequest model, CancellationToken cancellationToken)
     {
@@ -57,7 +56,7 @@ public class AuthenticateController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
+    [Authorize(false)]
     [HttpPost(nameof(RegisterAdmin))]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> RegisterAdmin([FromBody] RegisterAdminCommand model, CancellationToken cancellationToken)

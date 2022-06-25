@@ -3,9 +3,8 @@ using Do_Svyazi.User.Application.CQRS.Users.Queries;
 using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
 using Do_Svyazi.User.Dtos.Users;
-using Do_Svyazi.User.Web.Controllers.Tools;
+using Do_Svyazi.User.Web.Controllers.Helpers;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +12,6 @@ namespace Do_Svyazi.User.Web.Controllers;
 
 [Authorize]
 [ApiController]
-[ExceptionFilter]
 [Route("api/[controller]")]
 [ProducesResponseType(StatusCodes.Status200OK)]
 [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -72,7 +70,7 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
-    [AllowAnonymous]
+    [Authorize(false)]
     [HttpPost(nameof(AddUser))]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<Guid>> AddUser(AddUserCommand addUserCommand, CancellationToken cancellationToken)

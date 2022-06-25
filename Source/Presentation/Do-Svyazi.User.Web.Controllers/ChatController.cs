@@ -3,7 +3,6 @@ using Do_Svyazi.User.Application.CQRS.Chats.Queries;
 using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
 using Do_Svyazi.User.Web.Controllers.Helpers;
-using Do_Svyazi.User.Web.Controllers.Tools;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +11,6 @@ namespace Do_Svyazi.User.Web.Controllers;
 
 [Authorize]
 [ApiController]
-[ExceptionFilter]
 [Route("api/[controller]")]
 [ProducesResponseType(StatusCodes.Status200OK)]
 [ProducesResponseType(StatusCodes.Status401Unauthorized)]

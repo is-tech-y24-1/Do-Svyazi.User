@@ -51,6 +51,7 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
 
+        app.UseMiddleware<ErrorHandlingMiddleware>();
         app.UseMiddleware<AuthorizationMiddleware>();
 
         app.UseEndpoints(endpoints => endpoints.MapControllers());

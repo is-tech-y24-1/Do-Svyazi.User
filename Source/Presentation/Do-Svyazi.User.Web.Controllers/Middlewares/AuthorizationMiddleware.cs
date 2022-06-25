@@ -57,7 +57,8 @@ public class AuthorizationMiddleware
         }
         catch
         {
-            throw new UnauthorizedAccessException();
+            context.Response.StatusCode = 401;
+            await context.Response.WriteAsync("Wrong auth credentials");
         }
     }
 }
