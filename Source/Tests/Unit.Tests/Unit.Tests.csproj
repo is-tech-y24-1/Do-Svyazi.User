@@ -3,10 +3,9 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
-
         <IsPackable>false</IsPackable>
-
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <RootNamespace>CQRS.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

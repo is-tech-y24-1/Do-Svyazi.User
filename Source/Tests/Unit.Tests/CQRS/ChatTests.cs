@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Xunit;
 using static CQRS.Tests.Extensions.MockExtensions;
 
-namespace CQRS.Tests;
+namespace CQRS.Tests.CQRS;
 
 public class ChatTests
 {
