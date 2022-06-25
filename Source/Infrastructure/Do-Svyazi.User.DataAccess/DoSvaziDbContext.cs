@@ -11,6 +11,7 @@ public class DoSvaziDbContext : DbContext, IDbContext
     public DoSvaziDbContext(DbContextOptions<DoSvaziDbContext> options)
         : base(options)
     {
+        Database.EnsureCreated();
     }
 
     protected DoSvaziDbContext() { }
@@ -23,9 +24,6 @@ public class DoSvaziDbContext : DbContext, IDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
-
-        modelBuilder.Entity<Chat>()
-            .HasOne(chatUser => chatUser.Creator);
 
         modelBuilder.Entity<ChatUser>()
             .HasOne(chatUser => chatUser.Chat)

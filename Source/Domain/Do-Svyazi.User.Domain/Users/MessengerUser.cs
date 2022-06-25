@@ -1,5 +1,3 @@
-using Do_Svyazi.User.Domain.Chats;
-
 namespace Do_Svyazi.User.Domain.Users;
 
 public class MessengerUser
@@ -24,8 +22,6 @@ public class MessengerUser
     public string Name { get; private set; }
     public string NickName { get; private set; }
     public string Description { get; private set; }
-
-    public IReadOnlyCollection<Chat> Chats { get; } = new List<Chat>();
 
     public virtual void ChangeNickName(string nickName)
     {

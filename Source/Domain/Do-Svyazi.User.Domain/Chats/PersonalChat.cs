@@ -52,11 +52,10 @@ public class PersonalChat : Chat
         BaseAdminRole = _baseAdminRole;
         BaseUserRole = _baseUserRole;
 
-        Creator = firstMessengerUser;
-        CreatorId = firstMessengerUser.Id;
+        ChatUser firstUser = CreateChatUser(secondMessengerUser, _baseAdminRole);
         ChatUser secondUser = CreateChatUser(secondMessengerUser, _baseAdminRole);
 
-        Users.AddRange(new[] { secondUser });
+        Users.AddRange(new[] { firstUser, secondUser });
     }
 
     protected PersonalChat()
@@ -107,7 +106,7 @@ public class PersonalChat : Chat
         return newUser;
     }
 
-    public override void RemoveUser(MessengerUser user) =>
+    public override ChatUser RemoveUser(MessengerUser user) =>
         throw new Do_Svyazi_User_BusinessLogicException($"Chat {Name} doesn't support removing users");
 
     public override void AddRole(Role role) =>

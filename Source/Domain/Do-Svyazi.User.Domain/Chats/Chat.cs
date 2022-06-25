@@ -23,8 +23,6 @@ public abstract class Chat
     public Guid Id { get; protected init; } = Guid.NewGuid();
     public string Name { get; protected set; }
     public string Description { get; protected set; }
-    public MessengerUser Creator { get; init; }
-    public Guid CreatorId { get; init; }
     public int MaxUsersAmount { get; init; }
     public List<ChatUser> Users { get; init; } = new ();
     public List<Role> Roles { get; init; } = new ();
@@ -60,7 +58,7 @@ public abstract class Chat
         ?? throw new Do_Svyazi_User_NotFoundException($"User is not found in chat {Name}");
 
     public abstract ChatUser AddUser(MessengerUser user);
-    public abstract void RemoveUser(MessengerUser user);
+    public abstract ChatUser RemoveUser(MessengerUser user);
     public abstract void AddRole(Role role);
     public abstract void RemoveRole(Role role);
     public abstract void ChangeUserRole(MessengerUser user, Role role);

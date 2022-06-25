@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Do_Svyazi.User.Application.CQRS.Handlers;
 using Do_Svyazi.User.Application.CQRS.Users.Queries;
 using Do_Svyazi.User.Application.DbContexts;
@@ -26,44 +27,26 @@ public class UsersQueryHandler :
     }
 
     public async Task<IReadOnlyList<MessengerChatDto>> Handle(GetAllChatsByUserId request, CancellationToken cancellationToken)
-    {
-        MessengerUser messengerUser = await _context.Users
-                                          .Include(user => user.Chats)
-                                          .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken: cancellationToken) ??
-                                      throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId} to get all user chats");
-
-        var chats = _mapper.Map<IReadOnlyList<MessengerChatDto>>(messengerUser.Chats);
-
-        return chats;
-    }
+        => await _context.ChatUsers
+            .Include(user => user.Chat)
+            .Where(user => user.MessengerUserId == request.userId)
+            .Select(chatUser => chatUser.Chat)
+            .ProjectTo<MessengerChatDto>(_mapper.ConfigurationProvider)
+            .ToListAsync(cancellationToken);
 
     public async Task<IReadOnlyList<Guid>> Handle(GetAllChatsIdsByUserId request, CancellationToken cancellationToken)
-    {
-        MessengerUser messengerUser = await _context.Users
-                                          .Include(user => user.Chats)
-                                          .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken: cancellationToken) ??
-                                      throw new Do_Svyazi_User_NotFoundException($"Can't find user with id = {request.userId} to get user chat ids");
-
-        var chatIds = messengerUser.Chats.Select(chat => chat.Id).ToList();
-
-        return chatIds;
-    }
+        => await _context.ChatUsers
+            .Where(user => user.MessengerUserId == request.userId)
+            .Select(chatUser => chatUser.ChatId)
+            .ToListAsync(cancellationToken);
 
     public async Task<MessengerUser> Handle(GetUser request, CancellationToken cancellationToken)
-    {
-        MessengerUser user = await _context.Users
-                                 .Include(user => user.Chats)
-                                 .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken: cancellationToken) ??
-                             throw new Do_Svyazi_User_NotFoundException($"User with id = {request.userId} doesn't exist");
-
-        return user;
-    }
+        => await _context.Users
+               .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken: cancellationToken) ??
+           throw new Do_Svyazi_User_NotFoundException($"User with id = {request.userId} doesn't exist");
 
     public async Task<IReadOnlyCollection<MessengerUserDto>> Handle(GetUsers request, CancellationToken cancellationToken)
-    {
-        List<MessengerUser> users = await _context.Users
+        => await _context.Users
+            .ProjectTo<MessengerUserDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken: cancellationToken);
-
-        return _mapper.Map<IReadOnlyCollection<MessengerUserDto>>(users);
-    }
 }

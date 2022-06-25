@@ -29,7 +29,9 @@ public class ChatsCommandHandler :
                                  $"User with id = {request.adminId} to create a channel was not found");
 
         Chat chat = new Channel(user, request.name, request.description);
+        var chatAdmin = chat.Users.Single();
 
+        await _context.ChatUsers.AddAsync(chatAdmin, cancellationToken);
         await _context.Chats.AddAsync(chat, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -44,7 +46,9 @@ public class ChatsCommandHandler :
                                  $"User with id = {request.adminId} to create a group chat was not found");
 
         GroupChat chat = new GroupChat(user, request.name, request.description);
+        var chatAdmin = chat.Users.Single();
 
+        await _context.ChatUsers.AddAsync(chatAdmin, cancellationToken);
         await _context.Chats.AddAsync(chat, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -65,6 +69,8 @@ public class ChatsCommandHandler :
 
         Chat chat = new PersonalChat(firstUser, secondUser, request.name, request.description);
 
+        _context.Users.Update(firstUser);
+        _context.Users.Update(secondUser);
         await _context.Chats.AddAsync(chat, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -79,7 +85,9 @@ public class ChatsCommandHandler :
                 $"User with id = {request.userId} to create saved messages chat not found");
 
         Chat chat = new SavedMessages(user, request.name, request.description);
+        var chatAdmin = chat.Users.Single();
 
+        await _context.ChatUsers.AddAsync(chatAdmin, cancellationToken);
         await _context.Chats.AddAsync(chat, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -125,9 +133,9 @@ public class ChatsCommandHandler :
                                       throw new Do_Svyazi_User_NotFoundException(
                                           $"User with id {request.userId} not found");
 
-        chat.RemoveUser(messengerUser);
+        var removedUser = chat.RemoveUser(messengerUser);
 
-        // TODO: debug, if chat removes from user's List<Chat> property
+        _context.ChatUsers.Remove(removedUser);
         _context.Chats.Update(chat);
         await _context.SaveChangesAsync(cancellationToken);
 
