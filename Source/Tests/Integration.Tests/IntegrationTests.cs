@@ -78,21 +78,18 @@ public class IntegrationTests : IDisposable
         var userId1 = await authCommandHandler.Handle(new RegisterCommand(userModel1), CancellationToken.None);
         var userId2 = await authCommandHandler.Handle(new RegisterCommand(userModel2), CancellationToken.None);
 
-        var addGroupChat = new AddGroupChatCommand(userId1, "chat1", "description1");
-        Guid chatGroupId = await chatsCommandHandler.Handle(addGroupChat, CancellationToken.None);
+        Guid chatGroupId = await chatsCommandHandler.Handle(new AddGroupChatCommand(userId1, "chat1", "description1"), CancellationToken.None);
+        await chatsCommandHandler.Handle(new AddUserToChatCommand(userId2, chatGroupId), CancellationToken.None);
 
-        var addUserToChatCommand = new AddUserToChatCommand(userId2, chatGroupId);
-        await chatsCommandHandler.Handle(addUserToChatCommand, CancellationToken.None);
+        var userChats1 =
+            await usersQueryHandler.Handle(new GetAllChatsIdsByUserIdQuery(userId1), CancellationToken.None);
+        var userChats2 =
+            await usersQueryHandler.Handle(new GetAllChatsIdsByUserIdQuery(userId2), CancellationToken.None);
+        MessengerChatDto chat =
+            await chatsQueryHandler.Handle(new GetChatByIdQuery(chatGroupId), CancellationToken.None);
 
-        var getAllChatsIdsByUserId = new GetAllChatsIdsByUserIdQuery(userId1);
-        var userChats1 = await usersQueryHandler.Handle(getAllChatsIdsByUserId, CancellationToken.None);
-
-        getAllChatsIdsByUserId = new GetAllChatsIdsByUserIdQuery(userId2);
-        var userChats2 = await usersQueryHandler.Handle(getAllChatsIdsByUserId, CancellationToken.None);
-        var getChatById = new GetChatByIdQuery(chatGroupId);
-        MessengerChatDto chat = await chatsQueryHandler.Handle(getChatById, CancellationToken.None);
-
-        chat.Users.Should().Contain(userId1)
+        chat.Users.Should()
+            .Contain(userId1)
             .And.Contain(userId2)
             .And.HaveCount(2);
 
