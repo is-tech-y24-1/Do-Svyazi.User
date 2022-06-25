@@ -135,7 +135,6 @@ public class ChatsCommandHandler :
 
         var removedUser = chat.RemoveUser(messengerUser);
 
-        // TODO: debug, if chat removes from user's List<Chat> property
         _context.ChatUsers.Remove(removedUser);
         _context.Chats.Update(chat);
         await _context.SaveChangesAsync(cancellationToken);
