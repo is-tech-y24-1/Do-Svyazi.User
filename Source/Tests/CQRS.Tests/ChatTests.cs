@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +11,9 @@ using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Users;
 using EntityFrameworkCoreMock;
 using FluentAssertions;
+using Microsoft.AspNetCore.Identity;
+using MockQueryable.Moq;
+using Moq;
 using Xunit;
 
 namespace CQRS.Tests;
@@ -22,13 +26,19 @@ public class ChatTests
         [Greedy] MessengerUser user,
         [Greedy] GroupChat chat)
     {
-        var dbContextMock = new DbContextMock<DoSvaziDbContext>();
+        // to prevent Guid.Empty collision
+        user.Id = Guid.NewGuid();
 
+        var userStore = new Mock<IUserStore<MessengerUser>>();
+        var mgr = new Mock<UserManager<MessengerUser>>(userStore.Object, null, null, null, null, null, null, null, null);
+        var dbContextMock = new DbContextMock<DoSvaziDbContext>();
+        var usersQueryMock = new[] {user}.AsQueryable().BuildMock();
+
+        mgr.Setup(x => x.Users).Returns(usersQueryMock);
         dbContextMock.CreateDbSetMock(x => x.Chats, new[] {chat});
-        dbContextMock.CreateDbSetMock(x => x.Users, new[] {user});
         dbContextMock.CreateDbSetMock(x => x.ChatUsers);
 
-        var addUserToChatHandler = new ChatsCommandHandler(dbContextMock.Object);
+        var addUserToChatHandler = new ChatsCommandHandler(mgr.Object, dbContextMock.Object);
         var addUserToChatCommand = new AddUserToChatCommand(user.Id, chat.Id);
 
         // as soon as we have chat creator
@@ -43,8 +53,7 @@ public class ChatTests
             .With(chatUser => chatUser.MessengerUserId, user.Id)
             .Create();
 
-        chat.Users.Should().HaveCount(2);
-        chat.Users.Should().Contain(expectedChatUser);
+        chat.Users.Should().Contain(expectedChatUser).And.HaveCount(2);
     }
 
     [Theory, AutoData]
@@ -52,13 +61,19 @@ public class ChatTests
         [Greedy] MessengerUser user,
         [Greedy] GroupChat chat)
     {
-        var dbContextMock = new DbContextMock<DoSvaziDbContext>();
+        // to prevent Guid.Empty collision
+        user.Id = Guid.NewGuid();
 
+        var userStore = new Mock<IUserStore<MessengerUser>>();
+        var dbContextMock = new DbContextMock<DoSvaziDbContext>();
+        var mgr = new Mock<UserManager<MessengerUser>>(userStore.Object, null, null, null, null, null, null, null, null);
+        var usersQueryMock = new[] {user}.AsQueryable().BuildMock();
+
+        mgr.Setup(x => x.Users).Returns(usersQueryMock);
         dbContextMock.CreateDbSetMock(x => x.Chats, new[] {chat});
-        dbContextMock.CreateDbSetMock(x => x.Users, new[] {user});
         dbContextMock.CreateDbSetMock(x => x.ChatUsers);
 
-        var chatsCommandHandler = new ChatsCommandHandler(dbContextMock.Object);
+        var chatsCommandHandler = new ChatsCommandHandler(mgr.Object, dbContextMock.Object);
 
         var addUserToChatCommand = new AddUserToChatCommand(user.Id, chat.Id);
         await chatsCommandHandler.Handle(addUserToChatCommand, CancellationToken.None);

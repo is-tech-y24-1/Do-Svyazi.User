@@ -5,6 +5,8 @@
         <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
+
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,6 +19,8 @@
         <PackageReference Include="FluentAssertions" Version="6.7.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+        <PackageReference Include="MockQueryable.EntityFrameworkCore" Version="6.0.1" />
+        <PackageReference Include="MockQueryable.Moq" Version="6.0.1" />
         <PackageReference Include="Moq" Version="4.18.1" />
         <PackageReference Include="xunit" Version="2.4.2-pre.12" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
@@ -32,6 +36,12 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Domain\Do-Svyazi.User.Domain\Do-Svyazi.User.Domain.csproj" />
       <ProjectReference Include="..\..\Infrastructure\Do-Svyazi.User.DataAccess\Do-Svyazi.User.DataAccess.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="MockQueryable.Moq">
+        <HintPath>..\..\..\..\..\..\.nuget\packages\mockqueryable.moq\6.0.1\lib\net6.0\MockQueryable.Moq.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>
