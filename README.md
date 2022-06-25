@@ -26,7 +26,7 @@ dotnet restore
 
 ## Start project
 ```bash
-dotnet run --project .\Infrastructure\Do-Svyazi.User.Web.Api\
+dotnet run --project .\Source\Infrastructure\Do-Svyazi.User.Web.Api\
 ```
 
 ## Run unit tests
