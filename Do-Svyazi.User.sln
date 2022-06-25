@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do-Svyazi.User.Web.ApiClien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRS.Tests", "Source\Tests\CQRS.Tests\CQRS.Tests.csproj", "{86C8E30B-B631-46E7-A0DD-815D0F447079}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration.Tests", "Source\Tests\Integration.Tests\Integration.Tests.csproj", "{83F47902-3FCC-4D11-A780-5590930C224C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,7 @@ Global
 		{BB4721E0-196B-4B3F-8701-5B17DD09C036} = {EE6ADA46-41F6-4D21-838F-9DCA315A389E}
 		{A5520DDE-4790-46C6-BD8B-FD65BD5E32B9} = {EE6ADA46-41F6-4D21-838F-9DCA315A389E}
 		{86C8E30B-B631-46E7-A0DD-815D0F447079} = {4C3C26B8-EAE0-410F-92E6-3965E7AFEECE}
+		{83F47902-3FCC-4D11-A780-5590930C224C} = {4C3C26B8-EAE0-410F-92E6-3965E7AFEECE}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{ADA73903-610D-4130-A730-EBD3F6CA44DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -70,9 +73,13 @@ Global
 		{A5520DDE-4790-46C6-BD8B-FD65BD5E32B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5520DDE-4790-46C6-BD8B-FD65BD5E32B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5520DDE-4790-46C6-BD8B-FD65BD5E32B9}.Release|Any CPU.Build.0 = Release|Any CPU
-        {86C8E30B-B631-46E7-A0DD-815D0F447079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-        {86C8E30B-B631-46E7-A0DD-815D0F447079}.Debug|Any CPU.Build.0 = Debug|Any CPU
-        {86C8E30B-B631-46E7-A0DD-815D0F447079}.Release|Any CPU.ActiveCfg = Release|Any CPU
-        {86C8E30B-B631-46E7-A0DD-815D0F447079}.Release|Any CPU.Build.0 = Release|Any CPU
+								{86C8E30B-B631-46E7-A0DD-815D0F447079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+								{86C8E30B-B631-46E7-A0DD-815D0F447079}.Debug|Any CPU.Build.0 = Debug|Any CPU
+								{86C8E30B-B631-46E7-A0DD-815D0F447079}.Release|Any CPU.ActiveCfg = Release|Any CPU
+								{86C8E30B-B631-46E7-A0DD-815D0F447079}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83F47902-3FCC-4D11-A780-5590930C224C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83F47902-3FCC-4D11-A780-5590930C224C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83F47902-3FCC-4D11-A780-5590930C224C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83F47902-3FCC-4D11-A780-5590930C224C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

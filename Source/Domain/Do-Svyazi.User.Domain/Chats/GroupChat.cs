@@ -107,7 +107,7 @@ public class GroupChat : Chat
         return newUser;
     }
 
-    public override void RemoveUser(MessengerUser user)
+    public override ChatUser RemoveUser(MessengerUser user)
     {
         if (user is null)
             throw new ArgumentNullException(nameof(user), $"User to remove in chat {Name} is null");
@@ -118,6 +118,8 @@ public class GroupChat : Chat
             throw new Do_Svyazi_User_InnerLogicException($"User {user.Name} to remove doesn't exist in chat {Name}");
 
         Users.Remove(removeUser);
+
+        return removeUser;
     }
 
     public override void AddRole(Role role)

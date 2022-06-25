@@ -58,7 +58,7 @@ public abstract class Chat
         ?? throw new Do_Svyazi_User_NotFoundException($"User is not found in chat {Name}");
 
     public abstract ChatUser AddUser(MessengerUser user);
-    public abstract void RemoveUser(MessengerUser user);
+    public abstract ChatUser RemoveUser(MessengerUser user);
     public abstract void AddRole(Role role);
     public abstract void RemoveRole(Role role);
     public abstract void ChangeUserRole(MessengerUser user, Role role);

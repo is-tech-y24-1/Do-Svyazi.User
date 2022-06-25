@@ -31,7 +31,8 @@ public class ChatTests
         var addUserToChatHandler = new ChatsCommandHandler(dbContextMock.Object);
         var addUserToChatCommand = new AddUserToChatCommand(user.Id, chat.Id);
 
-        chat.Users.Should().HaveCount(0);
+        // as soon as we have chat creator
+        chat.Users.Should().HaveCount(1);
 
         await addUserToChatHandler.Handle(addUserToChatCommand, CancellationToken.None);
 
@@ -42,9 +43,8 @@ public class ChatTests
             .With(chatUser => chatUser.MessengerUserId, user.Id)
             .Create();
 
-        chat.Users.Should().HaveCount(1);
-        ChatUser gainChatUser = chat.Users.Single();
-        gainChatUser.Should().BeEquivalentTo(expectedChatUser);
+        chat.Users.Should().HaveCount(2);
+        chat.Users.Should().Contain(expectedChatUser);
     }
 
     [Theory, AutoData]
@@ -63,11 +63,12 @@ public class ChatTests
         var addUserToChatCommand = new AddUserToChatCommand(user.Id, chat.Id);
         await chatsCommandHandler.Handle(addUserToChatCommand, CancellationToken.None);
 
+        // as soon as we have chat creator
+        chat.Users.Should().HaveCount(2);
+
+        var deleteUserFromChatCommand = new DeleteUserFromChatCommand(user.Id, chat.Id);
+        await chatsCommandHandler.Handle(deleteUserFromChatCommand, CancellationToken.None);
+
         chat.Users.Should().HaveCount(1);
-
-        var deleteUserToChatCommand = new DeleteUserFromChatCommand(user.Id, chat.Id);
-        await chatsCommandHandler.Handle(deleteUserToChatCommand, CancellationToken.None);
-
-        chat.Users.Should().HaveCount(0);
     }
 }
