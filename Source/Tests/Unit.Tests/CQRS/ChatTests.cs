@@ -42,7 +42,7 @@ public class ChatTests
 
         ChatUser expectedChatUser = fixture.Build<ChatUser>()
             .With(chatUser => chatUser.Chat, chat)
-            .With(chatUser => chatUser.User, user)
+            // .With(chatUser => chatUser.User, user)
             .With(chatUser => chatUser.ChatId, chat.Id)
             .With(chatUser => chatUser.MessengerUserId, user.Id)
             .Create();

@@ -109,7 +109,6 @@ public class IntegrationTests : IDisposable
         RegisterModel userModel2 = CreateRegisterModel("name2", "nickname2", "email2", "phoneNumber2");
         RegisterModel userModel3 = CreateRegisterModel("name3", "nickname3", "email3", "phoneNumber3");
 
-
         Guid userId1 = await authCommandHandler.Handle(new RegisterCommand(userModel1), CancellationToken.None);
         Guid userId2 = await authCommandHandler.Handle(new RegisterCommand(userModel2), CancellationToken.None);
         Guid userId3 = await authCommandHandler.Handle(new RegisterCommand(userModel3), CancellationToken.None);
