@@ -18,7 +18,7 @@ namespace Do_Svyazi.User.Application.CQRS.Authenticate.Handlers;
 
 public class AuthenticateQueryHandler :
     IQueryHandler<LoginRequest, JwtSecurityToken>,
-    IQueryHandler<AuthenticateByJwtRequest, Guid>,
+    IQueryHandler<AuthenticateByJwtRequest, AuthenticateResponse>,
     IQueryHandler<GetUsersRequest, IReadOnlyCollection<MessengerUserDto>>
 {
     private const string NameType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
@@ -58,13 +58,13 @@ public class AuthenticateQueryHandler :
         return GetToken(authClaims);
     }
 
-    public async Task<Guid> Handle(AuthenticateByJwtRequest request, CancellationToken cancellationToken)
+    public async Task<AuthenticateResponse> Handle(AuthenticateByJwtRequest request, CancellationToken cancellationToken)
     {
         var token = new JwtSecurityToken(request.jwtToken);
         string userNickName = token.Claims.First(x => x.Type == NameType).Value;
 
         var identityUser = await _userManager.FindByNameAsync(userNickName);
-        return identityUser.Id;
+        return new AuthenticateResponse(identityUser.Id, token.ValidTo);
     }
 
     public async Task<IReadOnlyCollection<MessengerUserDto>> Handle(GetUsersRequest request, CancellationToken cancellationToken)
@@ -76,10 +76,13 @@ public class AuthenticateQueryHandler :
     {
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
+        var time = DateTime.UtcNow.AddHours(int.Parse(_configuration["JWT:Expires"]));
+
         var token = new JwtSecurityToken(
             issuer: _configuration["JWT:ValidIssuer"],
             audience: _configuration["JWT:ValidAudience"],
-            expires: DateTime.Now.AddHours(int.Parse(_configuration["JWT:Expires"])),
+            notBefore: DateTime.UtcNow,
+            expires: DateTime.UtcNow.AddHours(int.Parse(_configuration["JWT:Expires"])),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
 
