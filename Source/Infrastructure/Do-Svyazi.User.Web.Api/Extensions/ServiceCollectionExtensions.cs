@@ -48,7 +48,7 @@ public static class ServiceCollectionExtensions
             options.TokenValidationParameters = new TokenValidationParameters()
             {
                 ValidateIssuer = true,
-                ValidateAudience = true,
+                ValidateAudience = false,
                 ValidAudience = configuration["JWT:ValidAudience"],
                 ValidIssuer = configuration["JWT:ValidIssuer"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
@@ -90,27 +90,27 @@ public static class ServiceCollectionExtensions
                 Description = "Do Svyazi User API",
             });
 
-            opt.AddSecurityDefinition("Bearer (value: SecretKey)", new OpenApiSecurityScheme
+            var securityScheme = new OpenApiSecurityScheme
             {
                 Description = "JWT Authorization header using the bearer scheme",
-                Name = "Authorization",
+                Name = "JWT Authentication",
                 In = ParameterLocation.Header,
-                Scheme = "Bearer",
                 Type = SecuritySchemeType.Http,
+                Scheme = "Bearer",
                 BearerFormat = "JWT",
-            });
+                Reference = new OpenApiReference
+                {
+                    Id = JwtBearerDefaults.AuthenticationScheme,
+                    Type = ReferenceType.SecurityScheme,
+                },
+            };
+
+            opt.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
 
             opt.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Id = "Bearer (value: SecretKey)",
-                            Type = ReferenceType.SecurityScheme,
-                        },
-                    },
+                    securityScheme,
                     new List<string>()
                 },
             });
