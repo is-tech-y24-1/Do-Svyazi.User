@@ -26,11 +26,14 @@
 
     <ItemGroup>
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+        <PackageReference Include="log4net" Version="2.0.14" />
+        <PackageReference Include="log4net.Extensions.AspNetCore" Version="1.0.0" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.5" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
         <PackageReference Include="NSwag.AspNetCore" Version="13.16.1" />
         <PackageReference Include="NSwag.CodeGeneration.CSharp" Version="13.16.0" />
         <PackageReference Include="NSwag.MSBuild" Version="13.16.1">

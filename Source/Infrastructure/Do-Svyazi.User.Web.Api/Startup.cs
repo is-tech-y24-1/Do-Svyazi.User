@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Do_Svyazi.User.Web.Api;
 
@@ -37,8 +38,10 @@ public class Startup
     }
 
     [Obsolete("Obsolete")]
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
+        loggerFactory.AddLog4Net("../../../log4net.config");
+
         if (env.IsDevelopment())
             app.UseDeveloperExceptionPage();
 
