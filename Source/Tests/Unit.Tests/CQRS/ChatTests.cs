@@ -11,6 +11,7 @@ using Do_Svyazi.User.Domain.Users;
 using EntityFrameworkCoreMock;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
+using Moq;
 using Xunit;
 using static CQRS.Tests.Extensions.MockExtensions;
 
@@ -27,8 +28,9 @@ public class ChatTests
         var users = new List<MessengerUser> {user};
 
         var mockUserManager = MockUserManager<UserManager<MessengerUser>, MessengerUser>(users);
-        var dbContextMock = new DbContextMock<DoSvaziDbContext>();
+        mockUserManager.Setup( userManager => userManager.FindByIdAsync($"{user.Id}")).ReturnsAsync(user);
 
+        var dbContextMock = new DbContextMock<DoSvaziDbContext>();
         dbContextMock.CreateDbSetMock(x => x.Chats, new[] {chat});
         dbContextMock.CreateDbSetMock(x => x.ChatUsers);
 
@@ -42,7 +44,6 @@ public class ChatTests
 
         ChatUser expectedChatUser = fixture.Build<ChatUser>()
             .With(chatUser => chatUser.Chat, chat)
-            // .With(chatUser => chatUser.User, user)
             .With(chatUser => chatUser.ChatId, chat.Id)
             .With(chatUser => chatUser.MessengerUserId, user.Id)
             .Create();
@@ -58,6 +59,8 @@ public class ChatTests
         var users = new List<MessengerUser> {user};
 
         var mockUserManager = MockUserManager<UserManager<MessengerUser>, MessengerUser>(users);
+        mockUserManager.Setup( userManager => userManager.FindByIdAsync($"{user.Id}")).ReturnsAsync(user);
+
         var dbContextMock = new DbContextMock<DoSvaziDbContext>();
         dbContextMock.CreateDbSetMock(x => x.Chats, new[] {chat});
         dbContextMock.CreateDbSetMock(x => x.ChatUsers);
