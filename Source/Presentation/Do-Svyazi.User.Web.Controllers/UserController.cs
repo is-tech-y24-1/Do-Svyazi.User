@@ -1,7 +1,6 @@
 using Do_Svyazi.User.Application.CQRS.Users.Commands;
 using Do_Svyazi.User.Application.CQRS.Users.Queries;
 using Do_Svyazi.User.Domain.Authenticate;
-using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
 using Do_Svyazi.User.Dtos.Users;
 using MediatR;

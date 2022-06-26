@@ -1,4 +1,3 @@
-using Do_Svyazi.User.Domain.Chats;
 using Microsoft.AspNetCore.Identity;
 
 namespace Do_Svyazi.User.Domain.Users;

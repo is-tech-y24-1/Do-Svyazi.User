@@ -1,6 +1,5 @@
 using Do_Svyazi.User.Application.CQRS.Handlers;
 using Do_Svyazi.User.Application.CQRS.Users.Commands;
-using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Users;
 using MediatR;
