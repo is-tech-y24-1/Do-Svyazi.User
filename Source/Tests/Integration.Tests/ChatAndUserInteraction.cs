@@ -142,6 +142,87 @@ public class IntegrationTests : IDisposable
         userChats3.Should().NotContain(chatGroupId).And.HaveCount(0);
     }
 
+    [Test]
+    public async Task UserCreateFourChats()
+    {
+        var chatsCommandHandler = new ChatsCommandHandler(_userManager, _context);
+        var authCommandHandler = new AuthenticateCommandHandler(_userManager, _roleManager);
+        var usersQueryHandler = new UsersQueryHandler(_userManager, _context, _mapper);
+        var chatsQueryHandler = new ChatsQueryHandler(_context, _mapper);
+
+        RegisterModel userModel1 = CreateRegisterModel("name1", "nickname1", "email1", "phoneNumber1");
+        RegisterModel userModel2 = CreateRegisterModel("name2", "nickname2", "email2", "phoneNumber2");
+        Guid userId1 = await authCommandHandler.Handle(new RegisterCommand(userModel1), CancellationToken.None);
+        Guid userId2 = await authCommandHandler.Handle(new RegisterCommand(userModel2), CancellationToken.None);
+
+        var addGroupChat = new AddGroupChatCommand(userId1, "chat1", "description1");
+        Guid chatGroupId1 = await chatsCommandHandler.Handle(addGroupChat, CancellationToken.None);
+        var userChats1 =
+            await usersQueryHandler.Handle(new GetAllChatsIdsByUserIdQuery(userId1), CancellationToken.None);
+        
+        userChats1.Should().HaveCount(1);
+        
+        var addSavedMessages = new AddSavedMessagesCommand(userId1, "chat2", "description2");
+        Guid chatGroupId2 = await chatsCommandHandler.Handle(addSavedMessages, CancellationToken.None);
+
+        userChats1 =
+            await usersQueryHandler.Handle(new GetAllChatsIdsByUserIdQuery(userId1), CancellationToken.None);
+
+        userChats1.Should().HaveCount(2);
+        
+        var addChannel = new AddChannelCommand(userId1, "chat3", "description3");
+        Guid chatGroupId3 = await chatsCommandHandler.Handle(addChannel, CancellationToken.None);
+
+        userChats1 =
+            await usersQueryHandler.Handle(new GetAllChatsIdsByUserIdQuery(userId1), CancellationToken.None);
+
+        userChats1.Should().HaveCount(3);
+        
+        var addPersonalChat = new AddPersonalChatCommand(userId1, userId2, "chat4", "description4");
+        Guid chatGroupId4 = await chatsCommandHandler.Handle(addPersonalChat, CancellationToken.None);
+
+        userChats1 =
+            await usersQueryHandler.Handle(new GetAllChatsIdsByUserIdQuery(userId1), CancellationToken.None);
+        var userChats2 =
+            await usersQueryHandler.Handle(new GetAllChatsIdsByUserIdQuery(userId2), CancellationToken.None);
+
+        userChats1.Should().HaveCount(4);
+        userChats2.Should().HaveCount(1);
+    }
+    
+    
+    [Test]
+    public async Task CreatePersonalChat()
+    {
+        var chatsCommandHandler = new ChatsCommandHandler(_userManager, _context);
+        var authCommandHandler = new AuthenticateCommandHandler(_userManager, _roleManager);
+        var usersQueryHandler = new UsersQueryHandler(_userManager, _context, _mapper);
+        var chatsQueryHandler = new ChatsQueryHandler(_context, _mapper);
+
+        RegisterModel userModel1 = CreateRegisterModel("name1", "nickname1", "email1", "phoneNumber1");
+        RegisterModel userModel2 = CreateRegisterModel("name2", "nickname2", "email2", "phoneNumber2");
+        Guid userId1 = await authCommandHandler.Handle(new RegisterCommand(userModel1), CancellationToken.None);
+        Guid userId2 = await authCommandHandler.Handle(new RegisterCommand(userModel2), CancellationToken.None);
+
+        var addPersonalChat = new AddPersonalChatCommand(userId1, userId2, "chat1", "description1");
+        Guid chatGroupId1 = await chatsCommandHandler.Handle(addPersonalChat, CancellationToken.None);
+        
+        var userChats1 =
+            await usersQueryHandler.Handle(new GetAllChatsIdsByUserIdQuery(userId1), CancellationToken.None);
+        var userChats2 =
+            await usersQueryHandler.Handle(new GetAllChatsIdsByUserIdQuery(userId2), CancellationToken.None);
+
+        var getChatById = new GetChatByIdQuery(chatGroupId1);
+        var chat = await chatsQueryHandler.Handle(getChatById, CancellationToken.None);
+        
+        chat.Users.Should()
+            .Contain(userId1).And
+            .Contain(userId2).And
+            .HaveCount(2);
+        userChats1.Should().HaveCount(1);
+        userChats2.Should().HaveCount(1);
+    }
+    
     public void Dispose()
     {
         _context.Dispose();
