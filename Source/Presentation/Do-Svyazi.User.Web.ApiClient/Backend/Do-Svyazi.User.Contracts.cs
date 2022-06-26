@@ -53,12 +53,12 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
 
         /// <returns>Success</returns>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Guid> AuthenticateByJwtAsync(string? jwtToken);
+        System.Threading.Tasks.Task<AuthenticateResponse> AuthenticateByJwtAsync(string? jwtToken);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Guid> AuthenticateByJwtAsync(string? jwtToken, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<AuthenticateResponse> AuthenticateByJwtAsync(string? jwtToken, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
@@ -513,6 +513,40 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
         {
 
             return Newtonsoft.Json.JsonConvert.DeserializeObject<AddUserToChatCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class AuthenticateResponse
+    {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public AuthenticateResponse(System.Guid @userId, System.DateTimeOffset @validTo)
+
+        {
+
+            this.UserId = @userId;
+
+            this.ValidTo = @validTo;
+
+        }    [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid UserId { get; }
+
+        [Newtonsoft.Json.JsonProperty("validTo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset ValidTo { get; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static AuthenticateResponse FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<AuthenticateResponse>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
@@ -1205,7 +1239,7 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     {
         [Newtonsoft.Json.JsonConstructor]
 
-        public RoleDto(RoleDtoCanAddUsers @canAddUsers, RoleDtoCanDeleteChat @canDeleteChat, RoleDtoCanDeleteMessages @canDeleteMessages, RoleDtoCanDeleteUsers @canDeleteUsers, RoleDtoCanEditChannelDescription @canEditChannelDescription, RoleDtoCanEditMessages @canEditMessages, RoleDtoCanInviteOtherUsers @canInviteOtherUsers, RoleDtoCanPinMessages @canPinMessages, RoleDtoCanReadMessages @canReadMessages, RoleDtoCanSeeChannelMembers @canSeeChannelMembers, RoleDtoCanWriteMessages @canWriteMessages, string? @name)
+        public RoleDto(ActionOption @canAddUsers, ActionOption @canDeleteChat, ActionOption @canDeleteMessages, ActionOption @canDeleteUsers, ActionOption @canEditChannelDescription, ActionOption @canEditMessages, ActionOption @canInviteOtherUsers, ActionOption @canPinMessages, ActionOption @canReadMessages, ActionOption @canSeeChannelMembers, ActionOption @canWriteMessages, string? @name)
 
         {
 
@@ -1237,37 +1271,37 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
         public string? Name { get; }
 
         [Newtonsoft.Json.JsonProperty("canEditMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoleDtoCanEditMessages CanEditMessages { get; }
+        public ActionOption CanEditMessages { get; }
 
         [Newtonsoft.Json.JsonProperty("canDeleteMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoleDtoCanDeleteMessages CanDeleteMessages { get; }
+        public ActionOption CanDeleteMessages { get; }
 
         [Newtonsoft.Json.JsonProperty("canWriteMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoleDtoCanWriteMessages CanWriteMessages { get; }
+        public ActionOption CanWriteMessages { get; }
 
         [Newtonsoft.Json.JsonProperty("canReadMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoleDtoCanReadMessages CanReadMessages { get; }
+        public ActionOption CanReadMessages { get; }
 
         [Newtonsoft.Json.JsonProperty("canAddUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoleDtoCanAddUsers CanAddUsers { get; }
+        public ActionOption CanAddUsers { get; }
 
         [Newtonsoft.Json.JsonProperty("canDeleteUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoleDtoCanDeleteUsers CanDeleteUsers { get; }
+        public ActionOption CanDeleteUsers { get; }
 
         [Newtonsoft.Json.JsonProperty("canPinMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoleDtoCanPinMessages CanPinMessages { get; }
+        public ActionOption CanPinMessages { get; }
 
         [Newtonsoft.Json.JsonProperty("canSeeChannelMembers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoleDtoCanSeeChannelMembers CanSeeChannelMembers { get; }
+        public ActionOption CanSeeChannelMembers { get; }
 
         [Newtonsoft.Json.JsonProperty("canInviteOtherUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoleDtoCanInviteOtherUsers CanInviteOtherUsers { get; }
+        public ActionOption CanInviteOtherUsers { get; }
 
         [Newtonsoft.Json.JsonProperty("canEditChannelDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoleDtoCanEditChannelDescription CanEditChannelDescription { get; }
+        public ActionOption CanEditChannelDescription { get; }
 
         [Newtonsoft.Json.JsonProperty("canDeleteChat", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoleDtoCanDeleteChat CanDeleteChat { get; }
+        public ActionOption CanDeleteChat { get; }
 
         public string ToJson()
         {
@@ -1318,139 +1352,17 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum RoleDtoCanAddUsers
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum ActionOption
     {
 
-        _0 = 0,
+        Unavailable = 0,
 
-        _1 = 1,
+        Enabled = 1,
 
-        _2 = 2,
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum RoleDtoCanDeleteChat
-    {
-
-        _0 = 0,
-
-        _1 = 1,
-
-        _2 = 2,
+        Disabled = 2,
 
     }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum RoleDtoCanDeleteMessages
-    {
-
-        _0 = 0,
-
-        _1 = 1,
-
-        _2 = 2,
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum RoleDtoCanDeleteUsers
-    {
-
-        _0 = 0,
-
-        _1 = 1,
-
-        _2 = 2,
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum RoleDtoCanEditChannelDescription
-    {
-
-        _0 = 0,
-
-        _1 = 1,
-
-        _2 = 2,
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum RoleDtoCanEditMessages
-    {
-
-        _0 = 0,
-
-        _1 = 1,
-
-        _2 = 2,
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum RoleDtoCanInviteOtherUsers
-    {
-
-        _0 = 0,
-
-        _1 = 1,
-
-        _2 = 2,
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum RoleDtoCanPinMessages
-    {
-
-        _0 = 0,
-
-        _1 = 1,
-
-        _2 = 2,
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum RoleDtoCanReadMessages
-    {
-
-        _0 = 0,
-
-        _1 = 1,
-
-        _2 = 2,
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum RoleDtoCanSeeChannelMembers
-    {
-
-        _0 = 0,
-
-        _1 = 1,
-
-        _2 = 2,
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum RoleDtoCanWriteMessages
-    {
-
-        _0 = 0,
-
-        _1 = 1,
-
-        _2 = 2,
-
-    }
-
-
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class Do_Svyazi_User_ApiClient_Exception : System.Exception

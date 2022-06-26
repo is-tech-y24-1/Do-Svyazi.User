@@ -327,7 +327,7 @@ namespace Do_Svyazi.User.Web.ApiClient
 
         /// <returns>Success</returns>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Guid> AuthenticateByJwtAsync(string? jwtToken)
+        public virtual System.Threading.Tasks.Task<AuthenticateResponse> AuthenticateByJwtAsync(string? jwtToken)
         {
             return AuthenticateByJwtAsync(jwtToken, System.Threading.CancellationToken.None);
         }
@@ -335,7 +335,7 @@ namespace Do_Svyazi.User.Web.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Guid> AuthenticateByJwtAsync(string? jwtToken, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<AuthenticateResponse> AuthenticateByJwtAsync(string? jwtToken, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Authenticate/AuthenticateByJwt");
@@ -375,7 +375,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Guid>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<AuthenticateResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
