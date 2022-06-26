@@ -100,7 +100,7 @@ public class ChatController : ControllerBase
     }
 
     [HttpDelete(nameof(DeleteUserFromChat))]
-    [Authorize(Roles = $"{MessageIdentityRole.ChatAdmin}, {MessageIdentityRole.ChatCreator}")]
+    [Authorize(Roles = MessageIdentityRole.Admin)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> DeleteUserFromChat(
         DeleteUserFromChatCommand deleteUserFromChatCommand, CancellationToken cancellationToken)
