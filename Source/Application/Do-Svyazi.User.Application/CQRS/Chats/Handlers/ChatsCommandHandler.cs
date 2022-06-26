@@ -29,12 +29,11 @@ public class ChatsCommandHandler :
 
     public async Task<Guid> Handle(AddChannelCommand request, CancellationToken cancellationToken)
     {
-        MessengerUser user = await _userManager.Users
-                                 .SingleOrDefaultAsync(user => user.Id == request.adminId, cancellationToken) ??
-                             throw new Do_Svyazi_User_NotFoundException(
+        MessengerUser user = await _userManager.FindByIdAsync($"{request.adminId}")
+                             ?? throw new Do_Svyazi_User_NotFoundException(
                                  $"User with id = {request.adminId} to create a channel was not found");
 
-        Chat chat = new Channel(user, request.name, request.description);
+        var chat = new Channel(user, request.name, request.description);
         var chatAdmin = chat.Users.Single();
 
         await _context.ChatUsers.AddAsync(chatAdmin, cancellationToken);
@@ -50,7 +49,7 @@ public class ChatsCommandHandler :
                              ?? throw new Do_Svyazi_User_NotFoundException(
                                  $"User with id = {request.adminId} to create a group chat was not found");
 
-        GroupChat chat = new GroupChat(user, request.name, request.description);
+        var chat = new GroupChat(user, request.name, request.description);
         var chatAdmin = chat.Users.Single();
 
         await _context.ChatUsers.AddAsync(chatAdmin, cancellationToken);
@@ -62,15 +61,13 @@ public class ChatsCommandHandler :
 
     public async Task<Guid> Handle(AddPersonalChatCommand request, CancellationToken cancellationToken)
     {
-        MessengerUser firstUser =
-            await _userManager.Users.SingleOrDefaultAsync(user => user.Id == request.firstUserId, cancellationToken) ??
-            throw new Do_Svyazi_User_NotFoundException(
-                $"User with id = {request.firstUserId} to create a personal chat was not found");
+        MessengerUser firstUser = await _userManager.FindByIdAsync($"{request.firstUserId}")
+                                  ?? throw new Do_Svyazi_User_NotFoundException(
+                                      $"User with id = {request.firstUserId} to create a personal chat was not found");
 
-        MessengerUser secondUser =
-            await _userManager.Users.SingleOrDefaultAsync(user => user.Id == request.secondUserId, cancellationToken) ??
-            throw new Do_Svyazi_User_NotFoundException(
-                $"User with id = {request.secondUserId} to create a personal chat was not found");
+        MessengerUser secondUser = await _userManager.FindByIdAsync($"{request.secondUserId}")
+                                   ?? throw new Do_Svyazi_User_NotFoundException(
+                                       $"User with id = {request.secondUserId} to create a personal chat was not found");
 
         Chat chat = new PersonalChat(firstUser, secondUser, request.name, request.description);
 
@@ -83,10 +80,9 @@ public class ChatsCommandHandler :
 
     public async Task<Guid> Handle(AddSavedMessagesCommand request, CancellationToken cancellationToken)
     {
-        MessengerUser user =
-            await _userManager.Users.SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
-            throw new Do_Svyazi_User_NotFoundException(
-                $"User with id = {request.userId} to create saved messages chat not found");
+        MessengerUser user = await _userManager.FindByIdAsync($"{request.userId}")
+                             ?? throw new Do_Svyazi_User_NotFoundException(
+                                 $"User with id = {request.userId} to create saved messages chat not found");
 
         Chat chat = new SavedMessages(user, request.name, request.description);
         var chatAdmin = chat.Users.Single();
@@ -102,14 +98,13 @@ public class ChatsCommandHandler :
     {
         Chat chat = await _context.Chats
                         .Include(chat => chat.Users)
-                        .ThenInclude(user => user.Role)
+                            .ThenInclude(user => user.Role)
                         .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                     throw new Do_Svyazi_User_NotFoundException(
                         $"Chat with id = {request.chatId} to add user {request.userId} was not found");
 
-        MessengerUser messengerUser = await _userManager.Users
-                                          .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
-                                      throw new Do_Svyazi_User_NotFoundException(
+        MessengerUser messengerUser = await _userManager.FindByIdAsync($"{request.userId}")
+                                      ?? throw new Do_Svyazi_User_NotFoundException(
                                           $"User with id = {request.userId} to be added into chat with id = {request.chatId} not found");
 
         ChatUser newChatUser = chat.AddUser(messengerUser);
@@ -124,14 +119,12 @@ public class ChatsCommandHandler :
     {
         Chat chat = await _context.Chats
                         .Include(chat => chat.Users)
-                        .ThenInclude(user => user.Role)
+                            .ThenInclude(user => user.Role)
                         .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                     throw new Do_Svyazi_User_NotFoundException($"Chat with id {request.chatId} not found");
 
-        MessengerUser messengerUser = await _userManager.Users
-                                          .SingleOrDefaultAsync(user => user.Id == request.userId, cancellationToken) ??
-                                      throw new Do_Svyazi_User_NotFoundException(
-                                          $"User with id {request.userId} not found");
+        MessengerUser messengerUser = await _userManager.FindByIdAsync($"{request.userId}")
+                                      ?? throw new Do_Svyazi_User_NotFoundException($"User with id {request.userId} not found");
 
         var removedUser = chat.RemoveUser(messengerUser);
 
