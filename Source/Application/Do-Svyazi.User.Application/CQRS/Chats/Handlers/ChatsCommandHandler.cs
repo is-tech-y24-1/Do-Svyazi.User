@@ -102,8 +102,6 @@ public class ChatsCommandHandler :
     {
         Chat chat = await _context.Chats
                         .Include(chat => chat.Users)
-                        .ThenInclude(user => user.User)
-                        .Include(chat => chat.Users)
                         .ThenInclude(user => user.Role)
                         .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                     throw new Do_Svyazi_User_NotFoundException(
@@ -125,8 +123,6 @@ public class ChatsCommandHandler :
     public async Task<Unit> Handle(DeleteUserFromChatCommand request, CancellationToken cancellationToken)
     {
         Chat chat = await _context.Chats
-                        .Include(chat => chat.Users)
-                        .ThenInclude(user => user.User)
                         .Include(chat => chat.Users)
                         .ThenInclude(user => user.Role)
                         .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??

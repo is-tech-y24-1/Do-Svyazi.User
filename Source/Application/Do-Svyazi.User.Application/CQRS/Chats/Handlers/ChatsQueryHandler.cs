@@ -4,8 +4,8 @@ using Do_Svyazi.User.Application.CQRS.Handlers;
 using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Chats;
 using Do_Svyazi.User.Domain.Exceptions;
-using Do_Svyazi.User.Domain.Users;
 using Do_Svyazi.User.Dtos.Chats;
+using Do_Svyazi.User.Dtos.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Chats.Handlers;
@@ -14,7 +14,7 @@ public class ChatsQueryHandler :
     IQueryHandler<GetChatByIdQuery, MessengerChatDto>,
     IQueryHandler<GetChatsQuery, IReadOnlyCollection<MessengerChatDto>>,
     IQueryHandler<GetUserIdsByChatIdQuery, IReadOnlyCollection<Guid>>,
-    IQueryHandler<GetUsersByChatIdQuery, IReadOnlyCollection<ChatUser>>
+    IQueryHandler<GetUsersByChatIdQuery, IReadOnlyCollection<ChatUserDto>>
 {
     private readonly IDbContext _context;
     private readonly IMapper _mapper;
@@ -58,16 +58,14 @@ public class ChatsQueryHandler :
         return _mapper.Map<IReadOnlyCollection<Guid>>(userIds);
     }
 
-    public async Task<IReadOnlyCollection<ChatUser>> Handle(GetUsersByChatIdQuery request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<ChatUserDto>> Handle(GetUsersByChatIdQuery request, CancellationToken cancellationToken)
     {
         Chat chat = await _context.Chats
-                        .Include(chat => chat.Users)
-                        .ThenInclude(user => user.User)
                         .Include(chat => chat.Users)
                         .ThenInclude(user => user.Role)
                         .SingleOrDefaultAsync(chat => chat.Id == request.chatId, cancellationToken) ??
                     throw new Do_Svyazi_User_NotFoundException($"Chat with id = {request.chatId} to get users was not found");
 
-        return _mapper.Map<IReadOnlyCollection<ChatUser>>(chat.Users);
+        return _mapper.Map<IReadOnlyCollection<ChatUserDto>>(chat.Users);
     }
 }

@@ -20,6 +20,7 @@ public class MappingProfile : Profile
                         .Select(user => user.MessengerUserId)));
 
         CreateMap<MessengerUser, MessengerUserDto>();
+        CreateMap<ChatUser, ChatUserDto>();
         CreateMap<Role, RoleDto>();
     }
 }

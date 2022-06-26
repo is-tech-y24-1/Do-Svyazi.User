@@ -1,12 +1,10 @@
 using Do_Svyazi.User.Application.CQRS.Authenticate.Commands;
 using Do_Svyazi.User.Application.CQRS.Handlers;
-using Do_Svyazi.User.Application.DbContexts;
 using Do_Svyazi.User.Domain.Authenticate;
 using Do_Svyazi.User.Domain.Exceptions;
 using Do_Svyazi.User.Domain.Users;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Do_Svyazi.User.Application.CQRS.Authenticate.Handlers;
 
@@ -44,13 +42,7 @@ public class AuthenticateCommandHandler :
     {
         RegisterModel registerModel = request.model;
 
-        if (await _userManager.FindByNameAsync(registerModel.UserName) is not null)
-            throw new Do_Svyazi_User_BusinessLogicException($"User with userName {registerModel.UserName} exists");
-
-        MessengerUser user = CreateIdentityUser(registerModel);
-
-        if (!(await _userManager.CreateAsync(user, registerModel.Password)).Succeeded)
-            throw new Do_Svyazi_User_BusinessLogicException("User creation failed! Please check user details and try again.");
+        MessengerUser user = await GetUserByUsernameOrEmail(registerModel);
 
         if (!await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
             await _roleManager.CreateAsync(new MessageIdentityRole(MessageIdentityRole.Admin));
@@ -69,4 +61,13 @@ public class AuthenticateCommandHandler :
 
     private MessengerUser CreateIdentityUser(RegisterModel userModel) =>
         new (userModel.Name, userModel.UserName, userModel.Email, userModel.PhoneNumber);
+
+    private async Task<MessengerUser> GetUserByUsernameOrEmail(RegisterModel registerModel)
+    {
+        MessengerUser user = await _userManager.FindByNameAsync(registerModel.UserName)
+            ?? await _userManager.FindByEmailAsync(registerModel.Email)
+            ?? throw new Do_Svyazi_User_NotFoundException($"User with userName {registerModel.UserName} or email {registerModel.Email} was not found");
+
+        return user;
+    }
 }

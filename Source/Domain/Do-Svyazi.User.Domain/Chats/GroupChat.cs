@@ -150,7 +150,7 @@ public class GroupChat : Chat
         if (role is null)
             throw new ArgumentNullException(nameof(role), $"Role to set to user {user.Name} in chat {Name} is null");
 
-        ChatUser chatUser = GetUser(user.UserName);
+        ChatUser chatUser = GetUser(user.Id);
 
         chatUser.ChangeRole(role);
     }
