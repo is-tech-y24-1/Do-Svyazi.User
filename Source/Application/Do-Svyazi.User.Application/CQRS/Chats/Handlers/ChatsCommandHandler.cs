@@ -74,7 +74,7 @@ public class ChatsCommandHandler :
 
         Chat chat = new PersonalChat(firstUser, secondUser, request.name, request.description);
 
-        _context.ChatUsers.AddRange(chat.Users);
+        await _context.ChatUsers.AddRangeAsync(chat.Users, cancellationToken);
         await _context.Chats.AddAsync(chat, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
