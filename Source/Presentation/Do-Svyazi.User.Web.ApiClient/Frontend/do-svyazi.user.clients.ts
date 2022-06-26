@@ -14,9 +14,11 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } fr
 import * as moment from 'moment';
 
 export interface IAuthenticateClient {
-    login(model: Login): Promise<FileResponse>;
-    register(model: Register): Promise<FileResponse>;
-    registerAdmin(model: RegisterAdmin): Promise<FileResponse>;
+    getAll(): Promise<MessengerUser[]>;
+    login(model: LoginRequest): Promise<void>;
+    register(model: RegisterCommand): Promise<void>;
+    authenticateByJwt(jwtToken: string | null): Promise<string>;
+    registerAdmin(model: RegisterAdminCommand): Promise<void>;
 }
 
 export class AuthenticateClient implements IAuthenticateClient {
@@ -32,20 +34,85 @@ export class AuthenticateClient implements IAuthenticateClient {
 
     }
 
-    login(model: Login , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/Authenticate/login";
+    getAll(  cancelToken?: CancelToken | undefined): Promise<MessengerUser[]> {
+        let url_ = this.baseUrl + "/api/Authenticate/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetAll(_response);
+        });
+    }
+
+    protected processGetAll(response: AxiosResponse): Promise<MessengerUser[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        let _mappings: { source: any, target: any }[] = [];
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(MessengerUser.fromJS(item, _mappings));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<MessengerUser[]>(result200);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<MessengerUser[]>(null as any);
+    }
+
+    login(model: LoginRequest , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Authenticate/Login";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(model);
 
         let options_: AxiosRequestConfig = {
             data: content_,
-            responseType: "blob",
             method: "POST",
             url: url_,
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
             },
             cancelToken
         };
@@ -61,7 +128,7 @@ export class AuthenticateClient implements IAuthenticateClient {
         });
     }
 
-    protected processLogin(response: AxiosResponse): Promise<FileResponse> {
+    protected processLogin(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -71,32 +138,41 @@ export class AuthenticateClient implements IAuthenticateClient {
                 }
             }
         }
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        let _mappings: { source: any, target: any }[] = [];
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 
-    register(model: Register , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/Authenticate/register";
+    register(model: RegisterCommand , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Authenticate/Register";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(model);
 
         let options_: AxiosRequestConfig = {
             data: content_,
-            responseType: "blob",
             method: "POST",
             url: url_,
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
             },
             cancelToken
         };
@@ -112,7 +188,7 @@ export class AuthenticateClient implements IAuthenticateClient {
         });
     }
 
-    protected processRegister(response: AxiosResponse): Promise<FileResponse> {
+    protected processRegister(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -122,32 +198,107 @@ export class AuthenticateClient implements IAuthenticateClient {
                 }
             }
         }
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        let _mappings: { source: any, target: any }[] = [];
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 204) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 
-    registerAdmin(model: RegisterAdmin , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/Authenticate/register-admin";
+    authenticateByJwt(jwtToken: string | null , cancelToken?: CancelToken | undefined): Promise<string> {
+        let url_ = this.baseUrl + "/api/Authenticate/AuthenticateByJwt";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "jwtToken": jwtToken !== undefined && jwtToken !== null ? "" + jwtToken : "",
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processAuthenticateByJwt(_response);
+        });
+    }
+
+    protected processAuthenticateByJwt(response: AxiosResponse): Promise<string> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        let _mappings: { source: any, target: any }[] = [];
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return Promise.resolve<string>(result200);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<string>(null as any);
+    }
+
+    registerAdmin(model: RegisterAdminCommand , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Authenticate/RegisterAdmin";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(model);
 
         let options_: AxiosRequestConfig = {
             data: content_,
-            responseType: "blob",
             method: "POST",
             url: url_,
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
             },
             cancelToken
         };
@@ -163,7 +314,7 @@ export class AuthenticateClient implements IAuthenticateClient {
         });
     }
 
-    protected processRegisterAdmin(response: AxiosResponse): Promise<FileResponse> {
+    protected processRegisterAdmin(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -173,16 +324,31 @@ export class AuthenticateClient implements IAuthenticateClient {
                 }
             }
         }
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        let _mappings: { source: any, target: any }[] = [];
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 204) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 }
 
@@ -190,13 +356,13 @@ export interface IChatClient {
     getChats(): Promise<MessengerChatDto[]>;
     getChatById(chatId: string): Promise<MessengerChatDto>;
     getUserIdsByChatId(chatId: string): Promise<string[]>;
-    getUsersByChatId(chatId: string): Promise<ChatUser[]>;
-    addChannel(addChannelCommand: AddChannel): Promise<void>;
-    addGroupChat(addGroupChatCommand: AddGroupChat): Promise<void>;
-    addPersonalChat(addPersonalChatCommand: AddPersonalChat): Promise<void>;
-    addSavedMessages(addSavedMessagesCommand: AddSavedMessages): Promise<void>;
-    addUserToChat(addUserToChatCommand: AddUserToChat): Promise<void>;
-    deleteUserFromChat(deleteUserFromChatCommand: DeleteUserFromChat): Promise<void>;
+    getUsersByChatId(chatId: string): Promise<ChatUserDto[]>;
+    addChannel(addChannelCommand: AddChannelCommand): Promise<void>;
+    addGroupChat(addGroupChatCommand: AddGroupChatCommand): Promise<void>;
+    addPersonalChat(addPersonalChatCommand: AddPersonalChatCommand): Promise<void>;
+    addSavedMessages(addSavedMessagesCommand: AddSavedMessagesCommand): Promise<void>;
+    addUserToChat(addUserToChatCommand: AddUserToChatCommand): Promise<void>;
+    deleteUserFromChat(deleteUserFromChatCommand: DeleteUserFromChatCommand): Promise<void>;
 }
 
 export class ChatClient implements IChatClient {
@@ -261,6 +427,17 @@ export class ChatClient implements IChatClient {
             }
             return Promise.resolve<MessengerChatDto[]>(result200);
 
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -314,6 +491,17 @@ export class ChatClient implements IChatClient {
             result200 = MessengerChatDto.fromJS(resultData200, _mappings);
             return Promise.resolve<MessengerChatDto>(result200);
 
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -359,6 +547,7 @@ export class ChatClient implements IChatClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
@@ -373,6 +562,17 @@ export class ChatClient implements IChatClient {
             }
             return Promise.resolve<string[]>(result200);
 
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -380,7 +580,7 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<string[]>(null as any);
     }
 
-    getUsersByChatId(chatId: string , cancelToken?: CancelToken | undefined): Promise<ChatUser[]> {
+    getUsersByChatId(chatId: string , cancelToken?: CancelToken | undefined): Promise<ChatUserDto[]> {
         let url_ = this.baseUrl + "/api/Chat/GetUsersByChatId?";
         if (chatId === undefined || chatId === null)
             throw new Error("The parameter 'chatId' must be defined and cannot be null.");
@@ -408,7 +608,7 @@ export class ChatClient implements IChatClient {
         });
     }
 
-    protected processGetUsersByChatId(response: AxiosResponse): Promise<ChatUser[]> {
+    protected processGetUsersByChatId(response: AxiosResponse): Promise<ChatUserDto[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -426,21 +626,32 @@ export class ChatClient implements IChatClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(ChatUser.fromJS(item, _mappings));
+                    result200!.push(ChatUserDto.fromJS(item, _mappings));
             }
             else {
                 result200 = <any>null;
             }
-            return Promise.resolve<ChatUser[]>(result200);
+            return Promise.resolve<ChatUserDto[]>(result200);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<ChatUser[]>(null as any);
+        return Promise.resolve<ChatUserDto[]>(null as any);
     }
 
-    addChannel(addChannelCommand: AddChannel , cancelToken?: CancelToken | undefined): Promise<void> {
+    addChannel(addChannelCommand: AddChannelCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/Chat/AddChannel";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -477,7 +688,23 @@ export class ChatClient implements IChatClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 201) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -488,7 +715,7 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<void>(null as any);
     }
 
-    addGroupChat(addGroupChatCommand: AddGroupChat , cancelToken?: CancelToken | undefined): Promise<void> {
+    addGroupChat(addGroupChatCommand: AddGroupChatCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/Chat/AddGroupChat";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -525,7 +752,23 @@ export class ChatClient implements IChatClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 201) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -536,7 +779,7 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<void>(null as any);
     }
 
-    addPersonalChat(addPersonalChatCommand: AddPersonalChat , cancelToken?: CancelToken | undefined): Promise<void> {
+    addPersonalChat(addPersonalChatCommand: AddPersonalChatCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/Chat/AddPersonalChat";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -573,7 +816,23 @@ export class ChatClient implements IChatClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 201) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -584,7 +843,7 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<void>(null as any);
     }
 
-    addSavedMessages(addSavedMessagesCommand: AddSavedMessages , cancelToken?: CancelToken | undefined): Promise<void> {
+    addSavedMessages(addSavedMessagesCommand: AddSavedMessagesCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/Chat/AddSavedMessages";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -621,7 +880,23 @@ export class ChatClient implements IChatClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 201) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -632,7 +907,7 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<void>(null as any);
     }
 
-    addUserToChat(addUserToChatCommand: AddUserToChat , cancelToken?: CancelToken | undefined): Promise<void> {
+    addUserToChat(addUserToChatCommand: AddUserToChatCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/Chat/AddUserToChat";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -669,7 +944,23 @@ export class ChatClient implements IChatClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -680,7 +971,7 @@ export class ChatClient implements IChatClient {
         return Promise.resolve<void>(null as any);
     }
 
-    deleteUserFromChat(deleteUserFromChatCommand: DeleteUserFromChat , cancelToken?: CancelToken | undefined): Promise<void> {
+    deleteUserFromChat(deleteUserFromChatCommand: DeleteUserFromChatCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/Chat/DeleteUserFromChat";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -717,7 +1008,23 @@ export class ChatClient implements IChatClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -731,8 +1038,8 @@ export class ChatClient implements IChatClient {
 
 export interface IRolesClient {
     getRoleByUserId(userId: string, chatId: string): Promise<RoleDto>;
-    createRoleForChat(createRoleForChat: CreateRoleForChat): Promise<void>;
-    changeRoleForUserById(changeRoleForUserById: ChangeRoleForUserById): Promise<void>;
+    createRoleForChat(createRoleForChatCommand: CreateRoleForChatCommand): Promise<void>;
+    changeRoleForUserById(changeRoleForUserByIdCommand: ChangeRoleForUserByIdCommand): Promise<void>;
 }
 
 export class RolesClient implements IRolesClient {
@@ -798,6 +1105,17 @@ export class RolesClient implements IRolesClient {
             result200 = RoleDto.fromJS(resultData200, _mappings);
             return Promise.resolve<RoleDto>(result200);
 
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -805,11 +1123,11 @@ export class RolesClient implements IRolesClient {
         return Promise.resolve<RoleDto>(null as any);
     }
 
-    createRoleForChat(createRoleForChat: CreateRoleForChat , cancelToken?: CancelToken | undefined): Promise<void> {
+    createRoleForChat(createRoleForChatCommand: CreateRoleForChatCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/Roles/CreateRoleForChat";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(createRoleForChat);
+        const content_ = JSON.stringify(createRoleForChatCommand);
 
         let options_: AxiosRequestConfig = {
             data: content_,
@@ -842,7 +1160,23 @@ export class RolesClient implements IRolesClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -853,11 +1187,11 @@ export class RolesClient implements IRolesClient {
         return Promise.resolve<void>(null as any);
     }
 
-    changeRoleForUserById(changeRoleForUserById: ChangeRoleForUserById , cancelToken?: CancelToken | undefined): Promise<void> {
+    changeRoleForUserById(changeRoleForUserByIdCommand: ChangeRoleForUserByIdCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/Roles/ChangeRoleForUserById";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(changeRoleForUserById);
+        const content_ = JSON.stringify(changeRoleForUserByIdCommand);
 
         let options_: AxiosRequestConfig = {
             data: content_,
@@ -890,7 +1224,23 @@ export class RolesClient implements IRolesClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -904,14 +1254,14 @@ export class RolesClient implements IRolesClient {
 
 export interface IUserClient {
     getAll(): Promise<MessengerUserDto[]>;
-    getUser(userId: string): Promise<MessengerUser>;
+    getUser(userId: string): Promise<MessengerUserDto>;
     getAllChatsByUserId(userId: string): Promise<MessengerChatDto[]>;
     getAllChatsIdsByUserId(userId: string): Promise<string[]>;
-    setNickNameById(setUserNickNameById: SetUserNickNameById): Promise<void>;
-    deleteUser(deleteUser: DeleteUser): Promise<void>;
-    addUser(addUser: AddUser): Promise<string>;
-    changeDescription(changeUserDescriptionById: ChangeUserDescriptionById): Promise<void>;
-    changeName(changeUserNameById: ChangeUserNameById): Promise<void>;
+    setNickNameById(setUserNickNameByIdCommand: SetUserNickNameByIdCommand): Promise<void>;
+    deleteUser(deleteUserCommand: DeleteUserCommand): Promise<void>;
+    addUser(addUserCommand: AddUserCommand): Promise<string>;
+    changeDescription(changeUserDescriptionByIdCommand: ChangeUserDescriptionByIdCommand): Promise<void>;
+    changeName(changeUserNameByIdCommand: ChangeUserNameByIdCommand): Promise<void>;
 }
 
 export class UserClient implements IUserClient {
@@ -976,6 +1326,17 @@ export class UserClient implements IUserClient {
             }
             return Promise.resolve<MessengerUserDto[]>(result200);
 
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -983,7 +1344,7 @@ export class UserClient implements IUserClient {
         return Promise.resolve<MessengerUserDto[]>(null as any);
     }
 
-    getUser(userId: string , cancelToken?: CancelToken | undefined): Promise<MessengerUser> {
+    getUser(userId: string , cancelToken?: CancelToken | undefined): Promise<MessengerUserDto> {
         let url_ = this.baseUrl + "/api/User/GetUser?";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined and cannot be null.");
@@ -1011,7 +1372,7 @@ export class UserClient implements IUserClient {
         });
     }
 
-    protected processGetUser(response: AxiosResponse): Promise<MessengerUser> {
+    protected processGetUser(response: AxiosResponse): Promise<MessengerUserDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1026,14 +1387,25 @@ export class UserClient implements IUserClient {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            result200 = MessengerUser.fromJS(resultData200, _mappings);
-            return Promise.resolve<MessengerUser>(result200);
+            result200 = MessengerUserDto.fromJS(resultData200, _mappings);
+            return Promise.resolve<MessengerUserDto>(result200);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<MessengerUser>(null as any);
+        return Promise.resolve<MessengerUserDto>(null as any);
     }
 
     getAllChatsByUserId(userId: string , cancelToken?: CancelToken | undefined): Promise<MessengerChatDto[]> {
@@ -1089,6 +1461,17 @@ export class UserClient implements IUserClient {
             }
             return Promise.resolve<MessengerChatDto[]>(result200);
 
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1134,6 +1517,7 @@ export class UserClient implements IUserClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
@@ -1148,6 +1532,17 @@ export class UserClient implements IUserClient {
             }
             return Promise.resolve<string[]>(result200);
 
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1155,11 +1550,11 @@ export class UserClient implements IUserClient {
         return Promise.resolve<string[]>(null as any);
     }
 
-    setNickNameById(setUserNickNameById: SetUserNickNameById , cancelToken?: CancelToken | undefined): Promise<void> {
+    setNickNameById(setUserNickNameByIdCommand: SetUserNickNameByIdCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/User/SetNickNameById";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(setUserNickNameById);
+        const content_ = JSON.stringify(setUserNickNameByIdCommand);
 
         let options_: AxiosRequestConfig = {
             data: content_,
@@ -1192,7 +1587,23 @@ export class UserClient implements IUserClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -1203,11 +1614,11 @@ export class UserClient implements IUserClient {
         return Promise.resolve<void>(null as any);
     }
 
-    deleteUser(deleteUser: DeleteUser , cancelToken?: CancelToken | undefined): Promise<void> {
+    deleteUser(deleteUserCommand: DeleteUserCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/User/DeleteUser";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(deleteUser);
+        const content_ = JSON.stringify(deleteUserCommand);
 
         let options_: AxiosRequestConfig = {
             data: content_,
@@ -1240,7 +1651,23 @@ export class UserClient implements IUserClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -1251,11 +1678,11 @@ export class UserClient implements IUserClient {
         return Promise.resolve<void>(null as any);
     }
 
-    addUser(addUser: AddUser , cancelToken?: CancelToken | undefined): Promise<string> {
+    addUser(addUserCommand: AddUserCommand , cancelToken?: CancelToken | undefined): Promise<string> {
         let url_ = this.baseUrl + "/api/User/AddUser";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(addUser);
+        const content_ = JSON.stringify(addUserCommand);
 
         let options_: AxiosRequestConfig = {
             data: content_,
@@ -1289,6 +1716,7 @@ export class UserClient implements IUserClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
@@ -1297,6 +1725,25 @@ export class UserClient implements IUserClient {
     
             return Promise.resolve<string>(result200);
 
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 201) {
+            const _responseText = response.data;
+            let result201: any = null;
+            let resultData201  = _responseText;
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+    
+            return Promise.resolve<string>(result201);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1304,11 +1751,11 @@ export class UserClient implements IUserClient {
         return Promise.resolve<string>(null as any);
     }
 
-    changeDescription(changeUserDescriptionById: ChangeUserDescriptionById , cancelToken?: CancelToken | undefined): Promise<void> {
+    changeDescription(changeUserDescriptionByIdCommand: ChangeUserDescriptionByIdCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/User/ChangeDescription";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(changeUserDescriptionById);
+        const content_ = JSON.stringify(changeUserDescriptionByIdCommand);
 
         let options_: AxiosRequestConfig = {
             data: content_,
@@ -1341,7 +1788,23 @@ export class UserClient implements IUserClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -1352,11 +1815,11 @@ export class UserClient implements IUserClient {
         return Promise.resolve<void>(null as any);
     }
 
-    changeName(changeUserNameById: ChangeUserNameById , cancelToken?: CancelToken | undefined): Promise<void> {
+    changeName(changeUserNameByIdCommand: ChangeUserNameByIdCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/User/ChangeName";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(changeUserNameById);
+        const content_ = JSON.stringify(changeUserNameByIdCommand);
 
         let options_: AxiosRequestConfig = {
             data: content_,
@@ -1389,7 +1852,23 @@ export class UserClient implements IUserClient {
                 }
             }
         }
+        let _mappings: { source: any, target: any }[] = [];
         if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = ProblemDetails.fromJS(resultData401, _mappings);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+
+        } else if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -1401,10 +1880,201 @@ export class UserClient implements IUserClient {
     }
 }
 
-export class Login implements ILogin {
+export class IdentityUserOfGuid implements IIdentityUserOfGuid {
+    id!: string;
+    userName!: string | undefined;
+    normalizedUserName!: string | undefined;
+    email!: string | undefined;
+    normalizedEmail!: string | undefined;
+    emailConfirmed!: boolean;
+    passwordHash!: string | undefined;
+    securityStamp!: string | undefined;
+    concurrencyStamp!: string | undefined;
+    phoneNumber!: string | undefined;
+    phoneNumberConfirmed!: boolean;
+    twoFactorEnabled!: boolean;
+    lockoutEnd!: moment.Moment | undefined;
+    lockoutEnabled!: boolean;
+    accessFailedCount!: number;
+
+    constructor(data?: IIdentityUserOfGuid) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.userName = _data["userName"];
+            this.normalizedUserName = _data["normalizedUserName"];
+            this.email = _data["email"];
+            this.normalizedEmail = _data["normalizedEmail"];
+            this.emailConfirmed = _data["emailConfirmed"];
+            this.passwordHash = _data["passwordHash"];
+            this.securityStamp = _data["securityStamp"];
+            this.concurrencyStamp = _data["concurrencyStamp"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.phoneNumberConfirmed = _data["phoneNumberConfirmed"];
+            this.twoFactorEnabled = _data["twoFactorEnabled"];
+            this.lockoutEnd = _data["lockoutEnd"] ? moment.parseZone(_data["lockoutEnd"].toString()) : <any>undefined;
+            this.lockoutEnabled = _data["lockoutEnabled"];
+            this.accessFailedCount = _data["accessFailedCount"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): IdentityUserOfGuid | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<IdentityUserOfGuid>(data, _mappings, IdentityUserOfGuid);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["userName"] = this.userName;
+        data["normalizedUserName"] = this.normalizedUserName;
+        data["email"] = this.email;
+        data["normalizedEmail"] = this.normalizedEmail;
+        data["emailConfirmed"] = this.emailConfirmed;
+        data["passwordHash"] = this.passwordHash;
+        data["securityStamp"] = this.securityStamp;
+        data["concurrencyStamp"] = this.concurrencyStamp;
+        data["phoneNumber"] = this.phoneNumber;
+        data["phoneNumberConfirmed"] = this.phoneNumberConfirmed;
+        data["twoFactorEnabled"] = this.twoFactorEnabled;
+        data["lockoutEnd"] = this.lockoutEnd ? this.lockoutEnd.toISOString(true) : <any>undefined;
+        data["lockoutEnabled"] = this.lockoutEnabled;
+        data["accessFailedCount"] = this.accessFailedCount;
+        return data;
+    }
+}
+
+export interface IIdentityUserOfGuid {
+    id: string;
+    userName: string | undefined;
+    normalizedUserName: string | undefined;
+    email: string | undefined;
+    normalizedEmail: string | undefined;
+    emailConfirmed: boolean;
+    passwordHash: string | undefined;
+    securityStamp: string | undefined;
+    concurrencyStamp: string | undefined;
+    phoneNumber: string | undefined;
+    phoneNumberConfirmed: boolean;
+    twoFactorEnabled: boolean;
+    lockoutEnd: moment.Moment | undefined;
+    lockoutEnabled: boolean;
+    accessFailedCount: number;
+}
+
+export class MessengerUser extends IdentityUserOfGuid implements IMessengerUser {
+    name!: string;
+    description!: string;
+
+    constructor(data?: IMessengerUser) {
+        super(data);
+    }
+
+    override init(_data?: any, _mappings?: any) {
+        super.init(_data);
+        if (_data) {
+            this.name = _data["name"];
+            this.description = _data["description"];
+        }
+    }
+
+    static override fromJS(data: any, _mappings?: any): MessengerUser | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<MessengerUser>(data, _mappings, MessengerUser);
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["description"] = this.description;
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IMessengerUser extends IIdentityUserOfGuid {
+    name: string;
+    description: string;
+}
+
+export class ProblemDetails implements IProblemDetails {
+    type!: string | undefined;
+    title!: string | undefined;
+    status!: number | undefined;
+    detail!: string | undefined;
+    instance!: string | undefined;
+    extensions!: { [key: string]: any; };
+
+    constructor(data?: IProblemDetails) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.type = _data["type"];
+            this.title = _data["title"];
+            this.status = _data["status"];
+            this.detail = _data["detail"];
+            this.instance = _data["instance"];
+            if (_data["extensions"]) {
+                this.extensions = {} as any;
+                for (let key in _data["extensions"]) {
+                    if (_data["extensions"].hasOwnProperty(key))
+                        (<any>this.extensions)![key] = _data["extensions"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): ProblemDetails | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<ProblemDetails>(data, _mappings, ProblemDetails);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["type"] = this.type;
+        data["title"] = this.title;
+        data["status"] = this.status;
+        data["detail"] = this.detail;
+        data["instance"] = this.instance;
+        if (this.extensions) {
+            data["extensions"] = {};
+            for (let key in this.extensions) {
+                if (this.extensions.hasOwnProperty(key))
+                    (<any>data["extensions"])[key] = this.extensions[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface IProblemDetails {
+    type: string | undefined;
+    title: string | undefined;
+    status: number | undefined;
+    detail: string | undefined;
+    instance: string | undefined;
+    extensions: { [key: string]: any; };
+}
+
+export class LoginRequest implements ILoginRequest {
     model!: LoginModel;
 
-    constructor(data?: ILogin) {
+    constructor(data?: ILoginRequest) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1419,9 +2089,9 @@ export class Login implements ILogin {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): Login | null {
+    static fromJS(data: any, _mappings?: any): LoginRequest | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<Login>(data, _mappings, Login);
+        return createInstance<LoginRequest>(data, _mappings, LoginRequest);
     }
 
     toJSON(data?: any) {
@@ -1431,13 +2101,13 @@ export class Login implements ILogin {
     }
 }
 
-export interface ILogin {
+export interface ILoginRequest {
     model: LoginModel;
 }
 
 export class LoginModel implements ILoginModel {
-    id!: string;
-    nickName!: string;
+    userName!: string | undefined;
+    email!: string | undefined;
     password!: string;
 
     constructor(data?: ILoginModel) {
@@ -1451,8 +2121,8 @@ export class LoginModel implements ILoginModel {
 
     init(_data?: any, _mappings?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.nickName = _data["nickName"];
+            this.userName = _data["userName"];
+            this.email = _data["email"];
             this.password = _data["password"];
         }
     }
@@ -1464,23 +2134,23 @@ export class LoginModel implements ILoginModel {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["nickName"] = this.nickName;
+        data["userName"] = this.userName;
+        data["email"] = this.email;
         data["password"] = this.password;
         return data;
     }
 }
 
 export interface ILoginModel {
-    id: string;
-    nickName: string;
+    userName: string | undefined;
+    email: string | undefined;
     password: string;
 }
 
-export class Register implements IRegister {
+export class RegisterCommand implements IRegisterCommand {
     model!: RegisterModel;
 
-    constructor(data?: IRegister) {
+    constructor(data?: IRegisterCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1495,9 +2165,9 @@ export class Register implements IRegister {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): Register | null {
+    static fromJS(data: any, _mappings?: any): RegisterCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<Register>(data, _mappings, Register);
+        return createInstance<RegisterCommand>(data, _mappings, RegisterCommand);
     }
 
     toJSON(data?: any) {
@@ -1507,15 +2177,16 @@ export class Register implements IRegister {
     }
 }
 
-export interface IRegister {
+export interface IRegisterCommand {
     model: RegisterModel;
 }
 
 export class RegisterModel implements IRegisterModel {
+    userName!: string;
     name!: string;
-    nickName!: string;
     email!: string;
     password!: string;
+    phoneNumber!: string;
 
     constructor(data?: IRegisterModel) {
         if (data) {
@@ -1528,10 +2199,11 @@ export class RegisterModel implements IRegisterModel {
 
     init(_data?: any, _mappings?: any) {
         if (_data) {
+            this.userName = _data["userName"];
             this.name = _data["name"];
-            this.nickName = _data["nickName"];
             this.email = _data["email"];
             this.password = _data["password"];
+            this.phoneNumber = _data["phoneNumber"];
         }
     }
 
@@ -1542,25 +2214,27 @@ export class RegisterModel implements IRegisterModel {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["userName"] = this.userName;
         data["name"] = this.name;
-        data["nickName"] = this.nickName;
         data["email"] = this.email;
         data["password"] = this.password;
+        data["phoneNumber"] = this.phoneNumber;
         return data;
     }
 }
 
 export interface IRegisterModel {
+    userName: string;
     name: string;
-    nickName: string;
     email: string;
     password: string;
+    phoneNumber: string;
 }
 
-export class RegisterAdmin implements IRegisterAdmin {
+export class RegisterAdminCommand implements IRegisterAdminCommand {
     model!: RegisterModel;
 
-    constructor(data?: IRegisterAdmin) {
+    constructor(data?: IRegisterAdminCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1575,9 +2249,9 @@ export class RegisterAdmin implements IRegisterAdmin {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): RegisterAdmin | null {
+    static fromJS(data: any, _mappings?: any): RegisterAdminCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<RegisterAdmin>(data, _mappings, RegisterAdmin);
+        return createInstance<RegisterAdminCommand>(data, _mappings, RegisterAdminCommand);
     }
 
     toJSON(data?: any) {
@@ -1587,7 +2261,7 @@ export class RegisterAdmin implements IRegisterAdmin {
     }
 }
 
-export interface IRegisterAdmin {
+export interface IRegisterAdminCommand {
     model: RegisterModel;
 }
 
@@ -1595,7 +2269,6 @@ export class MessengerChatDto implements IMessengerChatDto {
     id!: string;
     name!: string | undefined;
     description!: string | undefined;
-    creator!: MessengerUserDto | undefined;
     users!: string[];
     roles!: RoleDto[];
 
@@ -1613,7 +2286,6 @@ export class MessengerChatDto implements IMessengerChatDto {
             this.id = _data["id"];
             this.name = _data["name"];
             this.description = _data["description"];
-            this.creator = _data["creator"] ? MessengerUserDto.fromJS(_data["creator"], _mappings) : <any>undefined;
             if (Array.isArray(_data["users"])) {
                 this.users = [] as any;
                 for (let item of _data["users"])
@@ -1637,7 +2309,6 @@ export class MessengerChatDto implements IMessengerChatDto {
         data["id"] = this.id;
         data["name"] = this.name;
         data["description"] = this.description;
-        data["creator"] = this.creator ? this.creator.toJSON() : <any>undefined;
         if (Array.isArray(this.users)) {
             data["users"] = [];
             for (let item of this.users)
@@ -1656,55 +2327,8 @@ export interface IMessengerChatDto {
     id: string;
     name: string | undefined;
     description: string | undefined;
-    creator: MessengerUserDto | undefined;
     users: string[];
     roles: RoleDto[];
-}
-
-export class MessengerUserDto implements IMessengerUserDto {
-    id!: string;
-    name!: string | undefined;
-    nickName!: string | undefined;
-    description!: string | undefined;
-
-    constructor(data?: IMessengerUserDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any, _mappings?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.nickName = _data["nickName"];
-            this.description = _data["description"];
-        }
-    }
-
-    static fromJS(data: any, _mappings?: any): MessengerUserDto | null {
-        data = typeof data === 'object' ? data : {};
-        return createInstance<MessengerUserDto>(data, _mappings, MessengerUserDto);
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["nickName"] = this.nickName;
-        data["description"] = this.description;
-        return data;
-    }
-}
-
-export interface IMessengerUserDto {
-    id: string;
-    name: string | undefined;
-    nickName: string | undefined;
-    description: string | undefined;
 }
 
 export class RoleDto implements IRoleDto {
@@ -1791,15 +2415,12 @@ export enum ActionOption {
     Disabled = 2,
 }
 
-export class ChatUser implements IChatUser {
-    user!: MessengerUser;
-    id!: string;
+export class ChatUserDto implements IChatUserDto {
+    chatUserName!: string;
     messengerUserId!: string;
-    chat!: Chat;
-    chatId!: string;
-    role!: Role;
+    role!: RoleDto;
 
-    constructor(data?: IChatUser) {
+    constructor(data?: IChatUserDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1810,269 +2431,38 @@ export class ChatUser implements IChatUser {
 
     init(_data?: any, _mappings?: any) {
         if (_data) {
-            this.user = _data["user"] ? MessengerUser.fromJS(_data["user"], _mappings) : <any>undefined;
-            this.id = _data["id"];
+            this.chatUserName = _data["chatUserName"];
             this.messengerUserId = _data["messengerUserId"];
-            this.chat = _data["chat"] ? Chat.fromJS(_data["chat"], _mappings) : <any>undefined;
-            this.chatId = _data["chatId"];
-            this.role = _data["role"] ? Role.fromJS(_data["role"], _mappings) : <any>undefined;
+            this.role = _data["role"] ? RoleDto.fromJS(_data["role"], _mappings) : <any>undefined;
         }
     }
 
-    static fromJS(data: any, _mappings?: any): ChatUser | null {
+    static fromJS(data: any, _mappings?: any): ChatUserDto | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<ChatUser>(data, _mappings, ChatUser);
+        return createInstance<ChatUserDto>(data, _mappings, ChatUserDto);
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
-        data["id"] = this.id;
+        data["chatUserName"] = this.chatUserName;
         data["messengerUserId"] = this.messengerUserId;
-        data["chat"] = this.chat ? this.chat.toJSON() : <any>undefined;
-        data["chatId"] = this.chatId;
         data["role"] = this.role ? this.role.toJSON() : <any>undefined;
         return data;
     }
 }
 
-export interface IChatUser {
-    user: MessengerUser;
-    id: string;
+export interface IChatUserDto {
+    chatUserName: string;
     messengerUserId: string;
-    chat: Chat;
-    chatId: string;
-    role: Role;
+    role: RoleDto;
 }
 
-export class MessengerUser implements IMessengerUser {
-    id!: string;
-    name!: string;
-    nickName!: string;
-    description!: string;
-    chats!: Chat[];
-
-    constructor(data?: IMessengerUser) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any, _mappings?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.nickName = _data["nickName"];
-            this.description = _data["description"];
-            if (Array.isArray(_data["chats"])) {
-                this.chats = [] as any;
-                for (let item of _data["chats"])
-                    this.chats!.push(Chat.fromJS(item, _mappings));
-            }
-        }
-    }
-
-    static fromJS(data: any, _mappings?: any): MessengerUser | null {
-        data = typeof data === 'object' ? data : {};
-        return createInstance<MessengerUser>(data, _mappings, MessengerUser);
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["nickName"] = this.nickName;
-        data["description"] = this.description;
-        if (Array.isArray(this.chats)) {
-            data["chats"] = [];
-            for (let item of this.chats)
-                data["chats"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IMessengerUser {
-    id: string;
-    name: string;
-    nickName: string;
-    description: string;
-    chats: Chat[];
-}
-
-export abstract class Chat implements IChat {
-    id!: string;
-    name!: string;
-    description!: string;
-    creator!: MessengerUser;
-    creatorId!: string;
-    maxUsersAmount!: number;
-    users!: ChatUser[];
-    roles!: Role[];
-
-    constructor(data?: IChat) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any, _mappings?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.description = _data["description"];
-            this.creator = _data["creator"] ? MessengerUser.fromJS(_data["creator"], _mappings) : <any>undefined;
-            this.creatorId = _data["creatorId"];
-            this.maxUsersAmount = _data["maxUsersAmount"];
-            if (Array.isArray(_data["users"])) {
-                this.users = [] as any;
-                for (let item of _data["users"])
-                    this.users!.push(ChatUser.fromJS(item, _mappings));
-            }
-            if (Array.isArray(_data["roles"])) {
-                this.roles = [] as any;
-                for (let item of _data["roles"])
-                    this.roles!.push(Role.fromJS(item, _mappings));
-            }
-        }
-    }
-
-    static fromJS(data: any, _mappings?: any): Chat | null {
-        data = typeof data === 'object' ? data : {};
-        throw new Error("The abstract class 'Chat' cannot be instantiated.");
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["creator"] = this.creator ? this.creator.toJSON() : <any>undefined;
-        data["creatorId"] = this.creatorId;
-        data["maxUsersAmount"] = this.maxUsersAmount;
-        if (Array.isArray(this.users)) {
-            data["users"] = [];
-            for (let item of this.users)
-                data["users"].push(item.toJSON());
-        }
-        if (Array.isArray(this.roles)) {
-            data["roles"] = [];
-            for (let item of this.roles)
-                data["roles"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IChat {
-    id: string;
-    name: string;
-    description: string;
-    creator: MessengerUser;
-    creatorId: string;
-    maxUsersAmount: number;
-    users: ChatUser[];
-    roles: Role[];
-}
-
-export class Role implements IRole {
-    id!: string;
-    chat!: Chat;
-    name!: string;
-    canEditMessages!: ActionOption;
-    canDeleteMessages!: ActionOption;
-    canWriteMessages!: ActionOption;
-    canReadMessages!: ActionOption;
-    canAddUsers!: ActionOption;
-    canDeleteUsers!: ActionOption;
-    canPinMessages!: ActionOption;
-    canSeeChannelMembers!: ActionOption;
-    canInviteOtherUsers!: ActionOption;
-    canEditChannelDescription!: ActionOption;
-    canDeleteChat!: ActionOption;
-
-    constructor(data?: IRole) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any, _mappings?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.chat = _data["chat"] ? Chat.fromJS(_data["chat"], _mappings) : <any>undefined;
-            this.name = _data["name"];
-            this.canEditMessages = _data["canEditMessages"];
-            this.canDeleteMessages = _data["canDeleteMessages"];
-            this.canWriteMessages = _data["canWriteMessages"];
-            this.canReadMessages = _data["canReadMessages"];
-            this.canAddUsers = _data["canAddUsers"];
-            this.canDeleteUsers = _data["canDeleteUsers"];
-            this.canPinMessages = _data["canPinMessages"];
-            this.canSeeChannelMembers = _data["canSeeChannelMembers"];
-            this.canInviteOtherUsers = _data["canInviteOtherUsers"];
-            this.canEditChannelDescription = _data["canEditChannelDescription"];
-            this.canDeleteChat = _data["canDeleteChat"];
-        }
-    }
-
-    static fromJS(data: any, _mappings?: any): Role | null {
-        data = typeof data === 'object' ? data : {};
-        return createInstance<Role>(data, _mappings, Role);
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["chat"] = this.chat ? this.chat.toJSON() : <any>undefined;
-        data["name"] = this.name;
-        data["canEditMessages"] = this.canEditMessages;
-        data["canDeleteMessages"] = this.canDeleteMessages;
-        data["canWriteMessages"] = this.canWriteMessages;
-        data["canReadMessages"] = this.canReadMessages;
-        data["canAddUsers"] = this.canAddUsers;
-        data["canDeleteUsers"] = this.canDeleteUsers;
-        data["canPinMessages"] = this.canPinMessages;
-        data["canSeeChannelMembers"] = this.canSeeChannelMembers;
-        data["canInviteOtherUsers"] = this.canInviteOtherUsers;
-        data["canEditChannelDescription"] = this.canEditChannelDescription;
-        data["canDeleteChat"] = this.canDeleteChat;
-        return data;
-    }
-}
-
-export interface IRole {
-    id: string;
-    chat: Chat;
-    name: string;
-    canEditMessages: ActionOption;
-    canDeleteMessages: ActionOption;
-    canWriteMessages: ActionOption;
-    canReadMessages: ActionOption;
-    canAddUsers: ActionOption;
-    canDeleteUsers: ActionOption;
-    canPinMessages: ActionOption;
-    canSeeChannelMembers: ActionOption;
-    canInviteOtherUsers: ActionOption;
-    canEditChannelDescription: ActionOption;
-    canDeleteChat: ActionOption;
-}
-
-export class AddChannel implements IAddChannel {
+export class AddChannelCommand implements IAddChannelCommand {
     adminId!: string;
     name!: string;
     description!: string;
 
-    constructor(data?: IAddChannel) {
+    constructor(data?: IAddChannelCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2089,9 +2479,9 @@ export class AddChannel implements IAddChannel {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): AddChannel | null {
+    static fromJS(data: any, _mappings?: any): AddChannelCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<AddChannel>(data, _mappings, AddChannel);
+        return createInstance<AddChannelCommand>(data, _mappings, AddChannelCommand);
     }
 
     toJSON(data?: any) {
@@ -2103,18 +2493,18 @@ export class AddChannel implements IAddChannel {
     }
 }
 
-export interface IAddChannel {
+export interface IAddChannelCommand {
     adminId: string;
     name: string;
     description: string;
 }
 
-export class AddGroupChat implements IAddGroupChat {
+export class AddGroupChatCommand implements IAddGroupChatCommand {
     adminId!: string;
     name!: string;
     description!: string;
 
-    constructor(data?: IAddGroupChat) {
+    constructor(data?: IAddGroupChatCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2131,9 +2521,9 @@ export class AddGroupChat implements IAddGroupChat {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): AddGroupChat | null {
+    static fromJS(data: any, _mappings?: any): AddGroupChatCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<AddGroupChat>(data, _mappings, AddGroupChat);
+        return createInstance<AddGroupChatCommand>(data, _mappings, AddGroupChatCommand);
     }
 
     toJSON(data?: any) {
@@ -2145,19 +2535,19 @@ export class AddGroupChat implements IAddGroupChat {
     }
 }
 
-export interface IAddGroupChat {
+export interface IAddGroupChatCommand {
     adminId: string;
     name: string;
     description: string;
 }
 
-export class AddPersonalChat implements IAddPersonalChat {
+export class AddPersonalChatCommand implements IAddPersonalChatCommand {
     firstUserId!: string;
     secondUserId!: string;
     name!: string;
     description!: string;
 
-    constructor(data?: IAddPersonalChat) {
+    constructor(data?: IAddPersonalChatCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2175,9 +2565,9 @@ export class AddPersonalChat implements IAddPersonalChat {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): AddPersonalChat | null {
+    static fromJS(data: any, _mappings?: any): AddPersonalChatCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<AddPersonalChat>(data, _mappings, AddPersonalChat);
+        return createInstance<AddPersonalChatCommand>(data, _mappings, AddPersonalChatCommand);
     }
 
     toJSON(data?: any) {
@@ -2190,19 +2580,19 @@ export class AddPersonalChat implements IAddPersonalChat {
     }
 }
 
-export interface IAddPersonalChat {
+export interface IAddPersonalChatCommand {
     firstUserId: string;
     secondUserId: string;
     name: string;
     description: string;
 }
 
-export class AddSavedMessages implements IAddSavedMessages {
+export class AddSavedMessagesCommand implements IAddSavedMessagesCommand {
     userId!: string;
     name!: string;
     description!: string;
 
-    constructor(data?: IAddSavedMessages) {
+    constructor(data?: IAddSavedMessagesCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2219,9 +2609,9 @@ export class AddSavedMessages implements IAddSavedMessages {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): AddSavedMessages | null {
+    static fromJS(data: any, _mappings?: any): AddSavedMessagesCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<AddSavedMessages>(data, _mappings, AddSavedMessages);
+        return createInstance<AddSavedMessagesCommand>(data, _mappings, AddSavedMessagesCommand);
     }
 
     toJSON(data?: any) {
@@ -2233,17 +2623,17 @@ export class AddSavedMessages implements IAddSavedMessages {
     }
 }
 
-export interface IAddSavedMessages {
+export interface IAddSavedMessagesCommand {
     userId: string;
     name: string;
     description: string;
 }
 
-export class AddUserToChat implements IAddUserToChat {
+export class AddUserToChatCommand implements IAddUserToChatCommand {
     userId!: string;
     chatId!: string;
 
-    constructor(data?: IAddUserToChat) {
+    constructor(data?: IAddUserToChatCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2259,9 +2649,9 @@ export class AddUserToChat implements IAddUserToChat {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): AddUserToChat | null {
+    static fromJS(data: any, _mappings?: any): AddUserToChatCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<AddUserToChat>(data, _mappings, AddUserToChat);
+        return createInstance<AddUserToChatCommand>(data, _mappings, AddUserToChatCommand);
     }
 
     toJSON(data?: any) {
@@ -2272,16 +2662,16 @@ export class AddUserToChat implements IAddUserToChat {
     }
 }
 
-export interface IAddUserToChat {
+export interface IAddUserToChatCommand {
     userId: string;
     chatId: string;
 }
 
-export class DeleteUserFromChat implements IDeleteUserFromChat {
+export class DeleteUserFromChatCommand implements IDeleteUserFromChatCommand {
     userId!: string;
     chatId!: string;
 
-    constructor(data?: IDeleteUserFromChat) {
+    constructor(data?: IDeleteUserFromChatCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2297,9 +2687,9 @@ export class DeleteUserFromChat implements IDeleteUserFromChat {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): DeleteUserFromChat | null {
+    static fromJS(data: any, _mappings?: any): DeleteUserFromChatCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<DeleteUserFromChat>(data, _mappings, DeleteUserFromChat);
+        return createInstance<DeleteUserFromChatCommand>(data, _mappings, DeleteUserFromChatCommand);
     }
 
     toJSON(data?: any) {
@@ -2310,16 +2700,16 @@ export class DeleteUserFromChat implements IDeleteUserFromChat {
     }
 }
 
-export interface IDeleteUserFromChat {
+export interface IDeleteUserFromChatCommand {
     userId: string;
     chatId: string;
 }
 
-export class CreateRoleForChat implements ICreateRoleForChat {
+export class CreateRoleForChatCommand implements ICreateRoleForChatCommand {
     role!: RoleDto;
     chatId!: string;
 
-    constructor(data?: ICreateRoleForChat) {
+    constructor(data?: ICreateRoleForChatCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2335,9 +2725,9 @@ export class CreateRoleForChat implements ICreateRoleForChat {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): CreateRoleForChat | null {
+    static fromJS(data: any, _mappings?: any): CreateRoleForChatCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<CreateRoleForChat>(data, _mappings, CreateRoleForChat);
+        return createInstance<CreateRoleForChatCommand>(data, _mappings, CreateRoleForChatCommand);
     }
 
     toJSON(data?: any) {
@@ -2348,17 +2738,17 @@ export class CreateRoleForChat implements ICreateRoleForChat {
     }
 }
 
-export interface ICreateRoleForChat {
+export interface ICreateRoleForChatCommand {
     role: RoleDto;
     chatId: string;
 }
 
-export class ChangeRoleForUserById implements IChangeRoleForUserById {
+export class ChangeRoleForUserByIdCommand implements IChangeRoleForUserByIdCommand {
     userId!: string;
     chatId!: string;
     role!: RoleDto;
 
-    constructor(data?: IChangeRoleForUserById) {
+    constructor(data?: IChangeRoleForUserByIdCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2375,9 +2765,9 @@ export class ChangeRoleForUserById implements IChangeRoleForUserById {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): ChangeRoleForUserById | null {
+    static fromJS(data: any, _mappings?: any): ChangeRoleForUserByIdCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<ChangeRoleForUserById>(data, _mappings, ChangeRoleForUserById);
+        return createInstance<ChangeRoleForUserByIdCommand>(data, _mappings, ChangeRoleForUserByIdCommand);
     }
 
     toJSON(data?: any) {
@@ -2389,17 +2779,63 @@ export class ChangeRoleForUserById implements IChangeRoleForUserById {
     }
 }
 
-export interface IChangeRoleForUserById {
+export interface IChangeRoleForUserByIdCommand {
     userId: string;
     chatId: string;
     role: RoleDto;
 }
 
-export class SetUserNickNameById implements ISetUserNickNameById {
-    userId!: string;
-    nickName!: string;
+export class MessengerUserDto implements IMessengerUserDto {
+    id!: string;
+    name!: string | undefined;
+    userName!: string | undefined;
+    description!: string | undefined;
 
-    constructor(data?: ISetUserNickNameById) {
+    constructor(data?: IMessengerUserDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.userName = _data["userName"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): MessengerUserDto | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<MessengerUserDto>(data, _mappings, MessengerUserDto);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["userName"] = this.userName;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IMessengerUserDto {
+    id: string;
+    name: string | undefined;
+    userName: string | undefined;
+    description: string | undefined;
+}
+
+export class SetUserNickNameByIdCommand implements ISetUserNickNameByIdCommand {
+    userId!: string;
+    userName!: string;
+
+    constructor(data?: ISetUserNickNameByIdCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2411,32 +2847,32 @@ export class SetUserNickNameById implements ISetUserNickNameById {
     init(_data?: any, _mappings?: any) {
         if (_data) {
             this.userId = _data["userId"];
-            this.nickName = _data["nickName"];
+            this.userName = _data["userName"];
         }
     }
 
-    static fromJS(data: any, _mappings?: any): SetUserNickNameById | null {
+    static fromJS(data: any, _mappings?: any): SetUserNickNameByIdCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<SetUserNickNameById>(data, _mappings, SetUserNickNameById);
+        return createInstance<SetUserNickNameByIdCommand>(data, _mappings, SetUserNickNameByIdCommand);
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["userId"] = this.userId;
-        data["nickName"] = this.nickName;
+        data["userName"] = this.userName;
         return data;
     }
 }
 
-export interface ISetUserNickNameById {
+export interface ISetUserNickNameByIdCommand {
     userId: string;
-    nickName: string;
+    userName: string;
 }
 
-export class DeleteUser implements IDeleteUser {
+export class DeleteUserCommand implements IDeleteUserCommand {
     userId!: string;
 
-    constructor(data?: IDeleteUser) {
+    constructor(data?: IDeleteUserCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2451,9 +2887,9 @@ export class DeleteUser implements IDeleteUser {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): DeleteUser | null {
+    static fromJS(data: any, _mappings?: any): DeleteUserCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<DeleteUser>(data, _mappings, DeleteUser);
+        return createInstance<DeleteUserCommand>(data, _mappings, DeleteUserCommand);
     }
 
     toJSON(data?: any) {
@@ -2463,16 +2899,16 @@ export class DeleteUser implements IDeleteUser {
     }
 }
 
-export interface IDeleteUser {
+export interface IDeleteUserCommand {
     userId: string;
 }
 
-export class AddUser implements IAddUser {
+export class AddUserCommand implements IAddUserCommand {
     name!: string;
     nickName!: string;
     description!: string;
 
-    constructor(data?: IAddUser) {
+    constructor(data?: IAddUserCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2489,9 +2925,9 @@ export class AddUser implements IAddUser {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): AddUser | null {
+    static fromJS(data: any, _mappings?: any): AddUserCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<AddUser>(data, _mappings, AddUser);
+        return createInstance<AddUserCommand>(data, _mappings, AddUserCommand);
     }
 
     toJSON(data?: any) {
@@ -2503,17 +2939,17 @@ export class AddUser implements IAddUser {
     }
 }
 
-export interface IAddUser {
+export interface IAddUserCommand {
     name: string;
     nickName: string;
     description: string;
 }
 
-export class ChangeUserDescriptionById implements IChangeUserDescriptionById {
+export class ChangeUserDescriptionByIdCommand implements IChangeUserDescriptionByIdCommand {
     userId!: string;
     description!: string;
 
-    constructor(data?: IChangeUserDescriptionById) {
+    constructor(data?: IChangeUserDescriptionByIdCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2529,9 +2965,9 @@ export class ChangeUserDescriptionById implements IChangeUserDescriptionById {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): ChangeUserDescriptionById | null {
+    static fromJS(data: any, _mappings?: any): ChangeUserDescriptionByIdCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<ChangeUserDescriptionById>(data, _mappings, ChangeUserDescriptionById);
+        return createInstance<ChangeUserDescriptionByIdCommand>(data, _mappings, ChangeUserDescriptionByIdCommand);
     }
 
     toJSON(data?: any) {
@@ -2542,16 +2978,16 @@ export class ChangeUserDescriptionById implements IChangeUserDescriptionById {
     }
 }
 
-export interface IChangeUserDescriptionById {
+export interface IChangeUserDescriptionByIdCommand {
     userId: string;
     description: string;
 }
 
-export class ChangeUserNameById implements IChangeUserNameById {
+export class ChangeUserNameByIdCommand implements IChangeUserNameByIdCommand {
     userId!: string;
     name!: string;
 
-    constructor(data?: IChangeUserNameById) {
+    constructor(data?: IChangeUserNameByIdCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2567,9 +3003,9 @@ export class ChangeUserNameById implements IChangeUserNameById {
         }
     }
 
-    static fromJS(data: any, _mappings?: any): ChangeUserNameById | null {
+    static fromJS(data: any, _mappings?: any): ChangeUserNameByIdCommand | null {
         data = typeof data === 'object' ? data : {};
-        return createInstance<ChangeUserNameById>(data, _mappings, ChangeUserNameById);
+        return createInstance<ChangeUserNameByIdCommand>(data, _mappings, ChangeUserNameByIdCommand);
     }
 
     toJSON(data?: any) {
@@ -2580,7 +3016,7 @@ export class ChangeUserNameById implements IChangeUserNameById {
     }
 }
 
-export interface IChangeUserNameById {
+export interface IChangeUserNameByIdCommand {
     userId: string;
     name: string;
 }
@@ -2644,13 +3080,6 @@ function createInstance<T>(data: any, mappings: any, type: any): T | null {
   mappings.push({ source: data, target: result });
   result.init(data, mappings);
   return result;
-}
-
-export interface FileResponse {
-    data: Blob;
-    status: number;
-    fileName?: string;
-    headers?: { [name: string]: any };
 }
 
 export class Do_Svyazi_User_ApiClient_Exception extends Error {
