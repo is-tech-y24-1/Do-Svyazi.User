@@ -1,35 +1,30 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace Do_Svyazi.User.Domain.Users;
 
-public class MessengerUser
+public class MessengerUser : IdentityUser<Guid>
 {
     private const string DefaultDescription = "No description";
 
-    public MessengerUser(string name, string nickName, string? description = null)
+    public MessengerUser(string name, string nickName, string? email, string? phoneNumber, string? description = null)
+        : base(nickName)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException(nameof(name), "User name can't be null");
         if (string.IsNullOrWhiteSpace(nickName))
-            throw new ArgumentNullException(nameof(nickName), "User nickName can't be null");
+            throw new ArgumentNullException(nameof(nickName), "User userName can't be null");
 
+        Id = Guid.NewGuid();
+        Email = email;
+        PhoneNumber = phoneNumber;
         Name = name;
-        NickName = nickName;
         Description = string.IsNullOrEmpty(description) ? DefaultDescription : description;
     }
 
     public MessengerUser() { }
 
-    public Guid Id { get; protected init; } = Guid.NewGuid();
     public string Name { get; private set; }
-    public string NickName { get; private set; }
     public string Description { get; private set; }
-
-    public virtual void ChangeNickName(string nickName)
-    {
-        if (string.IsNullOrWhiteSpace(nickName))
-            throw new ArgumentNullException(nameof(nickName), "User nickName to change is null");
-
-        NickName = nickName;
-    }
 
     public virtual void ChangeName(string name)
     {

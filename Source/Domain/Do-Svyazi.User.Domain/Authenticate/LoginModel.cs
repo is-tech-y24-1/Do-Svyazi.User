@@ -2,21 +2,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Do_Svyazi.User.Domain.Authenticate;
 
-public class LoginModel
+public record LoginModel
 {
-    public Guid Id { get; protected init; } = Guid.NewGuid();
-
-    [Required(ErrorMessage = "NickName is required")]
-    public string NickName { get;  set; }
+    public string? UserName { get;  init; }
+    public string? Email { get;  init; }
 
     [Required(ErrorMessage = "Password is required")]
-    public string? Password { get; set; }
+    public string? Password { get; init; }
 
-    public override int GetHashCode() => HashCode.Combine(Id, NickName);
-    public override bool Equals(object? obj) => Equals(obj as LoginModel);
-
-    private bool Equals(LoginModel? login) =>
-        login is not null &&
-        Id.Equals(login.Id) &&
-        NickName.Equals(login.NickName);
+    public override int GetHashCode() => HashCode.Combine(UserName, Email);
 }

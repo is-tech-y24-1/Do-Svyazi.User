@@ -2,13 +2,18 @@ using Do_Svyazi.User.Application.CQRS.Roles.Commands;
 using Do_Svyazi.User.Application.CQRS.Roles.Queries;
 using Do_Svyazi.User.Dtos.Roles;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Do_Svyazi.User.Web.Controllers;
 
-[Route("api/[controller]")]
+[Authorize]
 [ApiController]
+[Route("api/[controller]")]
+[ProducesResponseType(StatusCodes.Status200OK)]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class RolesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -16,29 +21,28 @@ public class RolesController : ControllerBase
     public RolesController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet(nameof(GetRoleByUserId))]
-    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<RoleDto>> GetRoleByUserId(
-        [FromQuery] GetRoleByUserId getRoleByUserId, CancellationToken cancellationToken)
+        [FromQuery] GetRoleByUserIdQuery getRoleByUserIdQuery, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(getRoleByUserId, cancellationToken);
+        var response = await _mediator.Send(getRoleByUserIdQuery, cancellationToken);
         return Ok(response);
     }
 
     [HttpPost(nameof(CreateRoleForChat))]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> CreateRoleForChat(
-        CreateRoleForChat createRoleForChat, CancellationToken cancellationToken)
+        CreateRoleForChatCommand createRoleForChatCommand, CancellationToken cancellationToken)
     {
-        await _mediator.Send(createRoleForChat, cancellationToken);
-        return Ok();
+        await _mediator.Send(createRoleForChatCommand, cancellationToken);
+        return NoContent();
     }
 
     [HttpPost(nameof(ChangeRoleForUserById))]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> ChangeRoleForUserById(
-        ChangeRoleForUserById changeRoleForUserById, CancellationToken cancellationToken)
+        ChangeRoleForUserByIdCommand changeRoleForUserByIdCommand, CancellationToken cancellationToken)
     {
-        await _mediator.Send(changeRoleForUserById, cancellationToken);
-        return Ok();
+        await _mediator.Send(changeRoleForUserByIdCommand, cancellationToken);
+        return NoContent();
     }
 }

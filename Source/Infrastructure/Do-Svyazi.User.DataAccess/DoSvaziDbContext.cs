@@ -17,7 +17,6 @@ public class DoSvaziDbContext : DbContext, IDbContext
     protected DoSvaziDbContext() { }
 
     public virtual DbSet<Chat> Chats { get; init; }
-    public virtual DbSet<MessengerUser> Users { get; init; }
     public virtual DbSet<ChatUser> ChatUsers { get; init; }
     public virtual DbSet<Role> Roles { get; init; }
 

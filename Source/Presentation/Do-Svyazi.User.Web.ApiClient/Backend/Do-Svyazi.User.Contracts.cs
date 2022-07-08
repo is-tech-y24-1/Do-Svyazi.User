@@ -4,6 +4,10 @@
 // </auto-generated>
 //----------------------
 
+#nullable enable
+
+using Do_Svyazi.User.Web.ApiClient.Backend;
+
 #pragma warning disable 108 // Disable "CS0108 '{derivedDto}.ToJson()' hides inherited member '{dtoBase}.ToJson()'. Use the new keyword if hiding was intended."
 #pragma warning disable 114 // Disable "CS0114 '{derivedDto}.RaisePropertyChanged(String)' hides inherited member 'dtoBase.RaisePropertyChanged(String)'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword."
 #pragma warning disable 472 // Disable "CS0472 The result of the expression is always 'false' since a value of type 'Int32' is never equal to 'null' of type 'Int32?'
@@ -20,203 +24,155 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IAuthenticateClient
     {
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> LoginAsync(Login model);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> LoginAsync(Login model, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> RegisterAsync(Register model);
+        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<MessengerUser>> GetAllAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> RegisterAsync(Register model, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> RegisterAdminAsync(RegisterAdmin model);
+        System.Threading.Tasks.Task LoginAsync(LoginRequest model, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> RegisterAdminAsync(RegisterAdmin model, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task RegisterAsync(RegisterCommand model, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<AuthenticateResponse> AuthenticateByJwtAsync(string? jwtToken, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
+        System.Threading.Tasks.Task RegisterAdminAsync(RegisterAdminCommand model, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IChatClient
     {
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>> GetChatsAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>> GetChatsAsync(System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<MessengerChatDto> GetChatByIdAsync(System.Guid chatId);
+        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<MessengerChatDto>> GetChatsAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<MessengerChatDto> GetChatByIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<System.Guid>> GetUserIdsByChatIdAsync(System.Guid chatId);
+        System.Threading.Tasks.Task<MessengerChatDto> GetChatByIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<System.Guid>> GetUserIdsByChatIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<ChatUser>> GetUsersByChatIdAsync(System.Guid chatId);
+        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<System.Guid>> GetUserIdsByChatIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<ChatUser>> GetUsersByChatIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task AddChannelAsync(AddChannel addChannelCommand);
+        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<ChatUserDto>> GetUsersByChatIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task AddChannelAsync(AddChannel addChannelCommand, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task AddGroupChatAsync(AddGroupChat addGroupChatCommand);
+        System.Threading.Tasks.Task AddChannelAsync(AddChannelCommand addChannelCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task AddGroupChatAsync(AddGroupChat addGroupChatCommand, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task AddPersonalChatAsync(AddPersonalChat addPersonalChatCommand);
+        System.Threading.Tasks.Task AddGroupChatAsync(AddGroupChatCommand addGroupChatCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task AddPersonalChatAsync(AddPersonalChat addPersonalChatCommand, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task AddSavedMessagesAsync(AddSavedMessages addSavedMessagesCommand);
+        System.Threading.Tasks.Task AddPersonalChatAsync(AddPersonalChatCommand addPersonalChatCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task AddSavedMessagesAsync(AddSavedMessages addSavedMessagesCommand, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task AddUserToChatAsync(AddUserToChat addUserToChatCommand);
+        System.Threading.Tasks.Task AddSavedMessagesAsync(AddSavedMessagesCommand addSavedMessagesCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task AddUserToChatAsync(AddUserToChat addUserToChatCommand, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task DeleteUserFromChatAsync(DeleteUserFromChat deleteUserFromChatCommand);
+        System.Threading.Tasks.Task AddUserToChatAsync(AddUserToChatCommand addUserToChatCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task DeleteUserFromChatAsync(DeleteUserFromChat deleteUserFromChatCommand, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task DeleteUserFromChatAsync(DeleteUserFromChatCommand deleteUserFromChatCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IRolesClient
     {
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<RoleDto> GetRoleByUserIdAsync(System.Guid userId, System.Guid chatId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<RoleDto> GetRoleByUserIdAsync(System.Guid userId, System.Guid chatId, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task CreateRoleForChatAsync(CreateRoleForChat createRoleForChat);
+        System.Threading.Tasks.Task<RoleDto> GetRoleByUserIdAsync(System.Guid userId, System.Guid chatId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task CreateRoleForChatAsync(CreateRoleForChat createRoleForChat, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ChangeRoleForUserByIdAsync(ChangeRoleForUserById changeRoleForUserById);
+        System.Threading.Tasks.Task CreateRoleForChatAsync(CreateRoleForChatCommand createRoleForChatCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ChangeRoleForUserByIdAsync(ChangeRoleForUserById changeRoleForUserById, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task ChangeRoleForUserByIdAsync(ChangeRoleForUserByIdCommand changeRoleForUserByIdCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IUserClient
     {
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerUserDto>> GetUsersAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerUserDto>> GetUsersAsync(System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<MessengerUser> GetUserAsync(System.Guid userId);
+        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<MessengerUserDto>> GetUsersAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<MessengerUser> GetUserAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>> GetAllChatsByUserIdAsync(System.Guid userId);
+        System.Threading.Tasks.Task<MessengerUserDto> GetUserAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>> GetAllChatsByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<System.Guid>> GetAllChatsIdsByUserIdAsync(System.Guid userId);
+        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<MessengerChatDto>> GetAllChatsByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<System.Guid>> GetAllChatsIdsByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task SetNickNameByIdAsync(SetUserNickNameById setUserNickNameById);
+        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<System.Guid>> GetAllChatsIdsByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task SetNickNameByIdAsync(SetUserNickNameById setUserNickNameById, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task DeleteUserAsync(DeleteUser deleteUser);
+        System.Threading.Tasks.Task SetNickNameByIdAsync(SetUserNickNameByIdCommand setUserNickNameByIdCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task DeleteUserAsync(DeleteUser deleteUser, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Guid> AddUserAsync(AddUser addUser);
+        System.Threading.Tasks.Task DeleteUserAsync(DeleteUserCommand deleteUserCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Guid> AddUserAsync(AddUser addUser, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ChangeDescriptionAsync(ChangeUserDescriptionById changeUserDescriptionById);
+        System.Threading.Tasks.Task<System.Guid> AddUserAsync(AddUserCommand addUserCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ChangeDescriptionAsync(ChangeUserDescriptionById changeUserDescriptionById, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ChangeNameAsync(ChangeUserNameById changeUserNameById);
+        System.Threading.Tasks.Task ChangeDescriptionAsync(ChangeUserDescriptionByIdCommand changeUserDescriptionByIdCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ChangeNameAsync(ChangeUserNameById changeUserNameById, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task ChangeNameAsync(ChangeUserNameByIdCommand changeUserNameByIdCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class Login
+    public partial class MessengerUser : IdentityUserOfGuid
     {
-        [Newtonsoft.Json.JsonProperty("model", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public LoginModel Model { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public MessengerUser(int @accessFailedCount, string? @concurrencyStamp, string @description, string? @email, bool @emailConfirmed, System.Guid @id, bool @lockoutEnabled, System.DateTime? @lockoutEnd, string @name, string? @normalizedEmail, string? @normalizedUserName, string? @passwordHash, string? @phoneNumber, bool @phoneNumberConfirmed, string? @securityStamp, bool @twoFactorEnabled, string? @userName)
+
+            : base(accessFailedCount, concurrencyStamp, email, emailConfirmed, id, lockoutEnabled, lockoutEnd, normalizedEmail, normalizedUserName, passwordHash, phoneNumber, phoneNumberConfirmed, securityStamp, twoFactorEnabled, userName)
+
+        {
+
+            this.Name = @name;
+
+            this.Description = @description;
+
+        }    [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Name { get; }
+
+        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Description { get; }
 
         public string ToJson()
         {
@@ -224,10 +180,201 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static Login FromJson(string data)
+        public static MessengerUser FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Login>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<MessengerUser>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class IdentityUserOfGuid
+    {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public IdentityUserOfGuid(int @accessFailedCount, string? @concurrencyStamp, string? @email, bool @emailConfirmed, System.Guid @id, bool @lockoutEnabled, System.DateTime? @lockoutEnd, string? @normalizedEmail, string? @normalizedUserName, string? @passwordHash, string? @phoneNumber, bool @phoneNumberConfirmed, string? @securityStamp, bool @twoFactorEnabled, string? @userName)
+
+        {
+
+            this.Id = @id;
+
+            this.UserName = @userName;
+
+            this.NormalizedUserName = @normalizedUserName;
+
+            this.Email = @email;
+
+            this.NormalizedEmail = @normalizedEmail;
+
+            this.EmailConfirmed = @emailConfirmed;
+
+            this.PasswordHash = @passwordHash;
+
+            this.SecurityStamp = @securityStamp;
+
+            this.ConcurrencyStamp = @concurrencyStamp;
+
+            this.PhoneNumber = @phoneNumber;
+
+            this.PhoneNumberConfirmed = @phoneNumberConfirmed;
+
+            this.TwoFactorEnabled = @twoFactorEnabled;
+
+            this.LockoutEnd = @lockoutEnd;
+
+            this.LockoutEnabled = @lockoutEnabled;
+
+            this.AccessFailedCount = @accessFailedCount;
+
+        }    [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; }
+
+        [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? UserName { get; }
+
+        [Newtonsoft.Json.JsonProperty("normalizedUserName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? NormalizedUserName { get; }
+
+        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? Email { get; }
+
+        [Newtonsoft.Json.JsonProperty("normalizedEmail", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? NormalizedEmail { get; }
+
+        [Newtonsoft.Json.JsonProperty("emailConfirmed", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool EmailConfirmed { get; }
+
+        [Newtonsoft.Json.JsonProperty("passwordHash", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? PasswordHash { get; }
+
+        [Newtonsoft.Json.JsonProperty("securityStamp", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? SecurityStamp { get; }
+
+        [Newtonsoft.Json.JsonProperty("concurrencyStamp", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? ConcurrencyStamp { get; }
+
+        [Newtonsoft.Json.JsonProperty("phoneNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? PhoneNumber { get; }
+
+        [Newtonsoft.Json.JsonProperty("phoneNumberConfirmed", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool PhoneNumberConfirmed { get; }
+
+        [Newtonsoft.Json.JsonProperty("twoFactorEnabled", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool TwoFactorEnabled { get; }
+
+        [Newtonsoft.Json.JsonProperty("lockoutEnd", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTime? LockoutEnd { get; }
+
+        [Newtonsoft.Json.JsonProperty("lockoutEnabled", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool LockoutEnabled { get; }
+
+        [Newtonsoft.Json.JsonProperty("accessFailedCount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int AccessFailedCount { get; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static IdentityUserOfGuid FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<IdentityUserOfGuid>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ProblemDetails
+    {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public ProblemDetails(string? @detail, System.Collections.Generic.Dictionary<string, object> @extensions, string? @instance, int? @status, string? @title, string? @type)
+
+        {
+
+            this.Type = @type;
+
+            this.Title = @title;
+
+            this.Status = @status;
+
+            this.Detail = @detail;
+
+            this.Instance = @instance;
+
+            this.Extensions = @extensions;
+
+        }    [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? Type { get; }
+
+        [Newtonsoft.Json.JsonProperty("title", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? Title { get; }
+
+        [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? Status { get; }
+
+        [Newtonsoft.Json.JsonProperty("detail", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? Detail { get; }
+
+        [Newtonsoft.Json.JsonProperty("instance", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? Instance { get; }
+
+        [Newtonsoft.Json.JsonProperty("extensions", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.Dictionary<string, object> Extensions { get; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static ProblemDetails FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ProblemDetails>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class LoginRequest
+    {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public LoginRequest(LoginModel @model)
+
+        {
+
+            this.Model = @model;
+
+        }    [Newtonsoft.Json.JsonProperty("model", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public LoginModel Model { get; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static LoginRequest FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<LoginRequest>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
@@ -236,14 +383,26 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class LoginModel
     {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
 
-        [Newtonsoft.Json.JsonProperty("nickName", Required = Newtonsoft.Json.Required.Always)]
-        public string NickName { get; set; }
+        public LoginModel(string? @email, string @password, string? @userName)
+
+        {
+
+            this.UserName = @userName;
+
+            this.Email = @email;
+
+            this.Password = @password;
+
+        }    [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? UserName { get; }
+
+        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? Email { get; }
 
         [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.Always)]
-        public string Password { get; set; }
+        public string Password { get; }
 
         public string ToJson()
         {
@@ -261,10 +420,18 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class Register
+    public partial class RegisterCommand
     {
-        [Newtonsoft.Json.JsonProperty("model", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RegisterModel Model { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public RegisterCommand(RegisterModel @model)
+
+        {
+
+            this.Model = @model;
+
+        }    [Newtonsoft.Json.JsonProperty("model", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public RegisterModel Model { get; }
 
         public string ToJson()
         {
@@ -272,10 +439,10 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static Register FromJson(string data)
+        public static RegisterCommand FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Register>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<RegisterCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
@@ -284,17 +451,36 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class RegisterModel
     {
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
-        public string Name { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
 
-        [Newtonsoft.Json.JsonProperty("nickName", Required = Newtonsoft.Json.Required.Always)]
-        public string NickName { get; set; }
+        public RegisterModel(string @email, string @name, string @password, string @phoneNumber, string @userName)
+
+        {
+
+            this.UserName = @userName;
+
+            this.Name = @name;
+
+            this.Email = @email;
+
+            this.Password = @password;
+
+            this.PhoneNumber = @phoneNumber;
+
+        }    [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.Always)]
+        public string UserName { get; }
+
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Name { get; }
 
         [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.Always)]
-        public string Email { get; set; }
+        public string Email { get; }
 
         [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.Always)]
-        public string Password { get; set; }
+        public string Password { get; }
+
+        [Newtonsoft.Json.JsonProperty("phoneNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string PhoneNumber { get; }
 
         public string ToJson()
         {
@@ -312,10 +498,23 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class RegisterAdmin
+    public partial class AuthenticateResponse
     {
-        [Newtonsoft.Json.JsonProperty("model", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RegisterModel Model { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public AuthenticateResponse(System.Guid @userId, System.DateTime @validTo)
+
+        {
+
+            this.UserId = @userId;
+
+            this.ValidTo = @validTo;
+
+        }    [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid UserId { get; }
+
+        [Newtonsoft.Json.JsonProperty("validTo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTime ValidTo { get; }
 
         public string ToJson()
         {
@@ -323,10 +522,39 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static RegisterAdmin FromJson(string data)
+        public static AuthenticateResponse FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<RegisterAdmin>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<AuthenticateResponse>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class RegisterAdminCommand
+    {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public RegisterAdminCommand(RegisterModel @model)
+
+        {
+
+            this.Model = @model;
+
+        }    [Newtonsoft.Json.JsonProperty("model", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public RegisterModel Model { get; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static RegisterAdminCommand FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<RegisterAdminCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
@@ -335,23 +563,36 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class MessengerChatDto
     {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public MessengerChatDto(string? @description, System.Guid @id, string? @name, System.Collections.ObjectModel.ObservableCollection<RoleDto> @roles, System.Collections.ObjectModel.ObservableCollection<System.Guid> @users)
+
+        {
+
+            this.Id = @id;
+
+            this.Name = @name;
+
+            this.Description = @description;
+
+            this.Users = @users;
+
+            this.Roles = @roles;
+
+        }    [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; }
 
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
+        public string? Name { get; }
 
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("creator", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MessengerUserDto Creator { get; set; }
+        public string? Description { get; }
 
         [Newtonsoft.Json.JsonProperty("users", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.ObjectModel.ObservableCollection<System.Guid> Users { get; set; }
+        public System.Collections.ObjectModel.ObservableCollection<System.Guid> Users { get; }
 
         [Newtonsoft.Json.JsonProperty("roles", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.ObjectModel.ObservableCollection<RoleDto> Roles { get; set; }
+        public System.Collections.ObjectModel.ObservableCollection<RoleDto> Roles { get; }
 
         public string ToJson()
         {
@@ -369,73 +610,73 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class MessengerUserDto
-    {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("nickName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string NickName { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
-
-        public string ToJson()
-        {
-
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
-
-        }
-        public static MessengerUserDto FromJson(string data)
-        {
-
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<MessengerUserDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
-
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class RoleDto
     {
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public RoleDto(ActionOption @canAddUsers, ActionOption @canDeleteChat, ActionOption @canDeleteMessages, ActionOption @canDeleteUsers, ActionOption @canEditChannelDescription, ActionOption @canEditMessages, ActionOption @canInviteOtherUsers, ActionOption @canPinMessages, ActionOption @canReadMessages, ActionOption @canSeeChannelMembers, ActionOption @canWriteMessages, string @name)
+
+        {
+
+            this.Name = @name;
+
+            this.CanEditMessages = @canEditMessages;
+
+            this.CanDeleteMessages = @canDeleteMessages;
+
+            this.CanWriteMessages = @canWriteMessages;
+
+            this.CanReadMessages = @canReadMessages;
+
+            this.CanAddUsers = @canAddUsers;
+
+            this.CanDeleteUsers = @canDeleteUsers;
+
+            this.CanPinMessages = @canPinMessages;
+
+            this.CanSeeChannelMembers = @canSeeChannelMembers;
+
+            this.CanInviteOtherUsers = @canInviteOtherUsers;
+
+            this.CanEditChannelDescription = @canEditChannelDescription;
+
+            this.CanDeleteChat = @canDeleteChat;
+
+        }    [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Name { get; }
 
         [Newtonsoft.Json.JsonProperty("canEditMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanEditMessages { get; set; }
+        public ActionOption CanEditMessages { get; }
 
         [Newtonsoft.Json.JsonProperty("canDeleteMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanDeleteMessages { get; set; }
+        public ActionOption CanDeleteMessages { get; }
 
         [Newtonsoft.Json.JsonProperty("canWriteMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanWriteMessages { get; set; }
+        public ActionOption CanWriteMessages { get; }
 
         [Newtonsoft.Json.JsonProperty("canReadMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanReadMessages { get; set; }
+        public ActionOption CanReadMessages { get; }
 
         [Newtonsoft.Json.JsonProperty("canAddUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanAddUsers { get; set; }
+        public ActionOption CanAddUsers { get; }
 
         [Newtonsoft.Json.JsonProperty("canDeleteUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanDeleteUsers { get; set; }
+        public ActionOption CanDeleteUsers { get; }
 
         [Newtonsoft.Json.JsonProperty("canPinMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanPinMessages { get; set; }
+        public ActionOption CanPinMessages { get; }
 
         [Newtonsoft.Json.JsonProperty("canSeeChannelMembers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanSeeChannelMembers { get; set; }
+        public ActionOption CanSeeChannelMembers { get; }
 
         [Newtonsoft.Json.JsonProperty("canInviteOtherUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanInviteOtherUsers { get; set; }
+        public ActionOption CanInviteOtherUsers { get; }
 
         [Newtonsoft.Json.JsonProperty("canEditChannelDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanEditChannelDescription { get; set; }
+        public ActionOption CanEditChannelDescription { get; }
 
         [Newtonsoft.Json.JsonProperty("canDeleteChat", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanDeleteChat { get; set; }
+        public ActionOption CanDeleteChat { get; }
 
         public string ToJson()
         {
@@ -465,25 +706,28 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ChatUser
+    public partial class ChatUserDto
     {
-        [Newtonsoft.Json.JsonProperty("user", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MessengerUser User { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
 
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; }
+        public ChatUserDto(string @chatUserName, System.Guid @messengerUserId, RoleDto @role)
+
+        {
+
+            this.ChatUserName = @chatUserName;
+
+            this.MessengerUserId = @messengerUserId;
+
+            this.Role = @role;
+
+        }    [Newtonsoft.Json.JsonProperty("chatUserName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ChatUserName { get; }
 
         [Newtonsoft.Json.JsonProperty("messengerUserId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid MessengerUserId { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("chat", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public Chat Chat { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("chatId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid ChatId { get; set; }
+        public System.Guid MessengerUserId { get; }
 
         [Newtonsoft.Json.JsonProperty("role", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public Role Role { get; set; }
+        public RoleDto Role { get; }
 
         public string ToJson()
         {
@@ -491,32 +735,38 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static ChatUser FromJson(string data)
+        public static ChatUserDto FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<ChatUser>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ChatUserDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class MessengerUser
+    public partial class AddChannelCommand
     {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public AddChannelCommand(System.Guid @adminId, string @description, string @name)
+
+        {
+
+            this.AdminId = @adminId;
+
+            this.Name = @name;
+
+            this.Description = @description;
+
+        }    [Newtonsoft.Json.JsonProperty("adminId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid AdminId { get; }
 
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("nickName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string NickName { get; set; }
+        public string Name { get; }
 
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("chats", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.ObjectModel.ObservableCollection<Chat> Chats { get; set; }
+        public string Description { get; }
 
         public string ToJson()
         {
@@ -524,41 +774,38 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static MessengerUser FromJson(string data)
+        public static AddChannelCommand FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<MessengerUser>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<AddChannelCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public abstract partial class Chat
+    public partial class AddGroupChatCommand
     {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public AddGroupChatCommand(System.Guid @adminId, string @description, string @name)
+
+        {
+
+            this.AdminId = @adminId;
+
+            this.Name = @name;
+
+            this.Description = @description;
+
+        }    [Newtonsoft.Json.JsonProperty("adminId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid AdminId { get; }
 
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
+        public string Name { get; }
 
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("creator", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MessengerUser Creator { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("creatorId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid CreatorId { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("maxUsersAmount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int MaxUsersAmount { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("users", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.ObjectModel.ObservableCollection<ChatUser> Users { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("roles", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.ObjectModel.ObservableCollection<Role> Roles { get; set; }
+        public string Description { get; }
 
         public string ToJson()
         {
@@ -566,143 +813,43 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static Chat FromJson(string data)
+        public static AddGroupChatCommand FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Chat>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<AddGroupChatCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class Role
+    public partial class AddPersonalChatCommand
     {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
 
-        [Newtonsoft.Json.JsonProperty("chat", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public Chat Chat { get; set; }
+        public AddPersonalChatCommand(string @description, System.Guid @firstUserId, string @name, System.Guid @secondUserId)
 
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canEditMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanEditMessages { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canDeleteMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanDeleteMessages { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canWriteMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanWriteMessages { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canReadMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanReadMessages { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canAddUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanAddUsers { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canDeleteUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanDeleteUsers { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canPinMessages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanPinMessages { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canSeeChannelMembers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanSeeChannelMembers { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canInviteOtherUsers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanInviteOtherUsers { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canEditChannelDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanEditChannelDescription { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("canDeleteChat", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ActionOption CanDeleteChat { get; set; }
-
-        public string ToJson()
         {
 
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+            this.FirstUserId = @firstUserId;
 
-        }
-        public static Role FromJson(string data)
-        {
+            this.SecondUserId = @secondUserId;
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Role>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            this.Name = @name;
 
-        }
+            this.Description = @description;
 
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class AddChannel
-    {
-        [Newtonsoft.Json.JsonProperty("adminId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid AdminId { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
-
-        public string ToJson()
-        {
-
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
-
-        }
-        public static AddChannel FromJson(string data)
-        {
-
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<AddChannel>(data, new Newtonsoft.Json.JsonSerializerSettings());
-
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class AddGroupChat
-    {
-        [Newtonsoft.Json.JsonProperty("adminId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid AdminId { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
-
-        public string ToJson()
-        {
-
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
-
-        }
-        public static AddGroupChat FromJson(string data)
-        {
-
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<AddGroupChat>(data, new Newtonsoft.Json.JsonSerializerSettings());
-
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class AddPersonalChat
-    {
-        [Newtonsoft.Json.JsonProperty("firstUserId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid FirstUserId { get; set; }
+        }    [Newtonsoft.Json.JsonProperty("firstUserId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid FirstUserId { get; }
 
         [Newtonsoft.Json.JsonProperty("secondUserId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid SecondUserId { get; set; }
+        public System.Guid SecondUserId { get; }
 
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
+        public string Name { get; }
 
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
+        public string Description { get; }
 
         public string ToJson()
         {
@@ -710,26 +857,38 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static AddPersonalChat FromJson(string data)
+        public static AddPersonalChatCommand FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<AddPersonalChat>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<AddPersonalChatCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class AddSavedMessages
+    public partial class AddSavedMessagesCommand
     {
-        [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid UserId { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public AddSavedMessagesCommand(string @description, string @name, System.Guid @userId)
+
+        {
+
+            this.UserId = @userId;
+
+            this.Name = @name;
+
+            this.Description = @description;
+
+        }    [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid UserId { get; }
 
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
+        public string Name { get; }
 
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
+        public string Description { get; }
 
         public string ToJson()
         {
@@ -737,23 +896,33 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static AddSavedMessages FromJson(string data)
+        public static AddSavedMessagesCommand FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<AddSavedMessages>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<AddSavedMessagesCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class AddUserToChat
+    public partial class AddUserToChatCommand
     {
-        [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid UserId { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public AddUserToChatCommand(System.Guid @chatId, System.Guid @userId)
+
+        {
+
+            this.UserId = @userId;
+
+            this.ChatId = @chatId;
+
+        }    [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid UserId { get; }
 
         [Newtonsoft.Json.JsonProperty("chatId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid ChatId { get; set; }
+        public System.Guid ChatId { get; }
 
         public string ToJson()
         {
@@ -761,23 +930,33 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static AddUserToChat FromJson(string data)
+        public static AddUserToChatCommand FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<AddUserToChat>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<AddUserToChatCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class DeleteUserFromChat
+    public partial class DeleteUserFromChatCommand
     {
-        [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid UserId { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public DeleteUserFromChatCommand(System.Guid @chatId, System.Guid @userId)
+
+        {
+
+            this.UserId = @userId;
+
+            this.ChatId = @chatId;
+
+        }    [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid UserId { get; }
 
         [Newtonsoft.Json.JsonProperty("chatId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid ChatId { get; set; }
+        public System.Guid ChatId { get; }
 
         public string ToJson()
         {
@@ -785,23 +964,72 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static DeleteUserFromChat FromJson(string data)
+        public static DeleteUserFromChatCommand FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<DeleteUserFromChat>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<DeleteUserFromChatCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class CreateRoleForChat
+    public partial class CreateRoleForChatCommand
     {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public CreateRoleForChatCommand(System.Guid @chatId, RoleDto @role)
+
+        {
+
+            this.Role = @role;
+
+            this.ChatId = @chatId;
+
+        }    [Newtonsoft.Json.JsonProperty("role", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public RoleDto Role { get; }
+
+        [Newtonsoft.Json.JsonProperty("chatId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid ChatId { get; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static CreateRoleForChatCommand FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<CreateRoleForChatCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ChangeRoleForUserByIdCommand
+    {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public ChangeRoleForUserByIdCommand(System.Guid @chatId, RoleDto @role, System.Guid @userId)
+
+        {
+
+            this.UserId = @userId;
+
+            this.ChatId = @chatId;
+
+            this.Role = @role;
+
+        }    [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid UserId { get; }
+
+        [Newtonsoft.Json.JsonProperty("chatId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid ChatId { get; }
+
         [Newtonsoft.Json.JsonProperty("role", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoleDto Role { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("chatId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid ChatId { get; set; }
+        public RoleDto Role { get; }
 
         public string ToJson()
         {
@@ -809,26 +1037,43 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static CreateRoleForChat FromJson(string data)
+        public static ChangeRoleForUserByIdCommand FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<CreateRoleForChat>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ChangeRoleForUserByIdCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ChangeRoleForUserById
+    public partial class MessengerUserDto
     {
-        [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid UserId { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
 
-        [Newtonsoft.Json.JsonProperty("chatId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid ChatId { get; set; }
+        public MessengerUserDto(string? @description, System.Guid @id, string? @name, string? @userName)
 
-        [Newtonsoft.Json.JsonProperty("role", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoleDto Role { get; set; }
+        {
+
+            this.Id = @id;
+
+            this.Name = @name;
+
+            this.UserName = @userName;
+
+            this.Description = @description;
+
+        }    [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; }
+
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? Name { get; }
+
+        [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? UserName { get; }
+
+        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? Description { get; }
 
         public string ToJson()
         {
@@ -836,71 +1081,101 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static ChangeRoleForUserById FromJson(string data)
+        public static MessengerUserDto FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<ChangeRoleForUserById>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<MessengerUserDto>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class SetUserNickNameById
+    public partial class SetUserNickNameByIdCommand
     {
-        [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid UserId { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public SetUserNickNameByIdCommand(System.Guid @userId, string @userName)
+
+        {
+
+            this.UserId = @userId;
+
+            this.UserName = @userName;
+
+        }    [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid UserId { get; }
+
+        [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UserName { get; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static SetUserNickNameByIdCommand FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<SetUserNickNameByIdCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class DeleteUserCommand
+    {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public DeleteUserCommand(System.Guid @userId)
+
+        {
+
+            this.UserId = @userId;
+
+        }    [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid UserId { get; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static DeleteUserCommand FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<DeleteUserCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class AddUserCommand
+    {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public AddUserCommand(string @description, string @name, string @nickName)
+
+        {
+
+            this.Name = @name;
+
+            this.NickName = @nickName;
+
+            this.Description = @description;
+
+        }    [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Name { get; }
 
         [Newtonsoft.Json.JsonProperty("nickName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string NickName { get; set; }
-
-        public string ToJson()
-        {
-
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
-
-        }
-        public static SetUserNickNameById FromJson(string data)
-        {
-
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<SetUserNickNameById>(data, new Newtonsoft.Json.JsonSerializerSettings());
-
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class DeleteUser
-    {
-        [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid UserId { get; set; }
-
-        public string ToJson()
-        {
-
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
-
-        }
-        public static DeleteUser FromJson(string data)
-        {
-
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<DeleteUser>(data, new Newtonsoft.Json.JsonSerializerSettings());
-
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class AddUser
-    {
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("nickName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string NickName { get; set; }
+        public string NickName { get; }
 
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
+        public string Description { get; }
 
         public string ToJson()
         {
@@ -908,23 +1183,33 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static AddUser FromJson(string data)
+        public static AddUserCommand FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<AddUser>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<AddUserCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ChangeUserDescriptionById
+    public partial class ChangeUserDescriptionByIdCommand
     {
-        [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid UserId { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public ChangeUserDescriptionByIdCommand(string @description, System.Guid @userId)
+
+        {
+
+            this.UserId = @userId;
+
+            this.Description = @description;
+
+        }    [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid UserId { get; }
 
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
+        public string Description { get; }
 
         public string ToJson()
         {
@@ -932,23 +1217,33 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static ChangeUserDescriptionById FromJson(string data)
+        public static ChangeUserDescriptionByIdCommand FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<ChangeUserDescriptionById>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ChangeUserDescriptionByIdCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ChangeUserNameById
+    public partial class ChangeUserNameByIdCommand
     {
-        [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid UserId { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public ChangeUserNameByIdCommand(string @name, System.Guid @userId)
+
+        {
+
+            this.UserId = @userId;
+
+            this.Name = @name;
+
+        }    [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid UserId { get; }
 
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
+        public string Name { get; }
 
         public string ToJson()
         {
@@ -956,50 +1251,15 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
-        public static ChangeUserNameById FromJson(string data)
+        public static ChangeUserNameByIdCommand FromJson(string data)
         {
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<ChangeUserNameById>(data, new Newtonsoft.Json.JsonSerializerSettings());
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ChangeUserNameByIdCommand>(data, new Newtonsoft.Json.JsonSerializerSettings());
 
         }
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class FileResponse : System.IDisposable
-    {
-        private System.IDisposable _client;
-        private System.IDisposable _response;
-
-        public int StatusCode { get; private set; }
-
-        public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
-
-        public System.IO.Stream Stream { get; private set; }
-
-        public bool IsPartial
-        {
-            get { return StatusCode == 206; }
-        }
-
-        public FileResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.IO.Stream stream, System.IDisposable client, System.IDisposable response)
-        {
-            StatusCode = statusCode;
-            Headers = headers;
-            Stream = stream;
-            _client = client;
-            _response = response;
-        }
-
-        public void Dispose()
-        {
-            Stream.Dispose();
-            if (_response != null)
-                _response.Dispose();
-            if (_client != null)
-                _client.Dispose();
-        }
-    }
 
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -1007,11 +1267,11 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     {
         public int StatusCode { get; private set; }
 
-        public string Response { get; private set; }
+        public string? Response { get; private set; }
 
         public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
 
-        public Do_Svyazi_User_ApiClient_Exception(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception innerException)
+        public Do_Svyazi_User_ApiClient_Exception(string message, int statusCode, string? response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception? innerException)
             : base(message + "\n\nStatus: " + statusCode + "\nResponse: \n" + ((response == null) ? "(null)" : response.Substring(0, response.Length >= 512 ? 512 : response.Length)), innerException)
         {
             StatusCode = statusCode;
@@ -1030,7 +1290,7 @@ namespace Do_Svyazi.User.Web.ApiClient.Contracts
     {
         public TResult Result { get; private set; }
 
-        public Do_Svyazi_User_ApiClient_Exception(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException)
+        public Do_Svyazi_User_ApiClient_Exception(string message, int statusCode, string? response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception? innerException)
             : base(message, statusCode, response, headers, innerException)
         {
             Result = result;

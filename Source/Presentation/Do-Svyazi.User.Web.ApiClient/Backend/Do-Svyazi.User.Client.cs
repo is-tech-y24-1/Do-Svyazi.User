@@ -4,6 +4,9 @@
 // </auto-generated>
 //----------------------
 
+#nullable enable
+
+using Do_Svyazi.User.Web.ApiClient.Backend;
 using Do_Svyazi.User.Web.ApiClient.Contracts;
 
 #pragma warning disable 108 // Disable "CS0108 '{derivedDto}.ToJson()' hides inherited member '{dtoBase}.ToJson()'. Use the new keyword if hiding was intended."
@@ -20,7 +23,7 @@ namespace Do_Svyazi.User.Web.ApiClient
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class AuthenticateClient : IAuthenticateClient
+    public partial class AuthenticateClient : Do_SvyaziClientBase, IAuthenticateClient
     {
         private string _baseUrl = "";
         private System.Net.Http.HttpClient _httpClient;
@@ -54,33 +57,21 @@ namespace Do_Svyazi.User.Web.ApiClient
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> LoginAsync(Login model)
-        {
-            return LoginAsync(model, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> LoginAsync(Login model, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<MessengerUser>> GetAllAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (model == null)
-                throw new System.ArgumentNullException("model");
-
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Authenticate/login");
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Authenticate/GetAll");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(model, _settings.Value));
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/octet-stream"));
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -103,12 +94,30 @@ namespace Do_Svyazi.User.Web.ApiClient
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
-                        if (status_ == 200 || status_ == 206)
+                        if (status_ == 200)
                         {
-                            var responseStream_ = response_.Content == null ? System.IO.Stream.Null : await response_.Content.ReadAsStreamAsync().ConfigureAwait(false);
-                            var fileResponse_ = new FileResponse(status_, headers_, responseStream_, null, response_);
-                            disposeClient_ = false; disposeResponse_ = false; // response and client are disposed by FileResponse
-                            return fileResponse_;
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<MessengerUser>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
                         }
                         else
                         {
@@ -130,33 +139,26 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> RegisterAsync(Register model)
-        {
-            return RegisterAsync(model, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> RegisterAsync(Register model, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task LoginAsync(LoginRequest model, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (model == null)
                 throw new System.ArgumentNullException("model");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Authenticate/register");
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Authenticate/Login");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(model, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/octet-stream"));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -179,12 +181,25 @@ namespace Do_Svyazi.User.Web.ApiClient
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
-                        if (status_ == 200 || status_ == 206)
+                        if (status_ == 200)
                         {
-                            var responseStream_ = response_.Content == null ? System.IO.Stream.Null : await response_.Content.ReadAsStreamAsync().ConfigureAwait(false);
-                            var fileResponse_ = new FileResponse(status_, headers_, responseStream_, null, response_);
-                            disposeClient_ = false; disposeResponse_ = false; // response and client are disposed by FileResponse
-                            return fileResponse_;
+                            return;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
                         }
                         else
                         {
@@ -206,33 +221,26 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> RegisterAdminAsync(RegisterAdmin model)
-        {
-            return RegisterAdminAsync(model, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> RegisterAdminAsync(RegisterAdmin model, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task RegisterAsync(RegisterCommand model, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (model == null)
                 throw new System.ArgumentNullException("model");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Authenticate/register-admin");
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Authenticate/Register");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(model, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/octet-stream"));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -255,12 +263,203 @@ namespace Do_Svyazi.User.Web.ApiClient
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
-                        if (status_ == 200 || status_ == 206)
+                        if (status_ == 200)
                         {
-                            var responseStream_ = response_.Content == null ? System.IO.Stream.Null : await response_.Content.ReadAsStreamAsync().ConfigureAwait(false);
-                            var fileResponse_ = new FileResponse(status_, headers_, responseStream_, null, response_);
-                            disposeClient_ = false; disposeResponse_ = false; // response and client are disposed by FileResponse
-                            return fileResponse_;
+                            return;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<AuthenticateResponse> AuthenticateByJwtAsync(string? jwtToken, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Authenticate/AuthenticateByJwt");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
+                {
+
+                    if (jwtToken == null)
+                        throw new System.ArgumentNullException("jwtToken");
+                    request_.Headers.TryAddWithoutValidation("jwtToken", ConvertToString(jwtToken, System.Globalization.CultureInfo.InvariantCulture));
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<AuthenticateResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task RegisterAdminAsync(RegisterAdminCommand model, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (model == null)
+                throw new System.ArgumentNullException("model");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Authenticate/RegisterAdmin");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
+                {
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(model, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
                         }
                         else
                         {
@@ -301,7 +500,7 @@ namespace Do_Svyazi.User.Web.ApiClient
         {
             if (response == null || response.Content == null)
             {
-                return new ObjectResponseResult<T>(default(T), string.Empty);
+                return new ObjectResponseResult<T>(default(T)!, string.Empty);
             }
 
             if (ReadResponseAsString)
@@ -310,7 +509,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                 try
                 {
                     var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
-                    return new ObjectResponseResult<T>(typedBody, responseText);
+                    return new ObjectResponseResult<T>(typedBody!, responseText);
                 }
                 catch (Newtonsoft.Json.JsonException exception)
                 {
@@ -328,7 +527,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                     {
                         var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
                         var typedBody = serializer.Deserialize<T>(jsonTextReader);
-                        return new ObjectResponseResult<T>(typedBody, string.Empty);
+                        return new ObjectResponseResult<T>(typedBody!, string.Empty);
                     }
                 }
                 catch (Newtonsoft.Json.JsonException exception)
@@ -339,7 +538,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
+        private string ConvertToString(object? value, System.Globalization.CultureInfo cultureInfo)
         {
             if (value == null)
             {
@@ -386,7 +585,7 @@ namespace Do_Svyazi.User.Web.ApiClient
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class ChatClient : IChatClient
+    public partial class ChatClient : Do_SvyaziClientBase, IChatClient
     {
         private string _baseUrl = "";
         private System.Net.Http.HttpClient _httpClient;
@@ -420,15 +619,9 @@ namespace Do_Svyazi.User.Web.ApiClient
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>> GetChatsAsync()
-        {
-            return GetChatsAsync(System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>> GetChatsAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<MessengerChatDto>> GetChatsAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Chat/GetChats");
@@ -437,7 +630,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
@@ -465,12 +658,28 @@ namespace Do_Svyazi.User.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<MessengerChatDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
                         }
                         else
                         {
@@ -492,15 +701,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<MessengerChatDto> GetChatByIdAsync(System.Guid chatId)
-        {
-            return GetChatByIdAsync(chatId, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<MessengerChatDto> GetChatByIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<MessengerChatDto> GetChatByIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (chatId == null)
                 throw new System.ArgumentNullException("chatId");
@@ -514,7 +717,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
@@ -550,6 +753,22 @@ namespace Do_Svyazi.User.Web.ApiClient
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -569,15 +788,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<System.Guid>> GetUserIdsByChatIdAsync(System.Guid chatId)
-        {
-            return GetUserIdsByChatIdAsync(chatId, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<System.Guid>> GetUserIdsByChatIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<System.Guid>> GetUserIdsByChatIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (chatId == null)
                 throw new System.ArgumentNullException("chatId");
@@ -591,7 +804,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
@@ -619,12 +832,28 @@ namespace Do_Svyazi.User.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.ObjectModel.ObservableCollection<System.Guid>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<System.Guid>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
                         }
                         else
                         {
@@ -646,15 +875,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<ChatUser>> GetUsersByChatIdAsync(System.Guid chatId)
-        {
-            return GetUsersByChatIdAsync(chatId, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<ChatUser>> GetUsersByChatIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<ChatUserDto>> GetUsersByChatIdAsync(System.Guid chatId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (chatId == null)
                 throw new System.ArgumentNullException("chatId");
@@ -668,7 +891,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
@@ -696,12 +919,28 @@ namespace Do_Svyazi.User.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.ObjectModel.ObservableCollection<ChatUser>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<ChatUserDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
                         }
                         else
                         {
@@ -723,15 +962,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddChannelAsync(AddChannel addChannelCommand)
-        {
-            return AddChannelAsync(addChannelCommand, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddChannelAsync(AddChannel addChannelCommand, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task AddChannelAsync(AddChannelCommand addChannelCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (addChannelCommand == null)
                 throw new System.ArgumentNullException("addChannelCommand");
@@ -743,7 +976,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(addChannelCommand, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
@@ -776,6 +1009,27 @@ namespace Do_Svyazi.User.Web.ApiClient
                             return;
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            return;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -795,15 +1049,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddGroupChatAsync(AddGroupChat addGroupChatCommand)
-        {
-            return AddGroupChatAsync(addGroupChatCommand, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddGroupChatAsync(AddGroupChat addGroupChatCommand, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task AddGroupChatAsync(AddGroupChatCommand addGroupChatCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (addGroupChatCommand == null)
                 throw new System.ArgumentNullException("addGroupChatCommand");
@@ -815,7 +1063,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(addGroupChatCommand, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
@@ -848,6 +1096,27 @@ namespace Do_Svyazi.User.Web.ApiClient
                             return;
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            return;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -867,15 +1136,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddPersonalChatAsync(AddPersonalChat addPersonalChatCommand)
-        {
-            return AddPersonalChatAsync(addPersonalChatCommand, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddPersonalChatAsync(AddPersonalChat addPersonalChatCommand, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task AddPersonalChatAsync(AddPersonalChatCommand addPersonalChatCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (addPersonalChatCommand == null)
                 throw new System.ArgumentNullException("addPersonalChatCommand");
@@ -887,7 +1150,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(addPersonalChatCommand, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
@@ -920,6 +1183,27 @@ namespace Do_Svyazi.User.Web.ApiClient
                             return;
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            return;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -939,15 +1223,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddSavedMessagesAsync(AddSavedMessages addSavedMessagesCommand)
-        {
-            return AddSavedMessagesAsync(addSavedMessagesCommand, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddSavedMessagesAsync(AddSavedMessages addSavedMessagesCommand, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task AddSavedMessagesAsync(AddSavedMessagesCommand addSavedMessagesCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (addSavedMessagesCommand == null)
                 throw new System.ArgumentNullException("addSavedMessagesCommand");
@@ -959,7 +1237,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(addSavedMessagesCommand, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
@@ -992,6 +1270,27 @@ namespace Do_Svyazi.User.Web.ApiClient
                             return;
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            return;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1011,15 +1310,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddUserToChatAsync(AddUserToChat addUserToChatCommand)
-        {
-            return AddUserToChatAsync(addUserToChatCommand, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddUserToChatAsync(AddUserToChat addUserToChatCommand, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task AddUserToChatAsync(AddUserToChatCommand addUserToChatCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (addUserToChatCommand == null)
                 throw new System.ArgumentNullException("addUserToChatCommand");
@@ -1031,7 +1324,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(addUserToChatCommand, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
@@ -1064,6 +1357,27 @@ namespace Do_Svyazi.User.Web.ApiClient
                             return;
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1083,15 +1397,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task DeleteUserFromChatAsync(DeleteUserFromChat deleteUserFromChatCommand)
-        {
-            return DeleteUserFromChatAsync(deleteUserFromChatCommand, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task DeleteUserFromChatAsync(DeleteUserFromChat deleteUserFromChatCommand, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteUserFromChatAsync(DeleteUserFromChatCommand deleteUserFromChatCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (deleteUserFromChatCommand == null)
                 throw new System.ArgumentNullException("deleteUserFromChatCommand");
@@ -1103,7 +1411,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(deleteUserFromChatCommand, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
@@ -1132,6 +1440,27 @@ namespace Do_Svyazi.User.Web.ApiClient
 
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 204)
                         {
                             return;
                         }
@@ -1174,7 +1503,7 @@ namespace Do_Svyazi.User.Web.ApiClient
         {
             if (response == null || response.Content == null)
             {
-                return new ObjectResponseResult<T>(default(T), string.Empty);
+                return new ObjectResponseResult<T>(default(T)!, string.Empty);
             }
 
             if (ReadResponseAsString)
@@ -1183,7 +1512,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                 try
                 {
                     var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
-                    return new ObjectResponseResult<T>(typedBody, responseText);
+                    return new ObjectResponseResult<T>(typedBody!, responseText);
                 }
                 catch (Newtonsoft.Json.JsonException exception)
                 {
@@ -1201,7 +1530,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                     {
                         var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
                         var typedBody = serializer.Deserialize<T>(jsonTextReader);
-                        return new ObjectResponseResult<T>(typedBody, string.Empty);
+                        return new ObjectResponseResult<T>(typedBody!, string.Empty);
                     }
                 }
                 catch (Newtonsoft.Json.JsonException exception)
@@ -1212,7 +1541,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
+        private string ConvertToString(object? value, System.Globalization.CultureInfo cultureInfo)
         {
             if (value == null)
             {
@@ -1259,7 +1588,7 @@ namespace Do_Svyazi.User.Web.ApiClient
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class RolesClient : IRolesClient
+    public partial class RolesClient : Do_SvyaziClientBase, IRolesClient
     {
         private string _baseUrl = "";
         private System.Net.Http.HttpClient _httpClient;
@@ -1293,15 +1622,9 @@ namespace Do_Svyazi.User.Web.ApiClient
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<RoleDto> GetRoleByUserIdAsync(System.Guid userId, System.Guid chatId)
-        {
-            return GetRoleByUserIdAsync(userId, chatId, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<RoleDto> GetRoleByUserIdAsync(System.Guid userId, System.Guid chatId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<RoleDto> GetRoleByUserIdAsync(System.Guid userId, System.Guid chatId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -1319,7 +1642,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
@@ -1355,6 +1678,22 @@ namespace Do_Svyazi.User.Web.ApiClient
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1374,18 +1713,12 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task CreateRoleForChatAsync(CreateRoleForChat createRoleForChat)
-        {
-            return CreateRoleForChatAsync(createRoleForChat, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CreateRoleForChatAsync(CreateRoleForChat createRoleForChat, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task CreateRoleForChatAsync(CreateRoleForChatCommand createRoleForChatCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (createRoleForChat == null)
-                throw new System.ArgumentNullException("createRoleForChat");
+            if (createRoleForChatCommand == null)
+                throw new System.ArgumentNullException("createRoleForChatCommand");
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Roles/CreateRoleForChat");
@@ -1394,9 +1727,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(createRoleForChat, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(createRoleForChatCommand, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -1427,6 +1760,27 @@ namespace Do_Svyazi.User.Web.ApiClient
                             return;
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1446,18 +1800,12 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ChangeRoleForUserByIdAsync(ChangeRoleForUserById changeRoleForUserById)
-        {
-            return ChangeRoleForUserByIdAsync(changeRoleForUserById, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ChangeRoleForUserByIdAsync(ChangeRoleForUserById changeRoleForUserById, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ChangeRoleForUserByIdAsync(ChangeRoleForUserByIdCommand changeRoleForUserByIdCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (changeRoleForUserById == null)
-                throw new System.ArgumentNullException("changeRoleForUserById");
+            if (changeRoleForUserByIdCommand == null)
+                throw new System.ArgumentNullException("changeRoleForUserByIdCommand");
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Roles/ChangeRoleForUserById");
@@ -1466,9 +1814,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(changeRoleForUserById, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(changeRoleForUserByIdCommand, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -1495,6 +1843,27 @@ namespace Do_Svyazi.User.Web.ApiClient
 
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 204)
                         {
                             return;
                         }
@@ -1537,7 +1906,7 @@ namespace Do_Svyazi.User.Web.ApiClient
         {
             if (response == null || response.Content == null)
             {
-                return new ObjectResponseResult<T>(default(T), string.Empty);
+                return new ObjectResponseResult<T>(default(T)!, string.Empty);
             }
 
             if (ReadResponseAsString)
@@ -1546,7 +1915,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                 try
                 {
                     var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
-                    return new ObjectResponseResult<T>(typedBody, responseText);
+                    return new ObjectResponseResult<T>(typedBody!, responseText);
                 }
                 catch (Newtonsoft.Json.JsonException exception)
                 {
@@ -1564,7 +1933,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                     {
                         var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
                         var typedBody = serializer.Deserialize<T>(jsonTextReader);
-                        return new ObjectResponseResult<T>(typedBody, string.Empty);
+                        return new ObjectResponseResult<T>(typedBody!, string.Empty);
                     }
                 }
                 catch (Newtonsoft.Json.JsonException exception)
@@ -1575,7 +1944,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
+        private string ConvertToString(object? value, System.Globalization.CultureInfo cultureInfo)
         {
             if (value == null)
             {
@@ -1622,7 +1991,7 @@ namespace Do_Svyazi.User.Web.ApiClient
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class UserClient : IUserClient
+    public partial class UserClient : Do_SvyaziClientBase, IUserClient
     {
         private string _baseUrl = "";
         private System.Net.Http.HttpClient _httpClient;
@@ -1656,15 +2025,9 @@ namespace Do_Svyazi.User.Web.ApiClient
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerUserDto>> GetUsersAsync()
-        {
-            return GetUsersAsync(System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerUserDto>> GetUsersAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<MessengerUserDto>> GetUsersAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/GetAll");
@@ -1673,7 +2036,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
@@ -1701,12 +2064,28 @@ namespace Do_Svyazi.User.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.ObjectModel.ObservableCollection<MessengerUserDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<MessengerUserDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
                         }
                         else
                         {
@@ -1728,15 +2107,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<MessengerUser> GetUserAsync(System.Guid userId)
-        {
-            return GetUserAsync(userId, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<MessengerUser> GetUserAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<MessengerUserDto> GetUserAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -1750,7 +2123,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
@@ -1778,12 +2151,28 @@ namespace Do_Svyazi.User.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<MessengerUser>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<MessengerUserDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
                         }
                         else
                         {
@@ -1805,15 +2194,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>> GetAllChatsByUserIdAsync(System.Guid userId)
-        {
-            return GetAllChatsByUserIdAsync(userId, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>> GetAllChatsByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<MessengerChatDto>> GetAllChatsByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -1827,7 +2210,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
@@ -1855,12 +2238,28 @@ namespace Do_Svyazi.User.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.ObjectModel.ObservableCollection<MessengerChatDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<MessengerChatDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
                         }
                         else
                         {
@@ -1882,15 +2281,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<System.Guid>> GetAllChatsIdsByUserIdAsync(System.Guid userId)
-        {
-            return GetAllChatsIdsByUserIdAsync(userId, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<System.Guid>> GetAllChatsIdsByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<System.Guid>> GetAllChatsIdsByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -1904,7 +2297,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
@@ -1932,12 +2325,28 @@ namespace Do_Svyazi.User.Web.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.ObjectModel.ObservableCollection<System.Guid>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.IReadOnlyList<System.Guid>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
                         }
                         else
                         {
@@ -1959,18 +2368,12 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task SetNickNameByIdAsync(SetUserNickNameById setUserNickNameById)
-        {
-            return SetNickNameByIdAsync(setUserNickNameById, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task SetNickNameByIdAsync(SetUserNickNameById setUserNickNameById, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task SetNickNameByIdAsync(SetUserNickNameByIdCommand setUserNickNameByIdCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setUserNickNameById == null)
-                throw new System.ArgumentNullException("setUserNickNameById");
+            if (setUserNickNameByIdCommand == null)
+                throw new System.ArgumentNullException("setUserNickNameByIdCommand");
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/SetNickNameById");
@@ -1979,9 +2382,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(setUserNickNameById, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(setUserNickNameByIdCommand, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -2012,6 +2415,27 @@ namespace Do_Svyazi.User.Web.ApiClient
                             return;
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2031,18 +2455,12 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task DeleteUserAsync(DeleteUser deleteUser)
-        {
-            return DeleteUserAsync(deleteUser, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task DeleteUserAsync(DeleteUser deleteUser, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteUserAsync(DeleteUserCommand deleteUserCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (deleteUser == null)
-                throw new System.ArgumentNullException("deleteUser");
+            if (deleteUserCommand == null)
+                throw new System.ArgumentNullException("deleteUserCommand");
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/DeleteUser");
@@ -2051,9 +2469,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(deleteUser, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(deleteUserCommand, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -2084,6 +2502,27 @@ namespace Do_Svyazi.User.Web.ApiClient
                             return;
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2103,18 +2542,12 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Guid> AddUserAsync(AddUser addUser)
-        {
-            return AddUserAsync(addUser, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Guid> AddUserAsync(AddUser addUser, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Guid> AddUserAsync(AddUserCommand addUserCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (addUser == null)
-                throw new System.ArgumentNullException("addUser");
+            if (addUserCommand == null)
+                throw new System.ArgumentNullException("addUserCommand");
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/AddUser");
@@ -2123,9 +2556,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(addUser, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(addUserCommand, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -2162,6 +2595,32 @@ namespace Do_Svyazi.User.Web.ApiClient
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Guid>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2181,18 +2640,12 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ChangeDescriptionAsync(ChangeUserDescriptionById changeUserDescriptionById)
-        {
-            return ChangeDescriptionAsync(changeUserDescriptionById, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ChangeDescriptionAsync(ChangeUserDescriptionById changeUserDescriptionById, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ChangeDescriptionAsync(ChangeUserDescriptionByIdCommand changeUserDescriptionByIdCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (changeUserDescriptionById == null)
-                throw new System.ArgumentNullException("changeUserDescriptionById");
+            if (changeUserDescriptionByIdCommand == null)
+                throw new System.ArgumentNullException("changeUserDescriptionByIdCommand");
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/ChangeDescription");
@@ -2201,9 +2654,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(changeUserDescriptionById, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(changeUserDescriptionByIdCommand, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -2234,6 +2687,27 @@ namespace Do_Svyazi.User.Web.ApiClient
                             return;
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new Do_Svyazi_User_ApiClient_Exception("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2253,18 +2727,12 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ChangeNameAsync(ChangeUserNameById changeUserNameById)
-        {
-            return ChangeNameAsync(changeUserNameById, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="Do_Svyazi_User_ApiClient_Exception">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ChangeNameAsync(ChangeUserNameById changeUserNameById, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ChangeNameAsync(ChangeUserNameByIdCommand changeUserNameByIdCommand, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (changeUserNameById == null)
-                throw new System.ArgumentNullException("changeUserNameById");
+            if (changeUserNameByIdCommand == null)
+                throw new System.ArgumentNullException("changeUserNameByIdCommand");
 
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User/ChangeName");
@@ -2273,9 +2741,9 @@ namespace Do_Svyazi.User.Web.ApiClient
             var disposeClient_ = false;
             try
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(changeUserNameById, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(changeUserNameByIdCommand, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -2302,6 +2770,27 @@ namespace Do_Svyazi.User.Web.ApiClient
 
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new Do_Svyazi_User_ApiClient_Exception("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new Do_Svyazi_User_ApiClient_Exception<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new Do_Svyazi_User_ApiClient_Exception("A server side error occurred.", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 204)
                         {
                             return;
                         }
@@ -2344,7 +2833,7 @@ namespace Do_Svyazi.User.Web.ApiClient
         {
             if (response == null || response.Content == null)
             {
-                return new ObjectResponseResult<T>(default(T), string.Empty);
+                return new ObjectResponseResult<T>(default(T)!, string.Empty);
             }
 
             if (ReadResponseAsString)
@@ -2353,7 +2842,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                 try
                 {
                     var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
-                    return new ObjectResponseResult<T>(typedBody, responseText);
+                    return new ObjectResponseResult<T>(typedBody!, responseText);
                 }
                 catch (Newtonsoft.Json.JsonException exception)
                 {
@@ -2371,7 +2860,7 @@ namespace Do_Svyazi.User.Web.ApiClient
                     {
                         var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
                         var typedBody = serializer.Deserialize<T>(jsonTextReader);
-                        return new ObjectResponseResult<T>(typedBody, string.Empty);
+                        return new ObjectResponseResult<T>(typedBody!, string.Empty);
                     }
                 }
                 catch (Newtonsoft.Json.JsonException exception)
@@ -2382,7 +2871,7 @@ namespace Do_Svyazi.User.Web.ApiClient
             }
         }
 
-        private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
+        private string ConvertToString(object? value, System.Globalization.CultureInfo cultureInfo)
         {
             if (value == null)
             {

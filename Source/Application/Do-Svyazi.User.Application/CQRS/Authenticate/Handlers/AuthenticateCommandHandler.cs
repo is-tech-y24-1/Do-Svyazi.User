@@ -2,84 +2,72 @@ using Do_Svyazi.User.Application.CQRS.Authenticate.Commands;
 using Do_Svyazi.User.Application.CQRS.Handlers;
 using Do_Svyazi.User.Domain.Authenticate;
 using Do_Svyazi.User.Domain.Exceptions;
+using Do_Svyazi.User.Domain.Users;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace Do_Svyazi.User.Application.CQRS.Authenticate.Handlers;
 
-public class AuthenticateCommandHandler
-    : ICommandHandler<Register, Unit>,
-        ICommandHandler<RegisterAdmin, Unit>
+public class AuthenticateCommandHandler :
+    ICommandHandler<RegisterCommand, Guid>,
+    ICommandHandler<RegisterAdminCommand, Unit>
 {
-    private readonly UserManager<MessageIdentityUser> _userManager;
+    private readonly UserManager<MessengerUser> _userManager;
     private readonly RoleManager<MessageIdentityRole> _roleManager;
 
-    public AuthenticateCommandHandler(UserManager<MessageIdentityUser> userManager, RoleManager<MessageIdentityRole> roleManager)
+    public AuthenticateCommandHandler(
+        UserManager<MessengerUser> userManager,
+        RoleManager<MessageIdentityRole> roleManager)
     {
         _userManager = userManager;
         _roleManager = roleManager;
     }
 
-    public async Task<Unit> Handle(Register request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        MessageIdentityUser? userExists = await _userManager.FindByNameAsync(request.model.NickName);
+        RegisterModel registerModel = request.model;
 
-        if (userExists != null)
-        {
-            throw new Do_Svyazi_User_BusinessLogicException(
-                "User already exists");
-        }
+        if (await _userManager.FindByNameAsync(registerModel.UserName) is not null)
+            throw new Do_Svyazi_User_BusinessLogicException("User already exists");
 
-        MessageIdentityUser user = new ()
-        {
-            SecurityStamp = Guid.NewGuid().ToString(),
-            UserName = request.model.NickName,
-            Email = request.model.Email,
-        };
+        MessengerUser user = CreateIdentityUser(registerModel);
 
-        IdentityResult? result = await _userManager.CreateAsync(user, request.model.Password);
-        if (!result.Succeeded)
-        {
-            throw new Do_Svyazi_User_BusinessLogicException(
-                "User creation failed! Please check user details and try again.");
-        }
+        if (!(await _userManager.CreateAsync(user, registerModel.Password)).Succeeded)
+            throw new Do_Svyazi_User_BusinessLogicException("User creation failed! Please check user details and try again.");
+
+        return user.Id;
+    }
+
+    public async Task<Unit> Handle(RegisterAdminCommand request, CancellationToken cancellationToken)
+    {
+        RegisterModel registerModel = request.model;
+
+        MessengerUser user = await GetUserByUsernameOrEmail(registerModel);
+
+        if (!await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
+            await _roleManager.CreateAsync(new MessageIdentityRole(MessageIdentityRole.Admin));
+
+        if (!await _roleManager.RoleExistsAsync(MessageIdentityRole.User))
+            await _roleManager.CreateAsync(new MessageIdentityRole(MessageIdentityRole.User));
+
+        if (await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
+            await _userManager.AddToRoleAsync(user, MessageIdentityRole.Admin);
+
+        if (await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
+            await _userManager.AddToRoleAsync(user, MessageIdentityRole.User);
 
         return Unit.Value;
     }
 
-    public async Task<Unit> Handle(RegisterAdmin request, CancellationToken cancellationToken)
+    private MessengerUser CreateIdentityUser(RegisterModel userModel) =>
+        new (userModel.Name, userModel.UserName, userModel.Email, userModel.PhoneNumber);
+
+    private async Task<MessengerUser> GetUserByUsernameOrEmail(RegisterModel registerModel)
     {
-        MessageIdentityUser userExists = await _userManager.FindByNameAsync(request.model.NickName);
-        if (userExists != null)
-        {
-            throw new Do_Svyazi_User_BusinessLogicException(
-                "User already exists");
-        }
+        MessengerUser user = await _userManager.FindByNameAsync(registerModel.UserName)
+            ?? await _userManager.FindByEmailAsync(registerModel.Email)
+            ?? throw new Do_Svyazi_User_NotFoundException($"User with userName {registerModel.UserName} or email {registerModel.Email} was not found");
 
-        MessageIdentityUser user = new ()
-        {
-            SecurityStamp = Guid.NewGuid().ToString(),
-            UserName = request.model.NickName,
-        };
-        IdentityResult? result = await _userManager.CreateAsync(user, request.model.Password);
-        if (!result.Succeeded)
-        {
-            throw new Do_Svyazi_User_BusinessLogicException(
-                "User creation failed! Please check user details and try again.");
-        }
-
-        if (await _roleManager.RoleExistsAsync(MessageIdentityRole.Admin))
-        {
-            await _userManager.AddToRoleAsync(user, MessageIdentityRole.Admin);
-            await _roleManager.CreateAsync(new MessageIdentityRole(MessageIdentityRole.User));
-        }
-
-        if (await _roleManager.RoleExistsAsync(MessageIdentityRole.User))
-        {
-            await _userManager.AddToRoleAsync(user, MessageIdentityRole.User);
-            await _roleManager.CreateAsync(new MessageIdentityRole(MessageIdentityRole.Admin));
-        }
-
-        return Unit.Value;
+        return user;
     }
 }

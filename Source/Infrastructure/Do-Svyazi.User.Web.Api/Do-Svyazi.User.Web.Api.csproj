@@ -49,4 +49,8 @@
         <ProjectReference Include="..\Do-Svyazi.User.DataAccess\Do-Svyazi.User.DataAccess.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Extensions\ClaimsPrincipalExtensions.cs" />
+    </ItemGroup>
+
 </Project>
