@@ -49,7 +49,7 @@ public class AuthenticateController : ControllerBase
     }
 
     [HttpGet(nameof(AuthenticateByJwt))]
-    public async Task<ActionResult<Guid>> AuthenticateByJwt(
+    public async Task<ActionResult<AuthenticateResponse>> AuthenticateByJwt(
         [FromHeader] string jwtToken, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new AuthenticateByJwtRequest(jwtToken), cancellationToken);
