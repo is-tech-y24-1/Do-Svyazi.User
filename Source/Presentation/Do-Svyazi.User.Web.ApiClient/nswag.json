@@ -46,7 +46,7 @@
       "createWebHostBuilderMethod": null,
       "startupType": null,
       "allowNullableBodyParameters": true,
-      "output": "openApiContracts.json",
+      "output": "swagger.json",
       "outputType": "OpenApi3",
       "newLineBehavior": "Auto",
       "assemblyPaths": [],
