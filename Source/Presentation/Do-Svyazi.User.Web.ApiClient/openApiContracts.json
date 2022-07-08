@@ -1,0 +1,1696 @@
+{
+  "x-generator": "NSwag v13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Do-Svyazi user module",
+    "version": "2.1.0"
+  },
+  "paths": {
+    "/api/Authenticate/GetAll": {
+      "get": {
+        "tags": [
+          "Authenticate"
+        ],
+        "operationId": "Authenticate_GetAll",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MessengerUser"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Authenticate/Login": {
+      "post": {
+        "tags": [
+          "Authenticate"
+        ],
+        "operationId": "Authenticate_Login",
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Authenticate/Register": {
+      "post": {
+        "tags": [
+          "Authenticate"
+        ],
+        "operationId": "Authenticate_Register",
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "204": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Authenticate/AuthenticateByJwt": {
+      "get": {
+        "tags": [
+          "Authenticate"
+        ],
+        "operationId": "Authenticate_AuthenticateByJwt",
+        "parameters": [
+          {
+            "name": "jwtToken",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticateResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Authenticate/RegisterAdmin": {
+      "post": {
+        "tags": [
+          "Authenticate"
+        ],
+        "operationId": "Authenticate_RegisterAdmin",
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterAdminCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "204": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Chat/GetChats": {
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "Chat_GetChats",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MessengerChatDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Chat/GetChatById": {
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "Chat_GetChatById",
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessengerChatDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Chat/GetUserIdsByChatId": {
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "Chat_GetUserIdsByChatId",
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "guid"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Chat/GetUsersByChatId": {
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "Chat_GetUsersByChatId",
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChatUserDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Chat/AddChannel": {
+      "post": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "Chat_AddChannel",
+        "requestBody": {
+          "x-name": "addChannelCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddChannelCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Chat/AddGroupChat": {
+      "post": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "Chat_AddGroupChat",
+        "requestBody": {
+          "x-name": "addGroupChatCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddGroupChatCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Chat/AddPersonalChat": {
+      "post": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "Chat_AddPersonalChat",
+        "requestBody": {
+          "x-name": "addPersonalChatCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddPersonalChatCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Chat/AddSavedMessages": {
+      "post": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "Chat_AddSavedMessages",
+        "requestBody": {
+          "x-name": "addSavedMessagesCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddSavedMessagesCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Chat/AddUserToChat": {
+      "post": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "Chat_AddUserToChat",
+        "requestBody": {
+          "x-name": "addUserToChatCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddUserToChatCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "204": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Chat/DeleteUserFromChat": {
+      "delete": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "Chat_DeleteUserFromChat",
+        "requestBody": {
+          "x-name": "deleteUserFromChatCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteUserFromChatCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "204": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Roles/GetRoleByUserId": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "operationId": "Roles_GetRoleByUserId",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "chatId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Roles/CreateRoleForChat": {
+      "post": {
+        "tags": [
+          "Roles"
+        ],
+        "operationId": "Roles_CreateRoleForChat",
+        "requestBody": {
+          "x-name": "createRoleForChatCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoleForChatCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "204": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Roles/ChangeRoleForUserById": {
+      "post": {
+        "tags": [
+          "Roles"
+        ],
+        "operationId": "Roles_ChangeRoleForUserById",
+        "requestBody": {
+          "x-name": "changeRoleForUserByIdCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeRoleForUserByIdCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "204": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/User/GetAll": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_GetUsers",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MessengerUserDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/User/GetUser": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_GetUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessengerUserDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/User/GetAllChatsByUserId": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_GetAllChatsByUserId",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MessengerChatDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/User/GetAllChatsIdsByUserId": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_GetAllChatsIdsByUserId",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "guid"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/User/SetNickNameById": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_SetNickNameById",
+        "requestBody": {
+          "x-name": "setUserNickNameByIdCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetUserNickNameByIdCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "204": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/User/DeleteUser": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_DeleteUser",
+        "requestBody": {
+          "x-name": "deleteUserCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteUserCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "204": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/User/AddUser": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_AddUser",
+        "requestBody": {
+          "x-name": "addUserCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddUserCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/User/ChangeDescription": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_ChangeDescription",
+        "requestBody": {
+          "x-name": "changeUserDescriptionByIdCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeUserDescriptionByIdCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "204": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/User/ChangeName": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_ChangeName",
+        "requestBody": {
+          "x-name": "changeUserNameByIdCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeUserNameByIdCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          },
+          "204": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MessengerUser": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentityUserOfGuid"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "IdentityUserOfGuid": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "passwordHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "securityStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "additionalProperties": {
+          "nullable": true
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "extensions": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "model": {
+            "$ref": "#/components/schemas/LoginModel"
+          }
+        }
+      },
+      "LoginModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "password"
+        ],
+        "properties": {
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "RegisterCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "model": {
+            "$ref": "#/components/schemas/RegisterModel"
+          }
+        }
+      },
+      "RegisterModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "userName",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "userName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "minLength": 1
+          },
+          "phoneNumber": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthenticateResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "RegisterAdminCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "model": {
+            "$ref": "#/components/schemas/RegisterModel"
+          }
+        }
+      },
+      "MessengerChatDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoleDto"
+            }
+          }
+        }
+      },
+      "RoleDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "canEditMessages": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canDeleteMessages": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canWriteMessages": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canReadMessages": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canAddUsers": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canDeleteUsers": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canPinMessages": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canSeeChannelMembers": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canInviteOtherUsers": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canEditChannelDescription": {
+            "$ref": "#/components/schemas/ActionOption"
+          },
+          "canDeleteChat": {
+            "$ref": "#/components/schemas/ActionOption"
+          }
+        }
+      },
+      "ActionOption": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Unavailable",
+          "Enabled",
+          "Disabled"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
+      },
+      "ChatUserDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "chatUserName": {
+            "type": "string"
+          },
+          "messengerUserId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleDto"
+          }
+        }
+      },
+      "AddChannelCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "adminId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AddGroupChatCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "adminId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AddPersonalChatCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "firstUserId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "secondUserId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AddSavedMessagesCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AddUserToChatCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "chatId": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
+      "DeleteUserFromChatCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "chatId": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
+      "CreateRoleForChatCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/RoleDto"
+          },
+          "chatId": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
+      "ChangeRoleForUserByIdCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "chatId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleDto"
+          }
+        }
+      },
+      "MessengerUserDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "SetUserNickNameByIdCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "userName": {
+            "type": "string"
+          }
+        }
+      },
+      "DeleteUserCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
+      "AddUserCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "nickName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "ChangeUserDescriptionByIdCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "ChangeUserNameByIdCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
