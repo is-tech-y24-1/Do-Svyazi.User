@@ -3,15 +3,15 @@
   "version": "2.1.0",
   "description": "User module clients",
   "dependencies": {
-    "axios": "^0.27.2",
+    "@types/node": "^18.0.3",
     "asynckit": "^0.4.0",
-    "follow-redirects": "^1.15.1",
+    "axios": "^0.27.2",
     "combined-stream": "^1.0.8",
-    "form-data": "^4.0.0",
     "delayed-stream": "^1.0.0",
-    "mime-types": "^2.1.35",
+    "follow-redirects": "^1.15.1",
+    "form-data": "^4.0.0",
     "mime-db": "^1.52.0",
+    "mime-types": "^2.1.35",
     "moment": "^2.29.3"
-  },
-  "devDependencies": {}
+  }
 }

@@ -17,7 +17,7 @@ export interface IAuthenticateClient {
     getAll(): Promise<MessengerUser[]>;
     login(model: LoginRequest): Promise<void>;
     register(model: RegisterCommand): Promise<void>;
-    authenticateByJwt(jwtToken: string | null): Promise<string>;
+    authenticateByJwt(jwtToken: string | null): Promise<AuthenticateResponse>;
     registerAdmin(model: RegisterAdminCommand): Promise<void>;
 }
 
@@ -225,7 +225,7 @@ export class AuthenticateClient implements IAuthenticateClient {
         return Promise.resolve<void>(null as any);
     }
 
-    authenticateByJwt(jwtToken: string | null , cancelToken?: CancelToken | undefined): Promise<string> {
+    authenticateByJwt(jwtToken: string | null , cancelToken?: CancelToken | undefined): Promise<AuthenticateResponse> {
         let url_ = this.baseUrl + "/api/Authenticate/AuthenticateByJwt";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -250,7 +250,7 @@ export class AuthenticateClient implements IAuthenticateClient {
         });
     }
 
-    protected processAuthenticateByJwt(response: AxiosResponse): Promise<string> {
+    protected processAuthenticateByJwt(response: AxiosResponse): Promise<AuthenticateResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -265,9 +265,8 @@ export class AuthenticateClient implements IAuthenticateClient {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return Promise.resolve<string>(result200);
+            result200 = AuthenticateResponse.fromJS(resultData200, _mappings);
+            return Promise.resolve<AuthenticateResponse>(result200);
 
         } else if (status === 401) {
             const _responseText = response.data;
@@ -284,7 +283,7 @@ export class AuthenticateClient implements IAuthenticateClient {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<string>(null as any);
+        return Promise.resolve<AuthenticateResponse>(null as any);
     }
 
     registerAdmin(model: RegisterAdminCommand , cancelToken?: CancelToken | undefined): Promise<void> {
@@ -2231,6 +2230,44 @@ export interface IRegisterModel {
     phoneNumber: string;
 }
 
+export class AuthenticateResponse implements IAuthenticateResponse {
+    userId!: string;
+    validTo!: moment.Moment;
+
+    constructor(data?: IAuthenticateResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any, _mappings?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.validTo = _data["validTo"] ? moment.parseZone(_data["validTo"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any, _mappings?: any): AuthenticateResponse | null {
+        data = typeof data === 'object' ? data : {};
+        return createInstance<AuthenticateResponse>(data, _mappings, AuthenticateResponse);
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["validTo"] = this.validTo ? this.validTo.toISOString(true) : <any>undefined;
+        return data;
+    }
+}
+
+export interface IAuthenticateResponse {
+    userId: string;
+    validTo: moment.Moment;
+}
+
 export class RegisterAdminCommand implements IRegisterAdminCommand {
     model!: RegisterModel;
 
@@ -3107,10 +3144,7 @@ export class Do_Svyazi_User_ApiClient_Exception extends Error {
 }
 
 function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
-    if (result !== null && result !== undefined)
-        throw result;
-    else
-        throw new Do_Svyazi_User_ApiClient_Exception(message, status, response, headers, null);
+    throw new Do_Svyazi_User_ApiClient_Exception(message, status, response, headers, result);
 }
 
 function isAxiosError(obj: any | undefined): obj is AxiosError {
